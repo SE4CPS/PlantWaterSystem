@@ -1,7 +1,7 @@
 ---
 name: User Story
 about: A user story template for tracking features and requirements
-title: 'User Story: [short title here]'
+title: '[User Story]: [short title here]'
 labels: user-story
 assignees: ''
 
