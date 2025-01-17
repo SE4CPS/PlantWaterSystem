@@ -1,8 +1,7 @@
-
 ---
 name: Task
 about: A task template for smaller, actionable items
-title: '[Task]: [short task title here]'
+title: '[Task] - [short task title here]'
 labels: task
 assignees: ''
 
