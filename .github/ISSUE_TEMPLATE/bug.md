@@ -1,7 +1,7 @@
 ---
 name: Bug
 about: A bug report template for tracking issues
-title: '[Bug]: [short bug title here]'
+title: '[Bug] - [short bug title here]'
 labels: bug
 assignees: ''
 
