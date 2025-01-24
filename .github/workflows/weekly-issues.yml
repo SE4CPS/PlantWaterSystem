@@ -12,13 +12,10 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const lastIssueNumber = 1; // Adjust this number manually if needed
-            const newIssueNumber = lastIssueNumber + 1;
-
             await github.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: `[User Story] - Sprint Demo #${newIssueNumber}`,
+              title: "[User Story] - Sprint Demo",
               body: `
 ### Epic Link:
 
