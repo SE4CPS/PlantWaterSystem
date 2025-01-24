@@ -11,26 +11,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Get the latest issue number
-        id: get-issue-number
-        run: |
-          response=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            https://api.github.com/repos/${{ github.repository }}/issues?state=all)
-          echo "$response" | jq -r 'map(select(.title | startswith("[User Story] - Sprint Demo #")) | .title | capture("#(?<num>[0-9]+)").num | tonumber) | max' || echo "0"
-        shell: bash
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Create weekly issue
         uses: actions/github-script@v6
         with:
           script: |
-            // Parse the last issue number and increment
-            const lastIssueNumber = parseInt("${{ steps.get-issue-number.outputs.stdout }}", 10) || 0;
-            const newIssueNumber = lastIssueNumber + 1;
+            const existingIssues = await github.paginate(github.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "all"
+            });
 
-            // Create the issue
-            const { data: issue } = await github.issues.create({
+            // Find the latest issue number from the title
+            const lastIssue = existingIssues
+              .map(issue => issue.title.match(/\[User Story\] - Sprint Demo #(\d+)/))
+              .filter(match => match)
+              .map(match => parseInt(match[1], 10))
+              .reduce((max, num) => Math.max(max, num), 0);
+
+            const newIssueNumber = lastIssue + 1;
+
+            await github.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: `[User Story] - Sprint Demo #${newIssueNumber}`,
@@ -47,4 +47,4 @@ As a Client, I want to see the weekly progress, so that I can give fast feedback
               `.trim(),
             });
 
-            core.info(`Created issue #${issue.number}`);
+            core.info(`Created issue [User Story] - Sprint Demo #${newIssueNumber}`);
