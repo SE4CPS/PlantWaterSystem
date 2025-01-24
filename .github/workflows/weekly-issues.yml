@@ -8,27 +8,12 @@ jobs:
   create-issue:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
       - name: Create weekly issue
         uses: actions/github-script@v6
         with:
           script: |
-            const existingIssues = await github.paginate(github.issues.listForRepo, {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: "all"
-            });
-
-            // Find the latest issue number from the title
-            const lastIssue = existingIssues
-              .map(issue => issue.title.match(/\[User Story\] - Sprint Demo #(\d+)/))
-              .filter(match => match)
-              .map(match => parseInt(match[1], 10))
-              .reduce((max, num) => Math.max(max, num), 0);
-
-            const newIssueNumber = lastIssue + 1;
+            const lastIssueNumber = 1; // Adjust this number manually if needed
+            const newIssueNumber = lastIssueNumber + 1;
 
             await github.issues.create({
               owner: context.repo.owner,
@@ -46,5 +31,3 @@ As a Client, I want to see the weekly progress, so that I can give fast feedback
 ### Task Links:
               `.trim(),
             });
-
-            core.info(`Created issue [User Story] - Sprint Demo #${newIssueNumber}`);
