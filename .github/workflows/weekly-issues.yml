@@ -12,9 +12,9 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            github.issues.create({
+            await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: "[User Story] - Sprint Demo",
-              body: "### Epic Link:\n\n#17\n\n### User Story\n\nAs a Client, I want to see the weekly progress, so that I can give fast feedback.\n\n### Task Links:",
+              body: "### Epic Link:\n\n#17\n\n### User Story\n\nAs a Client, I want to see the weekly progress, so that I can give fast feedback.\n\n### Task Links:"
             });
