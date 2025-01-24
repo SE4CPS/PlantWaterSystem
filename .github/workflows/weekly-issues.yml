@@ -3,6 +3,7 @@ name: Create Weekly Issues
 on:
   schedule:
     - cron: "0 12 * * 5" # Runs every Friday at 12:00 UTC
+  workflow_dispatch: # Allows manual triggering
 
 jobs:
   create-issue:
