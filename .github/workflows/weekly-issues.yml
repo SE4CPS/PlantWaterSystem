@@ -5,9 +5,12 @@ on:
     - cron: "0 12 * * 5" # Runs every Friday at 12:00 UTC
   workflow_dispatch: # Allows manual triggering
 
+permissions:
+  issues: write  # Ensure write permissions to create issues
+
 jobs:
   create-issue:
-    runs-on: ubuntu-22.04  # Explicitly use Ubuntu 22.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Create weekly issue
         uses: actions/github-script@v6
