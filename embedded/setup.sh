@@ -5,7 +5,7 @@ echo "Starting PlantWaterSystem setup..."
 # Step 1: Clone the repository (only if not already cloned)
 if [ ! -d "PlantWaterSystem" ]; then
     echo "Cloning the PlantWaterSystem repository..."
-    git clone https://github.com/SE4CPS/PlantWaterSystem.git
+    git clone -b embedded-code https://github.com/SE4CPS/PlantWaterSystem.git
 fi
 
 # Navigate to the directory
