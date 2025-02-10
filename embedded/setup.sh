@@ -51,7 +51,6 @@ else
 fi
 
 # Step 6: Set Permissions and Run Python Script
-cd PlantWaterSystem/embedded || exit
 
 if [ -f "plant_monitor.py" ]; then
     echo "Setting executable permission for the plant_monitor.py script..."
