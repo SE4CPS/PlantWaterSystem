@@ -1,4 +1,4 @@
-from models.sensor_model import SensorData
+from backend.models.flower_model import FlowerData
 # from db import db
 
 # def save_sensor_data(sensor_data):

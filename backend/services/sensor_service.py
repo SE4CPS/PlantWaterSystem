@@ -1,7 +1,7 @@
 # from repository.sensor_repository import save_sensor_data
-from models.sensor_model import SensorData
+from backend.models.flower_model import Flowerdata
 
-def process_sensor_data(data):
+def process_flower_data(data):
     # Validate required fields
     if not all(key in data for key in ("device_id", "temperature", "humidity", "soil_moisture")):
         return {"error": "Missing required fields"}, 400
@@ -15,12 +15,12 @@ def process_sensor_data(data):
         return {"error": "Invalid data format"}, 400
 
     # Create a SensorData object and save to DB
-    sensor_data = SensorData(
+    sensor_data = Flowerdata(
         device_id=data["device_id"],
         temperature=temperature,
         humidity=humidity,
         soil_moisture=soil_moisture
     )
     print(sensor_data)
-    # save_sensor_data(sensor_data)
+    save_sensor_data(sensor_data)
     return {"message": "Sensor data saved successfully"}, 201
