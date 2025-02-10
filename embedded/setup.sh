@@ -44,10 +44,21 @@ sudo pip3 install RPi.GPIO adafruit-circuitpython-ads1x15 --break-system-package
 # Step 5: Verify I2C Devices
 echo "Verifying I2C connection..."
 i2cdetect -y 1
+if i2cdetect -y 1 | grep -q "48"; then
+    echo "I2C device detected successfully at address 0x48."
+else
+    echo "Warning: No I2C device detected. Please check your connections."
+fi
 
 # Step 6: Set Permissions and Run Python Script
-echo "Setting executable permission for the plant_monitor.py script..."
-chmod +x plant_monitor.py
+cd PlantWaterSystem/embedded || exit
+
+if [ -f "plant_monitor.py" ]; then
+    echo "Setting executable permission for the plant_monitor.py script..."
+    chmod +x plant_monitor.py
+else
+    echo "Warning: plant_monitor.py not found!"
+fi
 
 # Step 7: Setup Auto-Start with systemd
 echo "Setting up auto-start using systemd..."
