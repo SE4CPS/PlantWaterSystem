@@ -5,6 +5,7 @@ import PlantDetailPage from "../Pages/PlantDetailPage";
 import AboutPage from "../Pages/AboutPage";
 import FaqPage from "../Pages/FaqPage";
 import ErrorPage from "../Pages/ErrorPage";
+import NavBar from "./NavBar";
 
 const router = createBrowserRouter([
     {
@@ -16,20 +17,26 @@ const router = createBrowserRouter([
     },
     {
         path: '/',
-        element: <HomePage/>,
+        element: <NavBar />,
+        children: [
+            {
+                path: '/',
+                element: <HomePage/>,
+            },
+            {
+                path: '/plant_detail',
+                element: <PlantDetailPage/>,
+            },
+            {
+                path: '/about',
+                element: <AboutPage />,
+            },
+            {
+                path: '/faq',
+                element: <FaqPage />,
+            }
+        ]
     },
-    {
-        path: '/plant_detail',
-        element: <PlantDetailPage/>,
-    },
-    {
-        path: '/about',
-        element: <AboutPage />,
-    },
-    {
-        path: '/faq',
-        element: <FaqPage />,
-    }
 ]);
 
 function Provider() {
