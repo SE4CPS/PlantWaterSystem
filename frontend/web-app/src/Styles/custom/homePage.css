@@ -1,0 +1,18 @@
+/* Home Page CSS */
+
+.homePage{
+    display: flex;
+    flex-direction: column;
+    padding: 44px 82px 0px 82px;
+}
+
+.nameBar{
+    font-family: "Poppins", serif;
+    font-size: 42px;
+    font-weight: 800;
+    color: #4C5740;
+}
+
+.plantViewer{
+    padding-top: 31px;
+}
