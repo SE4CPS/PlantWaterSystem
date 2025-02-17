@@ -1,18 +1,38 @@
-import React from 'react'
-import { Link, Outlet } from 'react-router-dom';
+import React, { useMemo } from 'react'
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import '../Styles/custom/navBar.css'
 
 function NavBar() {
+
+	const location = useLocation();
+
+	const pageArray = useMemo(() => {
+		return [
+			{
+				name: 'Home',
+				path: '/',
+			},
+			{
+				name: 'About',
+				path: '/about',
+			},
+			{
+				name: 'FAQ',
+				path: '/faq',
+			}
+		]
+	}, [])
+
 	return (
 		<>
 			<div className='navbar'>
 				<div>Sproutly</div>
 				<div className='navbar-link-container'>
-					<Link className='navbar-link text-white' to="/">Home</Link>
-					<Link className='navbar-link' to="/about">About</Link>
-					<Link className='navbar-link' to="/faq">FAQ</Link>
+					{pageArray.map((page, index)=>{
+						return <Link key={index} className={`navbar-link${location.pathname===page.path? ' text-white': ''}`} to={page.path}>{page.name}</Link>
+					})}
 				</div>
-				<div className='navbar-login-logout-button'>Log In</div>
+				<button className='navbar-login-logout-button'>Log In</button>
 			</div>
 			<Outlet />
 		</>
