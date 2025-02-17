@@ -1,0 +1,8 @@
+/* Plant Card CSS */
+
+.plantCard{
+    height: 532px;
+    width: 356px;
+    background-color: #E6F2D7;
+    border-radius: 18px;
+}
