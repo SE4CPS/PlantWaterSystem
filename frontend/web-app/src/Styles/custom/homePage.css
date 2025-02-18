@@ -3,7 +3,7 @@
 .homePage{
     display: flex;
     flex-direction: column;
-    padding: 44px 82px 0px 82px;
+    padding: 44px 82px 94px 82px;
 }
 
 .nameBar{
@@ -15,4 +15,9 @@
 
 .plantViewer{
     padding-top: 31px;
+    display: grid;
+    justify-content: center;
+    grid-template-columns: auto auto auto auto;
+    row-gap: 30px;
+    column-gap: 24px;
 }
