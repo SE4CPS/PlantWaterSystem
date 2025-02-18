@@ -1,6 +1,6 @@
 import React from 'react'
 import '../Styles/custom/plantCard.css'
-import dummyImage from '../Images/dummy-image.png'
+import dummyImage from '../Images/rose.png'
 
 function PlantCard({status}: {status: string}) {
   return (
