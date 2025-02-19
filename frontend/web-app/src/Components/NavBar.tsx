@@ -1,10 +1,4 @@
 import React from 'react'
-<<<<<<< HEAD
-
-function NavBar() {
-  return (
-    <div>NavBar</div>
-=======
 import { Link, Outlet } from 'react-router-dom';
 
 function NavBar() {
@@ -17,7 +11,6 @@ function NavBar() {
       </div>
       <Outlet />
     </div>
->>>>>>> fe68087a11103b291e8a14f454bdff774de1db60
   )
 };
 

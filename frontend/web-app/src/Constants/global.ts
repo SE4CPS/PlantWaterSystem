@@ -1,0 +1,1 @@
+export const Dummy = 5000 //Dummy constant
