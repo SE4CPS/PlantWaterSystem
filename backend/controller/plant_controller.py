@@ -1,27 +1,26 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from schemas.plant_schema import PlantSchema
+from schemas.user_schema import UserSchema
 from services.plant_service import get_service, PlantService
 from fastapi import  Depends
 from fastapi.responses import JSONResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
-
+from services.user_service import get_user_service, UserService
 
 
 create_plant = APIRouter()
 
 security = HTTPBasic()
 
-user = {
-    "admin": "admin",
-    "user": "admin"
-}
 
-def verify_credentials(credentials: HTTPBasicCredentials = Depends(security)):
+def verify_credentials(credentials: HTTPBasicCredentials = Depends(security), user_service: UserService = Depends(get_user_service)):
     username = credentials.username
     password = credentials.password
-    if user.get(username) != password:
+    user_schema = UserSchema(username=username, password=password)
+    print(user_service.verify_user(user_schema))
+    if user_service.verify_user(user_schema) == 0:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code= 401,
             detail="Invalid credentials",
             headers={"WWW-Authenticate": "Basic"},
         )
@@ -46,3 +45,4 @@ def create_plant_entry(plant: PlantSchema, service: PlantService = Depends(get_s
     except Exception as e:
         # If an unexpected error occurs during processing, return a 500 status code
         return JSONResponse(status_code=500, content={"status": "error", "error": f"Unexpected error: {str(e)}"})
+    
