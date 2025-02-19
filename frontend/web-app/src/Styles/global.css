@@ -14,6 +14,7 @@ body{
     color: #FFFFFF;
 }
 
-.font-poppins > * {
+.font-poppins{
     font-family: 'Poppins', sans-serif;
+    color: #4C5740;
 }
