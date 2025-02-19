@@ -13,6 +13,8 @@ RUN npm install
 # Copy the rest of the frontend code
 COPY web-app/ .
 
+RUN npm install react-router-dom
+
 # Build the React app (for production build)
 RUN npm run build
 
