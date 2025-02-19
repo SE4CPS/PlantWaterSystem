@@ -42,6 +42,6 @@ function NavBar() {
 			<Outlet />
 		</>
 	)
-};
+}
 
 export default NavBar;
