@@ -29,7 +29,7 @@ def verify_credentials(credentials: HTTPBasicCredentials = Depends(security)):
 
 
 @create_plant.post("/api/plant/data", response_model=PlantSchema)
-def create_plant_entry(plant: PlantSchema, service: PlantService = Depends(get_service), username: str = Depends(verify_credentials)):
+def create_plant_entry(plant: PlantSchema, service: PlantService = Depends(get_service)):
     try:
         # Call the service layer to create the plant
         response = service.create_plant(plant)
