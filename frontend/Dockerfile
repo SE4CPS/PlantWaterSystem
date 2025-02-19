@@ -5,7 +5,7 @@ FROM node:16 AS build
 WORKDIR /app
 
 # Copy package.json and package-lock.json
-COPY web-app/package*.json ./
+COPY web-app/package.json ./
 
 # Install dependencies
 RUN npm install
@@ -13,7 +13,7 @@ RUN npm install
 # Copy the rest of the frontend code
 COPY web-app/ .
 
-RUN npm install react-router-dom
+# RUN npm install react-router-dom
 
 # Build the React app (for production build)
 RUN npm run build

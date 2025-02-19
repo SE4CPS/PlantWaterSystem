@@ -19,22 +19,6 @@ const router = createBrowserRouter([
         element: <LoginPage/>,
     },
     {
-        path: '/',
-        element: <HomePage/>,
-    },
-    {
-        path: '/plant_detail',
-        element: <PlantDetailPage/>,
-    },
-    {
-        path: '/about',
-        element: <AboutPage />,
-    },
-    {
-        path: '/faq',
-        element: <FaqPage />,
-    },
-    {
         path: '/signup',
         element: <SignUpPage />,
     },
