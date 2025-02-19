@@ -15,7 +15,7 @@ function DisplayPage() {
           Log In
         </div>
         <div className='displayPage-signup-text'>
-          Don't have an account? <div className='signup-text'>Sign Up here</div>
+          Don&rsquo;t have an account? <div className='signup-text'>Sign Up here</div>
         </div>
       </div>
       <div className='displayPage-image-decoration'>
