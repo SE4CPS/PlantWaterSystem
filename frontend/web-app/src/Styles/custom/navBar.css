@@ -26,6 +26,7 @@
 }
 
 .navbar-link{
+    font-size: 23px;
     text-decoration: none;
     color: #4C5740;
 }
@@ -39,6 +40,7 @@
     padding-right: 26px;
     border-radius: 15px;
     border-color: #E6F2D7;
+    font-size: 21px;
 }
 
 .sproutly-text{
