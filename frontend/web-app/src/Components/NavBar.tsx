@@ -27,7 +27,7 @@ function NavBar() {
 
 	return (
 		<>
-			<div className='navbar'>
+			<div className='navbar font-poppins'>
 				<div>
 					<img className='sproutly-logo' src={sproutlyLogo} alt='error img'/>
 					<img className='sproutly-text' src={sproutlyText} alt='error img'/>
