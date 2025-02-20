@@ -27,6 +27,7 @@
 }
 
 .displayPage-login-button{
+    all: unset;
     width: 145px;
     height: 51px;
     background-color: #AFD582;
@@ -39,6 +40,12 @@
     font-size: 23px;
     line-height: 34px;
     margin-top: 8px;
+    transition: 0.4s;
+}
+
+.displayPage-login-button:hover{
+    background-color: #77B42D;
+    cursor: pointer;
 }
 
 .displayPage-signup-text{
@@ -56,6 +63,7 @@
     font-weight: 700;
     color: #AFD582;
     padding-left: 5px;
+    cursor: pointer;
 }
 
 .displayPage-image-decoration{

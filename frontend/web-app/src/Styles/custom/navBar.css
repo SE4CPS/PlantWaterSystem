@@ -31,6 +31,7 @@
 }
 
 .navbar-login-logout-button{
+    all: unset;
     height: 41.5px;
     background-color: #E6F2D7;
     display: flex;
@@ -40,8 +41,19 @@
     border-radius: 15px;
     border-color: #E6F2D7;
     font-size: 21px;
+    font-weight: 700;
+    transition: 0.4s;
+}
+
+.navbar-login-logout-button:hover{
+    background-color: #AFD582;
+    cursor: pointer;
 }
 
 .sproutly-text{
     padding-left: 11px;
+}
+
+.sproutly-logo-decoration:hover{
+    cursor: pointer;
 }
