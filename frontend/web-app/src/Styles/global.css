@@ -13,3 +13,11 @@ body{
 .text-white{
     color: #FFFFFF;
 }
+
+.good{
+    background-color: #E6F2D7;
+}
+
+.dry{
+    background-color: #F2DDD7;
+}
