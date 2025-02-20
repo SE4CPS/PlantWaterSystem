@@ -3,19 +3,21 @@ import '../Styles/custom/displayPage.css'
 import display_img_1 from '../Images/display-1.png'
 import display_img_2 from '../Images/display-2.png'
 import display_img_3 from '../Images/display-3.png'
+import { useNavigate } from 'react-router-dom'
 
 function DisplayPage() {
+  const navigate = useNavigate();
   return (
     <div className='displayPage font-poppins'>
       <div className='displayPage-text-decoration'>
         <div className='displayPage-sales-text'>
           Tracking with Sproutly <b className='highlighted-text'>helps your plants thrive</b> by keeping them healthy, hydrated & happy.
         </div>
-        <div className='displayPage-login-button'>
+        <button onClick={()=>navigate('/login')} className='displayPage-login-button'>
           Log In
-        </div>
+        </button>
         <div className='displayPage-signup-text'>
-          Don&rsquo;t have an account? <div className='signup-text'>Sign Up here</div>
+          Don&rsquo;t have an account? <div onClick={()=>navigate('/signup')} className='signup-text'>Sign Up here</div>
         </div>
       </div>
       <div className='displayPage-image-decoration'>
