@@ -12,7 +12,6 @@
 }
 
 .navbar > *{
-    font-family: "Poppins", serif;
     font-weight: 1000;
     text-decoration: none;
     color: #4C5740;
@@ -26,11 +25,13 @@
 }
 
 .navbar-link{
+    font-size: 23px;
     text-decoration: none;
     color: #4C5740;
 }
 
 .navbar-login-logout-button{
+    all: unset;
     height: 41.5px;
     background-color: #E6F2D7;
     display: flex;
@@ -39,8 +40,20 @@
     padding-right: 26px;
     border-radius: 15px;
     border-color: #E6F2D7;
+    font-size: 21px;
+    font-weight: 700;
+    transition: 0.4s;
+}
+
+.navbar-login-logout-button:hover{
+    background-color: #AFD582;
+    cursor: pointer;
 }
 
 .sproutly-text{
     padding-left: 11px;
+}
+
+.sproutly-logo-decoration:hover{
+    cursor: pointer;
 }

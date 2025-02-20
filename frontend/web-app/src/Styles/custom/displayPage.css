@@ -1,0 +1,100 @@
+/* Display Page CSS */
+
+.displayPage{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.displayPage-text-decoration{
+    display: flex;
+    flex-direction: column;
+    margin-top: 127px;
+    margin-right: 66px;
+}
+
+.displayPage-sales-text{
+    width: 521px;
+    height: 359px;
+    font-weight: 500;
+    font-size: 46px;
+    line-height: 69px;
+}
+
+.displayPage-sales-text > .highlighted-text{
+    color: #A9C885;
+}
+
+.displayPage-login-button{
+    all: unset;
+    width: 145px;
+    height: 51px;
+    background-color: #AFD582;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: 23px;
+    line-height: 34px;
+    margin-top: 8px;
+    transition: 0.4s;
+}
+
+.displayPage-login-button:hover{
+    background-color: #77B42D;
+    cursor: pointer;
+}
+
+.displayPage-signup-text{
+    display: flex;
+    flex-direction: row;
+    width: 399px;
+    height: 35px;
+    font-weight: 400;
+    font-size: 21px;
+    line-height: 31px;
+    margin-top: 26px;
+}
+
+.displayPage-signup-text > .signup-text {
+    font-weight: 700;
+    color: #AFD582;
+    padding-left: 5px;
+    cursor: pointer;
+}
+
+.displayPage-image-decoration{
+    display: flex;
+    flex-direction: column;
+    margin-top: 106px;
+}
+
+.displayPage-image-1{
+    width: 527px;
+    height: 271px;
+}
+
+.displayPage-image-2{
+    width: 198px;
+    height: 245px;
+}
+
+.displayPage-image-3{
+    width: 315px;
+    height: 190px;
+}
+
+.displayPage-image-decoration img{
+    border-radius: 27px;
+}
+
+.displayPage-upper-image{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: end;
+    margin-bottom: 15px;
+}
