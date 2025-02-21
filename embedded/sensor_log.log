@@ -1,0 +1,841 @@
+2025-02-09 16:25:39,437 - INFO - Sensor 1 - Raw ADC Value: 30221, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:25:39,459 - INFO - Sensor 2 - Raw ADC Value: 30219, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:25:39,481 - INFO - Sensor 3 - Raw ADC Value: 30230, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:25:39,502 - INFO - Sensor 4 - Raw ADC Value: 30230, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:25:39,514 - WARNING - Low average moisture level for Sensor 1: 0.00%
+2025-02-09 16:25:39,515 - WARNING - Low average moisture level for Sensor 2: 0.00%
+2025-02-09 16:25:39,516 - WARNING - Low average moisture level for Sensor 3: 0.00%
+2025-02-09 16:25:39,516 - WARNING - Low average moisture level for Sensor 4: 0.00%
+2025-02-09 16:25:49,527 - INFO - Sensor 1 - Raw ADC Value: 30243, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:25:49,552 - INFO - Sensor 2 - Raw ADC Value: 30233, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:25:49,575 - INFO - Sensor 3 - Raw ADC Value: 30238, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:25:49,604 - INFO - Sensor 4 - Raw ADC Value: 30234, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:25:49,617 - WARNING - Low average moisture level for Sensor 1: 0.00%
+2025-02-09 16:25:49,618 - WARNING - Low average moisture level for Sensor 2: 0.00%
+2025-02-09 16:25:49,618 - WARNING - Low average moisture level for Sensor 3: 0.00%
+2025-02-09 16:25:49,619 - WARNING - Low average moisture level for Sensor 4: 0.00%
+2025-02-09 16:25:51,725 - INFO - GPIO Cleanup Done.
+2025-02-09 16:25:51,726 - INFO - GPIO Cleanup Done.
+2025-02-09 16:45:25,179 - INFO - Sensor 1 - Raw ADC Value: 30243, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:45:25,216 - INFO - Sensor 2 - Raw ADC Value: 30222, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:45:25,237 - INFO - Sensor 3 - Raw ADC Value: 30227, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:45:25,258 - INFO - Sensor 4 - Raw ADC Value: 30213, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:45:25,274 - WARNING - Low average moisture level for Sensor 1: 0.00%
+2025-02-09 16:45:25,275 - WARNING - Low average moisture level for Sensor 2: 0.00%
+2025-02-09 16:45:25,275 - WARNING - Low average moisture level for Sensor 3: 0.00%
+2025-02-09 16:45:25,275 - WARNING - Low average moisture level for Sensor 4: 0.00%
+2025-02-09 16:45:35,287 - INFO - Sensor 1 - Raw ADC Value: 30228, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:45:35,310 - INFO - Sensor 2 - Raw ADC Value: 30228, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:45:35,335 - INFO - Sensor 3 - Raw ADC Value: 30228, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:45:35,359 - INFO - Sensor 4 - Raw ADC Value: 30231, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:45:35,373 - WARNING - Low average moisture level for Sensor 1: 0.00%
+2025-02-09 16:45:35,373 - WARNING - Low average moisture level for Sensor 2: 0.00%
+2025-02-09 16:45:35,374 - WARNING - Low average moisture level for Sensor 3: 0.00%
+2025-02-09 16:45:35,374 - WARNING - Low average moisture level for Sensor 4: 0.00%
+2025-02-09 16:45:45,385 - INFO - Sensor 1 - Raw ADC Value: 30220, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:45:45,406 - INFO - Sensor 2 - Raw ADC Value: 30221, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:45:45,428 - INFO - Sensor 3 - Raw ADC Value: 30216, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:45:45,449 - INFO - Sensor 4 - Raw ADC Value: 30222, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:45:45,462 - WARNING - Low average moisture level for Sensor 1: 0.00%
+2025-02-09 16:45:45,463 - WARNING - Low average moisture level for Sensor 2: 0.00%
+2025-02-09 16:45:45,463 - WARNING - Low average moisture level for Sensor 3: 0.00%
+2025-02-09 16:45:45,463 - WARNING - Low average moisture level for Sensor 4: 0.00%
+2025-02-09 16:45:55,473 - INFO - Sensor 1 - Raw ADC Value: 30216, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:45:55,495 - INFO - Sensor 2 - Raw ADC Value: 30213, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:45:55,516 - INFO - Sensor 3 - Raw ADC Value: 30225, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:45:55,541 - INFO - Sensor 4 - Raw ADC Value: 30222, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:45:55,553 - WARNING - Low average moisture level for Sensor 1: 0.00%
+2025-02-09 16:45:55,553 - WARNING - Low average moisture level for Sensor 2: 0.00%
+2025-02-09 16:45:55,554 - WARNING - Low average moisture level for Sensor 3: 0.00%
+2025-02-09 16:45:55,554 - WARNING - Low average moisture level for Sensor 4: 0.00%
+2025-02-09 16:46:05,564 - INFO - Sensor 1 - Raw ADC Value: 30222, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:46:05,585 - INFO - Sensor 2 - Raw ADC Value: 30221, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:46:05,608 - INFO - Sensor 3 - Raw ADC Value: 30221, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:46:05,629 - INFO - Sensor 4 - Raw ADC Value: 30188, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-09 16:46:05,641 - WARNING - Low average moisture level for Sensor 1: 0.00%
+2025-02-09 16:46:05,642 - WARNING - Low average moisture level for Sensor 2: 0.00%
+2025-02-09 16:46:05,642 - WARNING - Low average moisture level for Sensor 3: 0.00%
+2025-02-09 16:46:05,642 - WARNING - Low average moisture level for Sensor 4: 0.00%
+2025-02-09 16:46:10,194 - INFO - GPIO Cleanup Done.
+2025-02-09 16:46:10,196 - INFO - GPIO Cleanup Done.
+2025-02-19 11:30:59,519 - INFO - Sensor 1 - Raw ADC Value: -28927, Moisture Level: 100.00%, Digital Status: Wet
+2025-02-19 11:30:59,542 - INFO - Sensor 2 - Raw ADC Value: 29986, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:30:59,562 - INFO - Sensor 3 - Raw ADC Value: 30005, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:30:59,591 - INFO - Sensor 4 - Raw ADC Value: 1071, Moisture Level: 100.00%, Digital Status: Wet
+2025-02-19 11:30:59,615 - WARNING - Low average moisture level for Sensor 2: 0.00%
+2025-02-19 11:30:59,616 - WARNING - Low average moisture level for Sensor 3: 0.00%
+2025-02-19 11:31:09,627 - INFO - Sensor 1 - Raw ADC Value: 1055, Moisture Level: 100.00%, Digital Status: Wet
+2025-02-19 11:31:09,651 - INFO - Sensor 2 - Raw ADC Value: 30012, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:31:09,679 - INFO - Sensor 3 - Raw ADC Value: 30017, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:31:09,702 - INFO - Sensor 4 - Raw ADC Value: 1070, Moisture Level: 100.00%, Digital Status: Wet
+2025-02-19 11:31:09,716 - WARNING - Low average moisture level for Sensor 2: 0.00%
+2025-02-19 11:31:09,717 - WARNING - Low average moisture level for Sensor 3: 0.00%
+2025-02-19 11:31:19,727 - INFO - Sensor 1 - Raw ADC Value: 81, Moisture Level: 100.00%, Digital Status: Wet
+2025-02-19 11:31:19,750 - INFO - Sensor 2 - Raw ADC Value: 29954, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:31:19,772 - INFO - Sensor 3 - Raw ADC Value: 29396, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:31:19,794 - INFO - Sensor 4 - Raw ADC Value: 30011, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:31:19,806 - WARNING - Low average moisture level for Sensor 2: 0.00%
+2025-02-19 11:31:19,807 - WARNING - Low average moisture level for Sensor 3: 0.00%
+2025-02-19 11:31:29,817 - INFO - Sensor 1 - Raw ADC Value: 30081, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:31:29,839 - INFO - Sensor 2 - Raw ADC Value: 30157, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:31:29,860 - INFO - Sensor 3 - Raw ADC Value: 30160, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:31:29,882 - INFO - Sensor 4 - Raw ADC Value: 30076, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:31:29,893 - WARNING - Low average moisture level for Sensor 2: 0.00%
+2025-02-19 11:31:29,894 - WARNING - Low average moisture level for Sensor 3: 0.00%
+2025-02-19 11:31:39,904 - INFO - Sensor 1 - Raw ADC Value: -58, Moisture Level: 100.00%, Digital Status: Wet
+2025-02-19 11:31:39,926 - INFO - Sensor 2 - Raw ADC Value: 30103, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:31:39,946 - INFO - Sensor 3 - Raw ADC Value: 30104, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:31:39,974 - INFO - Sensor 4 - Raw ADC Value: 30112, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:31:39,989 - WARNING - Low average moisture level for Sensor 2: 0.00%
+2025-02-19 11:31:39,989 - WARNING - Low average moisture level for Sensor 3: 0.00%
+2025-02-19 11:31:50,000 - INFO - Sensor 1 - Raw ADC Value: 29894, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:31:50,025 - INFO - Sensor 2 - Raw ADC Value: 29897, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:31:50,047 - INFO - Sensor 3 - Raw ADC Value: 29905, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:31:50,074 - INFO - Sensor 4 - Raw ADC Value: 29905, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:31:50,087 - WARNING - Low average moisture level for Sensor 2: 0.00%
+2025-02-19 11:31:50,088 - WARNING - Low average moisture level for Sensor 3: 0.00%
+2025-02-19 11:32:00,100 - INFO - Sensor 1 - Raw ADC Value: 29952, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:32:00,126 - INFO - Sensor 2 - Raw ADC Value: 29956, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:32:00,152 - INFO - Sensor 3 - Raw ADC Value: 11834, Moisture Level: 100.00%, Digital Status: Wet
+2025-02-19 11:32:00,176 - INFO - Sensor 4 - Raw ADC Value: 29990, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:32:00,189 - WARNING - Low average moisture level for Sensor 2: 0.00%
+2025-02-19 11:32:10,202 - INFO - Sensor 1 - Raw ADC Value: 30061, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:32:10,228 - INFO - Sensor 2 - Raw ADC Value: 30044, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:32:10,251 - INFO - Sensor 3 - Raw ADC Value: 29992, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:32:10,273 - INFO - Sensor 4 - Raw ADC Value: 28694, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:32:10,287 - WARNING - Low average moisture level for Sensor 2: 0.00%
+2025-02-19 11:32:20,298 - INFO - Sensor 1 - Raw ADC Value: 29920, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:32:20,324 - INFO - Sensor 2 - Raw ADC Value: 29894, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:32:20,349 - INFO - Sensor 3 - Raw ADC Value: 67, Moisture Level: 100.00%, Digital Status: Wet
+2025-02-19 11:32:20,372 - INFO - Sensor 4 - Raw ADC Value: 9631, Moisture Level: 100.00%, Digital Status: Wet
+2025-02-19 11:32:20,386 - WARNING - Low average moisture level for Sensor 2: 0.00%
+2025-02-19 11:32:30,397 - INFO - Sensor 1 - Raw ADC Value: 29895, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:32:30,418 - INFO - Sensor 2 - Raw ADC Value: 29905, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:32:30,442 - INFO - Sensor 3 - Raw ADC Value: 18673, Moisture Level: 61.06%, Digital Status: Wet
+2025-02-19 11:32:30,466 - INFO - Sensor 4 - Raw ADC Value: 12739, Moisture Level: 100.00%, Digital Status: Wet
+2025-02-19 11:32:30,479 - WARNING - Low average moisture level for Sensor 2: 0.00%
+2025-02-19 11:32:40,490 - INFO - Sensor 1 - Raw ADC Value: 29957, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:32:40,512 - INFO - Sensor 2 - Raw ADC Value: 29953, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:32:40,536 - INFO - Sensor 3 - Raw ADC Value: 29964, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:32:40,558 - INFO - Sensor 4 - Raw ADC Value: 29996, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:32:40,570 - WARNING - Low average moisture level for Sensor 2: 0.00%
+2025-02-19 11:32:50,581 - INFO - Sensor 1 - Raw ADC Value: 29976, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:32:50,604 - INFO - Sensor 2 - Raw ADC Value: 29982, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:32:50,630 - INFO - Sensor 3 - Raw ADC Value: 29987, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:32:50,652 - INFO - Sensor 4 - Raw ADC Value: 29989, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:32:50,665 - WARNING - Low average moisture level for Sensor 2: 0.00%
+2025-02-19 11:59:43,331 - INFO - Sensor 1 - Raw ADC Value: 29904, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:59:43,354 - INFO - Sensor 2 - Raw ADC Value: 29907, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:59:43,376 - INFO - Sensor 3 - Raw ADC Value: 29911, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:59:43,400 - INFO - Sensor 4 - Raw ADC Value: 29891, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:59:43,413 - WARNING - Low average moisture level for Sensor 2: 0.00%
+2025-02-19 11:59:53,424 - INFO - Sensor 1 - Raw ADC Value: 29908, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:59:53,450 - INFO - Sensor 2 - Raw ADC Value: 29914, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:59:53,478 - INFO - Sensor 3 - Raw ADC Value: 29930, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:59:53,502 - INFO - Sensor 4 - Raw ADC Value: 29920, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 11:59:53,522 - WARNING - Low average moisture level for Sensor 2: 0.00%
+2025-02-19 12:00:03,533 - INFO - Sensor 1 - Raw ADC Value: 29763, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:00:03,555 - INFO - Sensor 2 - Raw ADC Value: 29908, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:00:03,576 - INFO - Sensor 3 - Raw ADC Value: 29924, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:00:03,604 - INFO - Sensor 4 - Raw ADC Value: 29915, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:00:03,617 - WARNING - Low average moisture level for Sensor 2: 0.00%
+2025-02-19 12:00:13,630 - INFO - Sensor 1 - Raw ADC Value: 30079, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:00:13,654 - INFO - Sensor 2 - Raw ADC Value: 15703, Moisture Level: 85.81%, Digital Status: Dry
+2025-02-19 12:00:13,678 - INFO - Sensor 3 - Raw ADC Value: 30087, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:00:13,705 - INFO - Sensor 4 - Raw ADC Value: 17874, Moisture Level: 67.72%, Digital Status: Wet
+2025-02-19 12:00:13,719 - WARNING - Low average moisture level for Sensor 2: 5.36%
+2025-02-19 12:00:23,731 - INFO - Sensor 1 - Raw ADC Value: 30142, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:00:23,755 - INFO - Sensor 2 - Raw ADC Value: 30126, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:00:23,780 - INFO - Sensor 3 - Raw ADC Value: 30079, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:00:23,805 - INFO - Sensor 4 - Raw ADC Value: 30133, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:00:23,819 - WARNING - Low average moisture level for Sensor 2: 5.05%
+2025-02-19 12:00:33,830 - INFO - Sensor 1 - Raw ADC Value: 30115, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:00:33,852 - INFO - Sensor 2 - Raw ADC Value: 30119, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:00:33,874 - INFO - Sensor 3 - Raw ADC Value: 30129, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:00:33,896 - INFO - Sensor 4 - Raw ADC Value: 30106, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:00:33,908 - WARNING - Low average moisture level for Sensor 2: 4.77%
+2025-02-19 12:00:43,919 - INFO - Sensor 1 - Raw ADC Value: 30123, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:00:43,940 - INFO - Sensor 2 - Raw ADC Value: 30129, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:00:43,961 - INFO - Sensor 3 - Raw ADC Value: 30145, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:00:43,983 - INFO - Sensor 4 - Raw ADC Value: 30124, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:00:43,995 - WARNING - Low average moisture level for Sensor 2: 4.52%
+2025-02-19 12:00:54,009 - INFO - Sensor 1 - Raw ADC Value: 30139, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:00:54,030 - INFO - Sensor 2 - Raw ADC Value: 30131, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:00:54,051 - INFO - Sensor 3 - Raw ADC Value: 30141, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:00:54,074 - INFO - Sensor 4 - Raw ADC Value: 30108, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:00:54,086 - WARNING - Low average moisture level for Sensor 2: 4.29%
+2025-02-19 12:01:04,097 - INFO - Sensor 1 - Raw ADC Value: 30125, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:01:04,122 - INFO - Sensor 2 - Raw ADC Value: 30127, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:01:04,143 - INFO - Sensor 3 - Raw ADC Value: 30129, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:01:04,166 - INFO - Sensor 4 - Raw ADC Value: 30115, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:01:04,178 - WARNING - Low average moisture level for Sensor 2: 4.09%
+2025-02-19 12:01:14,190 - INFO - Sensor 1 - Raw ADC Value: 30132, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:01:14,216 - INFO - Sensor 2 - Raw ADC Value: 30143, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:01:14,240 - INFO - Sensor 3 - Raw ADC Value: 30132, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:01:14,265 - INFO - Sensor 4 - Raw ADC Value: 30141, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:01:14,281 - WARNING - Low average moisture level for Sensor 2: 3.90%
+2025-02-19 12:01:24,292 - INFO - Sensor 1 - Raw ADC Value: 30143, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:01:24,317 - INFO - Sensor 2 - Raw ADC Value: 30161, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:01:24,341 - INFO - Sensor 3 - Raw ADC Value: 30148, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:01:24,368 - INFO - Sensor 4 - Raw ADC Value: 30090, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:01:24,382 - WARNING - Low average moisture level for Sensor 2: 3.73%
+2025-02-19 12:01:34,393 - INFO - Sensor 1 - Raw ADC Value: 30132, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:01:34,418 - INFO - Sensor 2 - Raw ADC Value: 30143, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:01:34,444 - INFO - Sensor 3 - Raw ADC Value: 30139, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:01:34,469 - INFO - Sensor 4 - Raw ADC Value: 30146, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 12:01:34,482 - WARNING - Low average moisture level for Sensor 2: 3.58%
+2025-02-19 12:01:40,822 - INFO - GPIO Cleanup Done.
+2025-02-19 12:01:40,823 - INFO - GPIO Cleanup Done.
+2025-02-19 21:42:33,127 - INFO - Sensor 1 - Raw ADC Value: 30173, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:42:33,149 - INFO - Sensor 2 - Raw ADC Value: 30108, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:42:33,169 - INFO - Sensor 3 - Raw ADC Value: 30174, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:42:33,192 - INFO - Sensor 4 - Raw ADC Value: 30172, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:42:33,206 - WARNING - Low average moisture level for Sensor 2: 3.43%
+2025-02-19 21:42:43,218 - INFO - Sensor 1 - Raw ADC Value: 30178, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:42:43,711 - INFO - Sensor 2 - Raw ADC Value: 30143, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:42:43,864 - INFO - Sensor 3 - Raw ADC Value: 30178, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:42:43,930 - INFO - Sensor 4 - Raw ADC Value: 30179, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:42:43,963 - WARNING - Low average moisture level for Sensor 2: 3.30%
+2025-02-19 21:42:53,974 - INFO - Sensor 1 - Raw ADC Value: 30171, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:42:53,998 - INFO - Sensor 2 - Raw ADC Value: 30103, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:42:54,021 - INFO - Sensor 3 - Raw ADC Value: 30173, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:42:54,044 - INFO - Sensor 4 - Raw ADC Value: 30154, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:42:54,056 - WARNING - Low average moisture level for Sensor 2: 3.18%
+2025-02-19 21:42:54,056 - WARNING - Low average moisture level for Sensor 3: 9.67%
+2025-02-19 21:43:04,067 - INFO - Sensor 1 - Raw ADC Value: 30160, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:43:04,090 - INFO - Sensor 2 - Raw ADC Value: 30139, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:43:04,113 - INFO - Sensor 3 - Raw ADC Value: 30169, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:43:04,134 - INFO - Sensor 4 - Raw ADC Value: 30175, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:43:04,146 - WARNING - Low average moisture level for Sensor 2: 3.06%
+2025-02-19 21:43:04,147 - WARNING - Low average moisture level for Sensor 3: 9.32%
+2025-02-19 21:43:14,157 - INFO - Sensor 1 - Raw ADC Value: 30152, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:43:14,180 - INFO - Sensor 2 - Raw ADC Value: 30128, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:43:14,201 - INFO - Sensor 3 - Raw ADC Value: 30170, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:43:14,222 - INFO - Sensor 4 - Raw ADC Value: 30172, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:43:14,237 - WARNING - Low average moisture level for Sensor 2: 2.96%
+2025-02-19 21:43:14,237 - WARNING - Low average moisture level for Sensor 3: 9.00%
+2025-02-19 21:43:24,248 - INFO - Sensor 1 - Raw ADC Value: 30151, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:43:24,273 - INFO - Sensor 2 - Raw ADC Value: 30122, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:43:24,297 - INFO - Sensor 3 - Raw ADC Value: 30183, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:43:24,323 - INFO - Sensor 4 - Raw ADC Value: 30182, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:43:24,338 - WARNING - Low average moisture level for Sensor 2: 2.86%
+2025-02-19 21:43:24,338 - WARNING - Low average moisture level for Sensor 3: 8.70%
+2025-02-19 21:43:34,351 - INFO - Sensor 1 - Raw ADC Value: 30175, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:43:34,374 - INFO - Sensor 2 - Raw ADC Value: 30139, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:43:34,398 - INFO - Sensor 3 - Raw ADC Value: 30205, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:43:34,424 - INFO - Sensor 4 - Raw ADC Value: 30172, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:43:34,443 - WARNING - Low average moisture level for Sensor 2: 2.77%
+2025-02-19 21:43:34,443 - WARNING - Low average moisture level for Sensor 3: 8.42%
+2025-02-19 21:43:44,456 - INFO - Sensor 1 - Raw ADC Value: 30181, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:43:44,482 - INFO - Sensor 2 - Raw ADC Value: 30134, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:43:44,509 - INFO - Sensor 3 - Raw ADC Value: 30186, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:43:44,536 - INFO - Sensor 4 - Raw ADC Value: 30159, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:43:44,551 - WARNING - Low average moisture level for Sensor 2: 2.68%
+2025-02-19 21:43:44,552 - WARNING - Low average moisture level for Sensor 3: 8.16%
+2025-02-19 21:43:54,565 - INFO - Sensor 1 - Raw ADC Value: 30183, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:43:54,592 - INFO - Sensor 2 - Raw ADC Value: 30144, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:43:54,617 - INFO - Sensor 3 - Raw ADC Value: 30183, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:43:54,643 - INFO - Sensor 4 - Raw ADC Value: 30180, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:43:54,658 - WARNING - Low average moisture level for Sensor 2: 2.60%
+2025-02-19 21:43:54,659 - WARNING - Low average moisture level for Sensor 3: 7.91%
+2025-02-19 21:44:04,669 - INFO - Sensor 1 - Raw ADC Value: 30167, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:44:04,692 - INFO - Sensor 2 - Raw ADC Value: 30146, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:44:04,714 - INFO - Sensor 3 - Raw ADC Value: 30156, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:44:04,739 - INFO - Sensor 4 - Raw ADC Value: 30176, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:44:04,753 - WARNING - Low average moisture level for Sensor 2: 2.52%
+2025-02-19 21:44:04,753 - WARNING - Low average moisture level for Sensor 3: 7.68%
+2025-02-19 21:44:14,764 - INFO - Sensor 1 - Raw ADC Value: 30167, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:44:14,786 - INFO - Sensor 2 - Raw ADC Value: 30121, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:44:14,811 - INFO - Sensor 3 - Raw ADC Value: 30179, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:44:14,834 - INFO - Sensor 4 - Raw ADC Value: 30173, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:44:14,847 - WARNING - Low average moisture level for Sensor 2: 2.45%
+2025-02-19 21:44:14,848 - WARNING - Low average moisture level for Sensor 3: 7.46%
+2025-02-19 21:44:24,858 - INFO - Sensor 1 - Raw ADC Value: 30171, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:44:24,881 - INFO - Sensor 2 - Raw ADC Value: 30091, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:44:24,905 - INFO - Sensor 3 - Raw ADC Value: 30155, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:44:24,929 - INFO - Sensor 4 - Raw ADC Value: 30180, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:44:24,943 - WARNING - Low average moisture level for Sensor 2: 2.38%
+2025-02-19 21:44:24,943 - WARNING - Low average moisture level for Sensor 3: 7.25%
+2025-02-19 21:44:34,956 - INFO - Sensor 1 - Raw ADC Value: 30175, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:44:34,983 - INFO - Sensor 2 - Raw ADC Value: 30150, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:44:35,009 - INFO - Sensor 3 - Raw ADC Value: 30182, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:44:35,035 - INFO - Sensor 4 - Raw ADC Value: 30173, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:44:35,050 - WARNING - Low average moisture level for Sensor 2: 2.32%
+2025-02-19 21:44:35,051 - WARNING - Low average moisture level for Sensor 3: 7.06%
+2025-02-19 21:44:45,062 - INFO - Sensor 1 - Raw ADC Value: 30179, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:44:45,089 - INFO - Sensor 2 - Raw ADC Value: 30134, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:44:45,114 - INFO - Sensor 3 - Raw ADC Value: 30184, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:44:45,140 - INFO - Sensor 4 - Raw ADC Value: 30180, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:44:45,155 - WARNING - Low average moisture level for Sensor 2: 2.26%
+2025-02-19 21:44:45,156 - WARNING - Low average moisture level for Sensor 3: 6.87%
+2025-02-19 21:44:52,933 - INFO - GPIO Cleanup Done.
+2025-02-19 21:44:52,934 - INFO - GPIO Cleanup Done.
+1,0.00,Dry
+2025-02-19 21:56:45,118 - INFO - Sensor 1 - Raw ADC Value: 30202, Moisture Level: 0.00%, Digital Status: Dry
+2,0.00,Dry
+2025-02-19 21:56:45,142 - INFO - Sensor 2 - Raw ADC Value: 30190, Moisture Level: 0.00%, Digital Status: Dry
+3,0.00,Dry
+2025-02-19 21:56:45,167 - INFO - Sensor 3 - Raw ADC Value: 30176, Moisture Level: 0.00%, Digital Status: Dry
+4,0.00,Dry
+2025-02-19 21:56:45,194 - INFO - Sensor 4 - Raw ADC Value: 30173, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:56:45,209 - WARNING - Low average moisture level for Sensor 2: 2.20%
+2025-02-19 21:56:45,209 - WARNING - Low average moisture level for Sensor 3: 6.69%
+1,0.00,Dry
+2025-02-19 21:56:55,221 - INFO - Sensor 1 - Raw ADC Value: 30181, Moisture Level: 0.00%, Digital Status: Dry
+2,0.00,Dry
+2025-02-19 21:56:55,247 - INFO - Sensor 2 - Raw ADC Value: 30193, Moisture Level: 0.00%, Digital Status: Dry
+3,0.00,Dry
+2025-02-19 21:56:55,273 - INFO - Sensor 3 - Raw ADC Value: 30190, Moisture Level: 0.00%, Digital Status: Dry
+4,0.00,Dry
+2025-02-19 21:56:55,299 - INFO - Sensor 4 - Raw ADC Value: 30187, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:56:55,314 - WARNING - Low average moisture level for Sensor 2: 2.15%
+2025-02-19 21:56:55,314 - WARNING - Low average moisture level for Sensor 3: 6.53%
+1,0.00,Dry
+2025-02-19 21:57:05,326 - INFO - Sensor 1 - Raw ADC Value: 30183, Moisture Level: 0.00%, Digital Status: Dry
+2,0.00,Dry
+2025-02-19 21:57:05,354 - INFO - Sensor 2 - Raw ADC Value: 30187, Moisture Level: 0.00%, Digital Status: Dry
+3,0.00,Dry
+2025-02-19 21:57:05,380 - INFO - Sensor 3 - Raw ADC Value: 30193, Moisture Level: 0.00%, Digital Status: Dry
+4,0.00,Dry
+2025-02-19 21:57:05,405 - INFO - Sensor 4 - Raw ADC Value: 30189, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:57:05,421 - WARNING - Low average moisture level for Sensor 1: 9.76%
+2025-02-19 21:57:05,422 - WARNING - Low average moisture level for Sensor 2: 2.09%
+2025-02-19 21:57:05,422 - WARNING - Low average moisture level for Sensor 3: 6.37%
+1,0.00,Dry
+2025-02-19 21:57:15,435 - INFO - Sensor 1 - Raw ADC Value: 30188, Moisture Level: 0.00%, Digital Status: Dry
+2,0.00,Dry
+2025-02-19 21:57:15,461 - INFO - Sensor 2 - Raw ADC Value: 30180, Moisture Level: 0.00%, Digital Status: Dry
+3,0.00,Dry
+2025-02-19 21:57:15,486 - INFO - Sensor 3 - Raw ADC Value: 30189, Moisture Level: 0.00%, Digital Status: Dry
+4,0.00,Dry
+2025-02-19 21:57:15,512 - INFO - Sensor 4 - Raw ADC Value: 30196, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 21:57:15,527 - WARNING - Low average moisture level for Sensor 1: 9.52%
+2025-02-19 21:57:15,528 - WARNING - Low average moisture level for Sensor 2: 2.04%
+2025-02-19 21:57:15,528 - WARNING - Low average moisture level for Sensor 3: 6.22%
+2025-02-19 21:57:21,194 - INFO - GPIO Cleanup Done.
+2025-02-19 21:57:21,195 - INFO - GPIO Cleanup Done.
+1,0.00,Dry
+2025-02-19 22:00:14,231 - INFO - Sensor 1 - Raw ADC Value: 30237, Moisture Level: 0.00%, Digital Status: Dry
+2,0.00,Dry
+2025-02-19 22:00:14,255 - INFO - Sensor 2 - Raw ADC Value: 30187, Moisture Level: 0.00%, Digital Status: Dry
+3,0.00,Dry
+2025-02-19 22:00:14,279 - INFO - Sensor 3 - Raw ADC Value: 30191, Moisture Level: 0.00%, Digital Status: Dry
+4,0.00,Dry
+2025-02-19 22:00:14,306 - INFO - Sensor 4 - Raw ADC Value: 30197, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 22:00:14,325 - INFO - Old data deleted up to 2025-02-12 22:00:14.320712.
+2025-02-19 22:00:14,326 - INFO - GPIO Cleanup Done.
+1,0.00,Dry
+2025-02-19 22:02:55,254 - INFO - Sensor 1 - Raw ADC Value: 30250, Moisture Level: 0.00%, Digital Status: Dry
+2,0.00,Dry
+2025-02-19 22:02:55,282 - INFO - Sensor 2 - Raw ADC Value: 30191, Moisture Level: 0.00%, Digital Status: Dry
+3,0.00,Dry
+2025-02-19 22:02:55,307 - INFO - Sensor 3 - Raw ADC Value: 30192, Moisture Level: 0.00%, Digital Status: Dry
+4,0.00,Dry
+2025-02-19 22:02:55,333 - INFO - Sensor 4 - Raw ADC Value: 30156, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 22:02:55,347 - INFO - Old data deleted up to 2025-02-12 22:02:55.346716.
+2025-02-19 22:02:55,349 - INFO - GPIO Cleanup Done.
+1,0.00,Dry
+2025-02-19 22:07:21,910 - INFO - Sensor 1 - Raw ADC Value: 30233, Moisture Level: 0.00%, Digital Status: Dry
+2,0.00,Dry
+2025-02-19 22:07:21,935 - INFO - Sensor 2 - Raw ADC Value: 30197, Moisture Level: 0.00%, Digital Status: Dry
+3,0.00,Dry
+2025-02-19 22:07:21,959 - INFO - Sensor 3 - Raw ADC Value: 30191, Moisture Level: 0.00%, Digital Status: Dry
+4,0.00,Dry
+2025-02-19 22:07:21,986 - INFO - Sensor 4 - Raw ADC Value: 30193, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 22:07:22,003 - INFO - Old data deleted up to 2025-02-12 22:07:22.002765.
+2025-02-19 22:07:22,005 - INFO - GPIO Cleanup Done.
+1,0.00,Dry
+2025-02-19 22:10:49,933 - INFO - Sensor 1 - Raw ADC Value: 30231, Moisture Level: 0.00%, Digital Status: Dry
+2,0.00,Dry
+2025-02-19 22:10:49,959 - INFO - Sensor 2 - Raw ADC Value: 30194, Moisture Level: 0.00%, Digital Status: Dry
+3,0.00,Dry
+2025-02-19 22:10:49,983 - INFO - Sensor 3 - Raw ADC Value: 30191, Moisture Level: 0.00%, Digital Status: Dry
+4,0.00,Dry
+2025-02-19 22:10:50,009 - INFO - Sensor 4 - Raw ADC Value: 30192, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 22:10:50,025 - INFO - Old data deleted up to 2025-02-12 22:10:50.024226.
+2025-02-19 22:10:50,026 - INFO - GPIO Cleanup Done.
+1,0.00,Dry
+2025-02-19 22:14:08,183 - INFO - Sensor 1 - Raw ADC Value: 30220, Moisture Level: 0.00%, Digital Status: Dry
+2,0.00,Dry
+2025-02-19 22:14:08,315 - INFO - Sensor 2 - Raw ADC Value: 30172, Moisture Level: 0.00%, Digital Status: Dry
+3,0.00,Dry
+2025-02-19 22:14:08,338 - INFO - Sensor 3 - Raw ADC Value: 30183, Moisture Level: 0.00%, Digital Status: Dry
+4,0.00,Dry
+2025-02-19 22:14:08,362 - INFO - Sensor 4 - Raw ADC Value: 30177, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 22:14:08,375 - INFO - Old data deleted up to 2025-02-12 22:14:08.374294.
+2025-02-19 22:14:08,376 - INFO - GPIO Cleanup Done.
+1,0.00,Dry
+2025-02-19 22:15:39,826 - INFO - Sensor 1 - Raw ADC Value: 30197, Moisture Level: 0.00%, Digital Status: Dry
+2,0.00,Dry
+2025-02-19 22:15:39,851 - INFO - Sensor 2 - Raw ADC Value: 30185, Moisture Level: 0.00%, Digital Status: Dry
+3,0.00,Dry
+2025-02-19 22:15:39,877 - INFO - Sensor 3 - Raw ADC Value: 30191, Moisture Level: 0.00%, Digital Status: Dry
+4,0.00,Dry
+2025-02-19 22:15:39,919 - INFO - Sensor 4 - Raw ADC Value: 30187, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 22:15:39,933 - INFO - Old data deleted up to 2025-02-12 22:15:39.932508.
+2025-02-19 22:15:39,935 - INFO - GPIO Cleanup Done.
+1,0.00,Dry
+2025-02-19 22:18:52,452 - INFO - Sensor 1 - Raw ADC Value: 30176, Moisture Level: 0.00%, Digital Status: Dry
+2,0.00,Dry
+2025-02-19 22:18:52,526 - INFO - Sensor 2 - Raw ADC Value: 30175, Moisture Level: 0.00%, Digital Status: Dry
+3,0.00,Dry
+2025-02-19 22:18:52,557 - INFO - Sensor 3 - Raw ADC Value: 30181, Moisture Level: 0.00%, Digital Status: Dry
+4,0.00,Dry
+2025-02-19 22:18:52,582 - INFO - Sensor 4 - Raw ADC Value: 30181, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 22:18:52,611 - INFO - Old data deleted up to 2025-02-12 22:18:52.610835.
+2025-02-19 22:18:52,613 - INFO - GPIO Cleanup Done.
+1,0.00,Dry
+2025-02-19 22:20:31,323 - INFO - Sensor 1 - Raw ADC Value: 30240, Moisture Level: 0.00%, Digital Status: Dry
+2,0.00,Dry
+2025-02-19 22:20:31,352 - INFO - Sensor 2 - Raw ADC Value: 30187, Moisture Level: 0.00%, Digital Status: Dry
+3,0.00,Dry
+2025-02-19 22:20:31,378 - INFO - Sensor 3 - Raw ADC Value: 30190, Moisture Level: 0.00%, Digital Status: Dry
+4,0.00,Dry
+2025-02-19 22:20:31,409 - INFO - Sensor 4 - Raw ADC Value: 30139, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 22:20:31,426 - INFO - Old data deleted up to 2025-02-12 22:20:31.425299.
+2025-02-19 22:20:31,427 - WARNING - Low average moisture level for Sensor 1: 8.00%
+2025-02-19 22:20:31,428 - WARNING - Low average moisture level for Sensor 2: 1.72%
+2025-02-19 22:20:31,429 - WARNING - Low average moisture level for Sensor 3: 5.22%
+2025-02-19 22:20:31,429 - WARNING - Low average moisture level for Sensor 4: 9.35%
+1,0.00,Dry
+2025-02-19 22:20:41,441 - INFO - Sensor 1 - Raw ADC Value: 30106, Moisture Level: 0.00%, Digital Status: Dry
+2,0.00,Dry
+2025-02-19 22:20:41,468 - INFO - Sensor 2 - Raw ADC Value: 30155, Moisture Level: 0.00%, Digital Status: Dry
+3,0.00,Dry
+2025-02-19 22:20:41,496 - INFO - Sensor 3 - Raw ADC Value: 30195, Moisture Level: 0.00%, Digital Status: Dry
+4,0.00,Dry
+2025-02-19 22:20:41,522 - INFO - Sensor 4 - Raw ADC Value: 30128, Moisture Level: 0.00%, Digital Status: Dry
+2025-02-19 22:20:41,536 - INFO - Old data deleted up to 2025-02-12 22:20:41.535950.
+2025-02-19 22:20:41,537 - WARNING - Low average moisture level for Sensor 1: 7.84%
+2025-02-19 22:20:41,538 - WARNING - Low average moisture level for Sensor 2: 1.68%
+2025-02-19 22:20:41,538 - WARNING - Low average moisture level for Sensor 3: 5.12%
+2025-02-19 22:20:41,539 - WARNING - Low average moisture level for Sensor 4: 9.17%
+2025-02-19 22:20:44,107 - INFO - GPIO Cleanup Done.
+2025-02-19 22:20:44,108 - INFO - GPIO Cleanup Done.
+2025-02-19 22:23:38,156 - INFO - Database setup complete.
+1,0.00,Wet
+2025-02-19 22:23:38,163 - INFO - Sensor 1 - ADC: 30185, Moisture: 0.00%, Status: Wet
+2,0.00,Dry
+2025-02-19 22:23:38,190 - INFO - Sensor 2 - ADC: 30142, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-19 22:23:38,216 - INFO - Sensor 3 - ADC: 30136, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-19 22:23:38,249 - INFO - Sensor 4 - ADC: 30134, Moisture: 0.00%, Status: Dry
+2025-02-19 22:23:38,264 - INFO - Old records older than 7 days removed.
+1,0.00,Wet
+2025-02-19 22:23:48,277 - INFO - Sensor 1 - ADC: -94, Moisture: 0.00%, Status: Wet
+2,0.00,Dry
+2025-02-19 22:23:48,303 - INFO - Sensor 2 - ADC: 30131, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-19 22:23:48,329 - INFO - Sensor 3 - ADC: 30130, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-19 22:23:48,355 - INFO - Sensor 4 - ADC: 30130, Moisture: 0.00%, Status: Dry
+2025-02-19 22:23:48,369 - INFO - Old records older than 7 days removed.
+1,0.00,Wet
+2025-02-19 22:23:58,381 - INFO - Sensor 1 - ADC: -96, Moisture: 0.00%, Status: Wet
+2,0.00,Dry
+2025-02-19 22:23:58,407 - INFO - Sensor 2 - ADC: 30127, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-19 22:23:58,434 - INFO - Sensor 3 - ADC: 30134, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-19 22:23:58,464 - INFO - Sensor 4 - ADC: 30131, Moisture: 0.00%, Status: Dry
+2025-02-19 22:23:58,481 - INFO - Old records older than 7 days removed.
+1,0.00,Wet
+2025-02-19 22:24:08,493 - INFO - Sensor 1 - ADC: -95, Moisture: 0.00%, Status: Wet
+2,0.00,Dry
+2025-02-19 22:24:08,518 - INFO - Sensor 2 - ADC: 30128, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-19 22:24:08,545 - INFO - Sensor 3 - ADC: 30132, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-19 22:24:08,571 - INFO - Sensor 4 - ADC: 30128, Moisture: 0.00%, Status: Dry
+2025-02-19 22:24:08,587 - INFO - Old records older than 7 days removed.
+1,0.00,Wet
+2025-02-19 22:24:18,598 - INFO - Sensor 1 - ADC: -101, Moisture: 0.00%, Status: Wet
+2,0.00,Dry
+2025-02-19 22:24:18,621 - INFO - Sensor 2 - ADC: 30126, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-19 22:24:18,645 - INFO - Sensor 3 - ADC: 30121, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-19 22:24:18,675 - INFO - Sensor 4 - ADC: 30122, Moisture: 0.00%, Status: Dry
+2025-02-19 22:24:18,689 - INFO - Old records older than 7 days removed.
+1,0.00,Wet
+2025-02-19 22:24:28,699 - INFO - Sensor 1 - ADC: -99, Moisture: 0.00%, Status: Wet
+2,0.00,Dry
+2025-02-19 22:24:28,723 - INFO - Sensor 2 - ADC: 30107, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-19 22:24:28,747 - INFO - Sensor 3 - ADC: 30120, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-19 22:24:28,769 - INFO - Sensor 4 - ADC: 30123, Moisture: 0.00%, Status: Dry
+2025-02-19 22:24:28,782 - INFO - Old records older than 7 days removed.
+1,0.00,Wet
+2025-02-19 22:24:38,793 - INFO - Sensor 1 - ADC: -100, Moisture: 0.00%, Status: Wet
+2,0.00,Dry
+2025-02-19 22:24:38,819 - INFO - Sensor 2 - ADC: 30111, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-19 22:24:38,841 - INFO - Sensor 3 - ADC: 30114, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-19 22:24:38,863 - INFO - Sensor 4 - ADC: 30117, Moisture: 0.00%, Status: Dry
+2025-02-19 22:24:38,878 - INFO - Old records older than 7 days removed.
+2025-02-19 22:24:45,018 - INFO - GPIO Cleanup Done.
+2025-02-19 22:27:08,691 - INFO - Database setup complete.
+1,0.00,Wet
+2025-02-19 22:27:08,697 - INFO - Sensor 1 - ADC: 30178, Moisture: 0.00%, Status: Wet
+2,0.00,Dry
+2025-02-19 22:27:08,724 - INFO - Sensor 2 - ADC: 30145, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-19 22:27:08,748 - INFO - Sensor 3 - ADC: 30131, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-19 22:27:08,773 - INFO - Sensor 4 - ADC: 30127, Moisture: 0.00%, Status: Dry
+2025-02-19 22:27:08,789 - INFO - Old records older than 7 days removed.
+1,0.00,Wet
+2025-02-19 22:27:18,801 - INFO - Sensor 1 - ADC: -96, Moisture: 0.00%, Status: Wet
+2,0.00,Dry
+2025-02-19 22:27:18,826 - INFO - Sensor 2 - ADC: 30126, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-19 22:27:18,853 - INFO - Sensor 3 - ADC: 30130, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-19 22:27:18,880 - INFO - Sensor 4 - ADC: 30131, Moisture: 0.00%, Status: Dry
+2025-02-19 22:27:18,896 - INFO - Old records older than 7 days removed.
+1,0.00,Wet
+2025-02-19 22:27:28,908 - INFO - Sensor 1 - ADC: -95, Moisture: 0.00%, Status: Wet
+2,0.00,Dry
+2025-02-19 22:27:28,934 - INFO - Sensor 2 - ADC: 30128, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-19 22:27:28,959 - INFO - Sensor 3 - ADC: 30124, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-19 22:27:28,988 - INFO - Sensor 4 - ADC: 30132, Moisture: 0.00%, Status: Dry
+2025-02-19 22:27:29,002 - INFO - Old records older than 7 days removed.
+1,0.00,Wet
+2025-02-19 22:27:39,013 - INFO - Sensor 1 - ADC: -101, Moisture: 0.00%, Status: Wet
+2,0.00,Dry
+2025-02-19 22:27:39,043 - INFO - Sensor 2 - ADC: 30118, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-19 22:27:39,067 - INFO - Sensor 3 - ADC: 30106, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-19 22:27:39,090 - INFO - Sensor 4 - ADC: 30116, Moisture: 0.00%, Status: Dry
+2025-02-19 22:27:39,114 - INFO - Old records older than 7 days removed.
+1,0.00,Wet
+2025-02-19 22:27:49,125 - INFO - Sensor 1 - ADC: -93, Moisture: 0.00%, Status: Wet
+2,0.00,Dry
+2025-02-19 22:27:49,152 - INFO - Sensor 2 - ADC: 30113, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-19 22:27:49,176 - INFO - Sensor 3 - ADC: 30121, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-19 22:27:49,200 - INFO - Sensor 4 - ADC: 30120, Moisture: 0.00%, Status: Dry
+2025-02-19 22:27:49,213 - INFO - Old records older than 7 days removed.
+1,0.00,Wet
+2025-02-19 22:27:59,223 - INFO - Sensor 1 - ADC: -101, Moisture: 0.00%, Status: Wet
+2,0.00,Dry
+2025-02-19 22:27:59,248 - INFO - Sensor 2 - ADC: 30108, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-19 22:27:59,271 - INFO - Sensor 3 - ADC: 30118, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-19 22:27:59,293 - INFO - Sensor 4 - ADC: 30122, Moisture: 0.00%, Status: Dry
+2025-02-19 22:27:59,307 - INFO - Old records older than 7 days removed.
+2025-02-19 22:28:07,159 - INFO - GPIO Cleanup Done.
+2025-02-19 22:34:09,298 - INFO - Database setup complete.
+1,0.00,Wet
+2025-02-19 22:34:09,304 - INFO - Sensor 1 - ADC: 30184, Moisture: 0.00%, Status: Wet
+2,0.00,Dry
+2025-02-19 22:34:09,329 - INFO - Sensor 2 - ADC: 30136, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-19 22:34:09,356 - INFO - Sensor 3 - ADC: 30135, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-19 22:34:09,382 - INFO - Sensor 4 - ADC: 30129, Moisture: 0.00%, Status: Dry
+2025-02-19 22:34:09,399 - INFO - Old records older than 7 days removed.
+2025-02-19 22:34:11,949 - INFO - GPIO Cleanup Done.
+2025-02-19 22:42:38,803 - INFO - Database setup complete.
+1,0.00,Wet
+2025-02-19 22:42:38,809 - INFO - Sensor 1 - ADC: 30183, Moisture: 0.00%, Status: Wet
+2,0.00,Dry
+2025-02-19 22:42:38,835 - INFO - Sensor 2 - ADC: 30137, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-19 22:42:38,859 - INFO - Sensor 3 - ADC: 30126, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-19 22:42:38,884 - INFO - Sensor 4 - ADC: 30125, Moisture: 0.00%, Status: Dry
+2025-02-19 22:42:38,899 - INFO - Old records older than 7 days removed.
+1,0.00,Wet
+2025-02-19 22:42:48,912 - INFO - Sensor 1 - ADC: -93, Moisture: 0.00%, Status: Wet
+2,0.00,Dry
+2025-02-19 22:42:48,938 - INFO - Sensor 2 - ADC: 30124, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-19 22:42:48,963 - INFO - Sensor 3 - ADC: 30124, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-19 22:42:48,989 - INFO - Sensor 4 - ADC: 30117, Moisture: 0.00%, Status: Dry
+2025-02-19 22:42:49,004 - INFO - Old records older than 7 days removed.
+1,0.00,Wet
+2025-02-19 22:42:59,017 - INFO - Sensor 1 - ADC: -92, Moisture: 0.00%, Status: Wet
+2,0.00,Dry
+2025-02-19 22:42:59,043 - INFO - Sensor 2 - ADC: 30122, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-19 22:42:59,067 - INFO - Sensor 3 - ADC: 30126, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-19 22:42:59,093 - INFO - Sensor 4 - ADC: 30124, Moisture: 0.00%, Status: Dry
+2025-02-19 22:42:59,109 - INFO - Old records older than 7 days removed.
+1,0.00,Wet
+2025-02-19 22:43:09,120 - INFO - Sensor 1 - ADC: -92, Moisture: 0.00%, Status: Wet
+2,0.00,Dry
+2025-02-19 22:43:09,148 - INFO - Sensor 2 - ADC: 30144, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-19 22:43:09,175 - INFO - Sensor 3 - ADC: 30129, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-19 22:43:09,202 - INFO - Sensor 4 - ADC: 30113, Moisture: 0.00%, Status: Dry
+2025-02-19 22:43:09,217 - INFO - Old records older than 7 days removed.
+2025-02-19 22:43:14,027 - INFO - GPIO Cleanup Done.
+2025-02-19 22:56:14,696 - INFO - Database setup complete.
+1,0.00,Dry
+2025-02-19 22:56:14,709 - INFO - Sensor 1 - ADC: 30184, Moisture: 0.00%, Status: Dry
+2,0.00,Dry
+2025-02-19 22:56:14,735 - INFO - Sensor 2 - ADC: 30176, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-19 22:56:14,762 - INFO - Sensor 3 - ADC: 30176, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-19 22:56:14,792 - INFO - Sensor 4 - ADC: 30185, Moisture: 0.00%, Status: Dry
+2025-02-19 22:56:14,819 - INFO - Old records older than 7 days removed.
+2025-02-19 22:56:21,889 - INFO - GPIO Cleanup Done.
+2025-02-19 23:04:44,093 - INFO - Database setup complete.
+1,0.00,Dry
+2025-02-19 23:04:44,112 - INFO - Sensor 1 - ADC: 30187, Moisture: 0.00%, Status: Dry
+2,0.00,Dry
+2025-02-19 23:04:44,141 - INFO - Sensor 2 - ADC: 30176, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-19 23:04:44,167 - INFO - Sensor 3 - ADC: 30182, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-19 23:04:44,191 - INFO - Sensor 4 - ADC: 30177, Moisture: 0.00%, Status: Dry
+2025-02-19 23:04:44,217 - INFO - Old records older than 7 days removed.
+1,0.00,Dry
+2025-02-19 23:04:54,228 - INFO - Sensor 1 - ADC: 30163, Moisture: 0.00%, Status: Dry
+2,0.00,Dry
+2025-02-19 23:04:54,252 - INFO - Sensor 2 - ADC: 30166, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-19 23:04:54,275 - INFO - Sensor 3 - ADC: 30166, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-19 23:04:54,298 - INFO - Sensor 4 - ADC: 30170, Moisture: 0.00%, Status: Dry
+2025-02-19 23:04:54,312 - INFO - Old records older than 7 days removed.
+1,0.00,Dry
+2025-02-19 23:05:04,324 - INFO - Sensor 1 - ADC: 30149, Moisture: 0.00%, Status: Dry
+2,0.00,Dry
+2025-02-19 23:05:04,350 - INFO - Sensor 2 - ADC: 30171, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-19 23:05:04,375 - INFO - Sensor 3 - ADC: 30169, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-19 23:05:04,399 - INFO - Sensor 4 - ADC: 30174, Moisture: 0.00%, Status: Dry
+2025-02-19 23:05:04,419 - INFO - Old records older than 7 days removed.
+1,0.00,Dry
+2025-02-19 23:05:14,431 - INFO - Sensor 1 - ADC: 30177, Moisture: 0.00%, Status: Dry
+2,0.00,Dry
+2025-02-19 23:05:14,457 - INFO - Sensor 2 - ADC: 30176, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-19 23:05:14,482 - INFO - Sensor 3 - ADC: 30221, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-19 23:05:14,508 - INFO - Sensor 4 - ADC: 30166, Moisture: 0.00%, Status: Dry
+2025-02-19 23:05:14,529 - INFO - Old records older than 7 days removed.
+2025-02-19 23:05:19,542 - INFO - GPIO Cleanup Done.
+2025-02-20 09:23:47,259 - INFO - Database setup complete.
+1,0.00,Dry
+2025-02-20 09:23:47,286 - INFO - Sensor 1 - ADC: 29849, Moisture: 0.00%, Status: Dry
+2,0.00,Dry
+2025-02-20 09:23:47,316 - INFO - Sensor 2 - ADC: 29809, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-20 09:23:47,340 - INFO - Sensor 3 - ADC: 29811, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-20 09:23:47,369 - INFO - Sensor 4 - ADC: 29834, Moisture: 0.00%, Status: Dry
+2025-02-20 09:23:47,390 - INFO - Old records older than 7 days removed.
+1,0.00,Dry
+2025-02-20 09:23:57,401 - INFO - Sensor 1 - ADC: 29766, Moisture: 0.00%, Status: Dry
+2,0.00,Dry
+2025-02-20 09:23:57,428 - INFO - Sensor 2 - ADC: 29789, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-20 09:23:57,450 - INFO - Sensor 3 - ADC: 29788, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-20 09:23:57,476 - INFO - Sensor 4 - ADC: 29799, Moisture: 0.00%, Status: Dry
+2025-02-20 09:23:57,490 - INFO - Old records older than 7 days removed.
+1,0.00,Dry
+2025-02-20 09:24:07,501 - INFO - Sensor 1 - ADC: 29750, Moisture: 0.00%, Status: Dry
+2,0.00,Dry
+2025-02-20 09:24:07,529 - INFO - Sensor 2 - ADC: 29784, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-20 09:24:07,553 - INFO - Sensor 3 - ADC: 29780, Moisture: 0.00%, Status: Dry
+4,0.00,Dry
+2025-02-20 09:24:07,575 - INFO - Sensor 4 - ADC: 29805, Moisture: 0.00%, Status: Dry
+2025-02-20 09:24:07,588 - INFO - Old records older than 7 days removed.
+2025-02-20 09:24:09,174 - INFO - GPIO Cleanup Done.
+2025-02-21 14:44:32,949 - INFO - Database setup complete.
+1,76.70,Wet
+2025-02-21 14:44:32,968 - INFO - Sensor 1 - ADC: 16796, Moisture: 76.70%, Status: Wet
+2,77.86,Dry
+2025-02-21 14:44:32,994 - INFO - Sensor 2 - ADC: 16657, Moisture: 77.86%, Status: Dry
+3,76.29,Wet
+2025-02-21 14:44:33,019 - INFO - Sensor 3 - ADC: 16845, Moisture: 76.29%, Status: Wet
+4,76.56,Wet
+2025-02-21 14:44:33,048 - INFO - Sensor 4 - ADC: 16813, Moisture: 76.56%, Status: Wet
+2025-02-21 14:44:33,074 - INFO - Old records older than 7 days removed.
+1,75.83,Wet
+2025-02-21 14:44:43,085 - INFO - Sensor 1 - ADC: 16901, Moisture: 75.83%, Status: Wet
+2,78.07,Dry
+2025-02-21 14:44:43,110 - INFO - Sensor 2 - ADC: 16632, Moisture: 78.07%, Status: Dry
+3,74.35,Wet
+2025-02-21 14:44:43,132 - INFO - Sensor 3 - ADC: 17078, Moisture: 74.35%, Status: Wet
+4,76.68,Wet
+2025-02-21 14:44:43,156 - INFO - Sensor 4 - ADC: 16799, Moisture: 76.68%, Status: Wet
+2025-02-21 14:44:43,169 - INFO - Old records older than 7 days removed.
+1,75.67,Wet
+2025-02-21 14:44:53,181 - INFO - Sensor 1 - ADC: 16920, Moisture: 75.67%, Status: Wet
+2,77.85,Dry
+2025-02-21 14:44:53,210 - INFO - Sensor 2 - ADC: 16658, Moisture: 77.85%, Status: Dry
+3,74.17,Wet
+2025-02-21 14:44:53,239 - INFO - Sensor 3 - ADC: 17100, Moisture: 74.17%, Status: Wet
+4,75.33,Wet
+2025-02-21 14:44:53,266 - INFO - Sensor 4 - ADC: 16961, Moisture: 75.33%, Status: Wet
+2025-02-21 14:44:53,282 - INFO - Old records older than 7 days removed.
+2025-02-21 14:44:54,877 - INFO - GPIO Cleanup Done.
+2025-02-21 14:46:10,099 - INFO - Database setup complete.
+1,71.56,Wet
+2025-02-21 14:46:10,117 - INFO - Sensor 1 - ADC: 17413, Moisture: 71.56%, Status: Wet
+2,75.13,Dry
+2025-02-21 14:46:10,143 - INFO - Sensor 2 - ADC: 16984, Moisture: 75.13%, Status: Dry
+3,70.56,Wet
+2025-02-21 14:46:10,169 - INFO - Sensor 3 - ADC: 17533, Moisture: 70.56%, Status: Wet
+4,72.56,Wet
+2025-02-21 14:46:10,194 - INFO - Sensor 4 - ADC: 17293, Moisture: 72.56%, Status: Wet
+2025-02-21 14:46:10,222 - INFO - Old records older than 7 days removed.
+1,71.61,Wet
+2025-02-21 14:46:20,235 - INFO - Sensor 1 - ADC: 17407, Moisture: 71.61%, Status: Wet
+2,74.58,Dry
+2025-02-21 14:46:20,260 - INFO - Sensor 2 - ADC: 17050, Moisture: 74.58%, Status: Dry
+3,70.24,Wet
+2025-02-21 14:46:20,285 - INFO - Sensor 3 - ADC: 17571, Moisture: 70.24%, Status: Wet
+4,72.12,Wet
+2025-02-21 14:46:20,314 - INFO - Sensor 4 - ADC: 17345, Moisture: 72.12%, Status: Wet
+2025-02-21 14:46:20,329 - INFO - Old records older than 7 days removed.
+1,90.25,Wet
+2025-02-21 14:46:30,340 - INFO - Sensor 1 - ADC: 15170, Moisture: 90.25%, Status: Wet
+2,0.00,Dry
+2025-02-21 14:46:30,363 - INFO - Sensor 2 - ADC: 11289, Moisture: 0.00%, Status: Dry
+3,87.44,Wet
+2025-02-21 14:46:30,391 - INFO - Sensor 3 - ADC: 15507, Moisture: 87.44%, Status: Wet
+4,88.06,Wet
+2025-02-21 14:46:30,413 - INFO - Sensor 4 - ADC: 15433, Moisture: 88.06%, Status: Wet
+2025-02-21 14:46:30,426 - INFO - Old records older than 7 days removed.
+1,75.23,Wet
+2025-02-21 14:46:40,438 - INFO - Sensor 1 - ADC: 16972, Moisture: 75.23%, Status: Wet
+2,0.00,Dry
+2025-02-21 14:46:40,464 - INFO - Sensor 2 - ADC: 29371, Moisture: 0.00%, Status: Dry
+3,71.69,Wet
+2025-02-21 14:46:40,492 - INFO - Sensor 3 - ADC: 17397, Moisture: 71.69%, Status: Wet
+4,73.31,Wet
+2025-02-21 14:46:40,522 - INFO - Sensor 4 - ADC: 17203, Moisture: 73.31%, Status: Wet
+2025-02-21 14:46:40,538 - INFO - Old records older than 7 days removed.
+1,85.80,Wet
+2025-02-21 14:46:50,550 - INFO - Sensor 1 - ADC: 15704, Moisture: 85.80%, Status: Wet
+2,0.00,Dry
+2025-02-21 14:46:50,577 - INFO - Sensor 2 - ADC: 29366, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-21 14:46:50,605 - INFO - Sensor 3 - ADC: 27982, Moisture: 0.00%, Status: Dry
+4,80.52,Wet
+2025-02-21 14:46:50,631 - INFO - Sensor 4 - ADC: 16338, Moisture: 80.52%, Status: Wet
+2025-02-21 14:46:50,645 - INFO - Old records older than 7 days removed.
+1,78.47,Wet
+2025-02-21 14:47:00,656 - INFO - Sensor 1 - ADC: 16583, Moisture: 78.47%, Status: Wet
+2,0.00,Dry
+2025-02-21 14:47:00,681 - INFO - Sensor 2 - ADC: 29004, Moisture: 0.00%, Status: Dry
+3,0.00,Dry
+2025-02-21 14:47:00,745 - INFO - Sensor 3 - ADC: 28947, Moisture: 0.00%, Status: Dry
+4,77.34,Wet
+2025-02-21 14:47:00,797 - INFO - Sensor 4 - ADC: 16719, Moisture: 77.34%, Status: Wet
+2025-02-21 14:47:00,829 - INFO - Old records older than 7 days removed.
+1,85.26,Wet
+2025-02-21 14:47:10,841 - INFO - Sensor 1 - ADC: 15769, Moisture: 85.26%, Status: Wet
+2,0.00,Dry
+2025-02-21 14:47:10,867 - INFO - Sensor 2 - ADC: 5941, Moisture: 0.00%, Status: Dry
+3,0.00,Wet
+2025-02-21 14:47:10,894 - INFO - Sensor 3 - ADC: 5290, Moisture: 0.00%, Status: Wet
+4,84.20,Wet
+2025-02-21 14:47:10,920 - INFO - Sensor 4 - ADC: 15896, Moisture: 84.20%, Status: Wet
+2025-02-21 14:47:10,934 - INFO - Old records older than 7 days removed.
+2025-02-21 14:47:19,759 - INFO - GPIO Cleanup Done.
+2025-02-21 14:47:23,319 - INFO - Database setup complete.
+1,79.69,Wet
+2025-02-21 14:47:23,325 - INFO - Sensor 1 - ADC: 16437, Moisture: 79.69%, Status: Wet
+2,0.00,Dry
+2025-02-21 14:47:23,355 - INFO - Sensor 2 - ADC: 6855, Moisture: 0.00%, Status: Dry
+3,0.00,Wet
+2025-02-21 14:47:23,380 - INFO - Sensor 3 - ADC: 7114, Moisture: 0.00%, Status: Wet
+4,78.98,Wet
+2025-02-21 14:47:23,405 - INFO - Sensor 4 - ADC: 16522, Moisture: 78.98%, Status: Wet
+2025-02-21 14:47:23,422 - INFO - Old records older than 7 days removed.
+1,77.90,Wet
+2025-02-21 14:47:33,434 - INFO - Sensor 1 - ADC: 16652, Moisture: 77.90%, Status: Wet
+2,0.00,Dry
+2025-02-21 14:47:33,459 - INFO - Sensor 2 - ADC: 7198, Moisture: 0.00%, Status: Dry
+3,0.00,Wet
+2025-02-21 14:47:33,485 - INFO - Sensor 3 - ADC: 7825, Moisture: 0.00%, Status: Wet
+4,79.22,Wet
+2025-02-21 14:47:33,512 - INFO - Sensor 4 - ADC: 16493, Moisture: 79.22%, Status: Wet
+2025-02-21 14:47:33,529 - INFO - Old records older than 7 days removed.
+1,75.55,Wet
+2025-02-21 14:47:43,541 - INFO - Sensor 1 - ADC: 16934, Moisture: 75.55%, Status: Wet
+2,0.00,Dry
+2025-02-21 14:47:43,568 - INFO - Sensor 2 - ADC: 7457, Moisture: 0.00%, Status: Dry
+3,0.00,Wet
+2025-02-21 14:47:43,590 - INFO - Sensor 3 - ADC: 8351, Moisture: 0.00%, Status: Wet
+4,78.62,Wet
+2025-02-21 14:47:43,616 - INFO - Sensor 4 - ADC: 16566, Moisture: 78.62%, Status: Wet
+2025-02-21 14:47:43,628 - INFO - Old records older than 7 days removed.
+1,76.39,Wet
+2025-02-21 14:47:53,639 - INFO - Sensor 1 - ADC: 16833, Moisture: 76.39%, Status: Wet
+2,0.00,Dry
+2025-02-21 14:47:53,664 - INFO - Sensor 2 - ADC: 7677, Moisture: 0.00%, Status: Dry
+3,0.00,Wet
+2025-02-21 14:47:53,687 - INFO - Sensor 3 - ADC: 8793, Moisture: 0.00%, Status: Wet
+4,75.38,Wet
+2025-02-21 14:47:53,711 - INFO - Sensor 4 - ADC: 16954, Moisture: 75.38%, Status: Wet
+2025-02-21 14:47:53,724 - INFO - Old records older than 7 days removed.
+1,74.83,Wet
+2025-02-21 14:48:03,736 - INFO - Sensor 1 - ADC: 17020, Moisture: 74.83%, Status: Wet
+2,0.00,Dry
+2025-02-21 14:48:03,761 - INFO - Sensor 2 - ADC: 7865, Moisture: 0.00%, Status: Dry
+3,0.00,Wet
+2025-02-21 14:48:03,782 - INFO - Sensor 3 - ADC: 9150, Moisture: 0.00%, Status: Wet
+4,76.87,Wet
+2025-02-21 14:48:03,805 - INFO - Sensor 4 - ADC: 16776, Moisture: 76.87%, Status: Wet
+2025-02-21 14:48:03,818 - INFO - Old records older than 7 days removed.
+1,75.12,Wet
+2025-02-21 14:48:13,830 - INFO - Sensor 1 - ADC: 16985, Moisture: 75.12%, Status: Wet
+2,0.00,Dry
+2025-02-21 14:48:13,856 - INFO - Sensor 2 - ADC: 8043, Moisture: 0.00%, Status: Dry
+3,0.00,Wet
+2025-02-21 14:48:13,880 - INFO - Sensor 3 - ADC: 9452, Moisture: 0.00%, Status: Wet
+4,74.01,Wet
+2025-02-21 14:48:13,906 - INFO - Sensor 4 - ADC: 17119, Moisture: 74.01%, Status: Wet
+2025-02-21 14:48:13,921 - INFO - Old records older than 7 days removed.
+2025-02-21 14:48:21,214 - INFO - GPIO Cleanup Done.
+2025-02-21 14:48:33,294 - INFO - Database setup complete.
+1,74.29,Wet
+2025-02-21 14:48:33,301 - INFO - Sensor 1 - ADC: 17085, Moisture: 74.29%, Status: Wet
+2,0.00,Dry
+2025-02-21 14:48:33,325 - INFO - Sensor 2 - ADC: 8334, Moisture: 0.00%, Status: Dry
+3,0.00,Wet
+2025-02-21 14:48:33,349 - INFO - Sensor 3 - ADC: 9878, Moisture: 0.00%, Status: Wet
+4,74.34,Wet
+2025-02-21 14:48:33,382 - INFO - Sensor 4 - ADC: 17079, Moisture: 74.34%, Status: Wet
+2025-02-21 14:48:33,397 - INFO - Old records older than 7 days removed.
+1,73.52,Wet
+2025-02-21 14:48:43,408 - INFO - Sensor 1 - ADC: 17177, Moisture: 73.52%, Status: Wet
+2,0.00,Dry
+2025-02-21 14:48:43,432 - INFO - Sensor 2 - ADC: 8426, Moisture: 0.00%, Status: Dry
+3,0.00,Wet
+2025-02-21 14:48:43,458 - INFO - Sensor 3 - ADC: 10043, Moisture: 0.00%, Status: Wet
+4,73.80,Wet
+2025-02-21 14:48:43,486 - INFO - Sensor 4 - ADC: 17144, Moisture: 73.80%, Status: Wet
+2025-02-21 14:48:43,501 - INFO - Old records older than 7 days removed.
+1,72.93,Wet
+2025-02-21 14:48:53,512 - INFO - Sensor 1 - ADC: 17248, Moisture: 72.93%, Status: Wet
+2,0.00,Dry
+2025-02-21 14:48:53,534 - INFO - Sensor 2 - ADC: 8605, Moisture: 0.00%, Status: Dry
+3,0.00,Wet
+2025-02-21 14:48:53,559 - INFO - Sensor 3 - ADC: 10256, Moisture: 0.00%, Status: Wet
+4,73.12,Wet
+2025-02-21 14:48:53,581 - INFO - Sensor 4 - ADC: 17226, Moisture: 73.12%, Status: Wet
+2025-02-21 14:48:53,595 - INFO - Old records older than 7 days removed.
+2025-02-21 14:48:59,543 - INFO - GPIO Cleanup Done.
