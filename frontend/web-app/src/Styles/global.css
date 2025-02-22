@@ -6,6 +6,10 @@ html, body, #root, .App {
     margin: 0px;
 }
 
+body{
+    overflow: scroll;
+}
+
 .text-white{
     color: #FFFFFF;
 }
