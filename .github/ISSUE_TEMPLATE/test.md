@@ -1,6 +1,6 @@
 ---
-name: Task
-about: A task template for smaller, actionable items
+name: Task - AAA Principle
+about: A task template for actionable items using the AAA principle
 title: '[Task] - [short task title here]'
 labels: task
 assignees: ''
