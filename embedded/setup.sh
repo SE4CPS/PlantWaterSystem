@@ -13,7 +13,7 @@ echo "Home directory: $ACTIVE_HOME"
 # Step 1: Clone the repository if not already present.
 if [ ! -d "PlantWaterSystem" ]; then
     echo "Cloning the PlantWaterSystem repository..."
-    git clone -b embedded-code https://github.com/SE4CPS/PlantWaterSystem.git
+    git clone https://github.com/SE4CPS/PlantWaterSystem.git
 fi
 
 cd PlantWaterSystem/embedded || exit
