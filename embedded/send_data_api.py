@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-from flask import Flask, jsonify, request
+
+from flask import Flask, jsonify
 import sqlite3
 import requests
 import schedule
@@ -9,26 +10,25 @@ import logging
 import os
 from datetime import datetime, timedelta
 
-# Setup logging
+# Setup logging to file "api_log.log"
 logging.basicConfig(filename="api_log.log", level=logging.INFO,
                     format="%(asctime)s - %(levelname)s - %(message)s")
 
-# Configuration
+# Configuration variables
 DB_NAME = os.getenv("DB_NAME", "plant_sensor_data.db")
 BACKEND_API_URL = os.getenv("BACKEND_API_URL", "https://backend.example.com/receive-data")
 RETRY_ATTEMPTS = 3
-BASE_DELAY = 2  # Base delay (in seconds) for exponential backoff
+BASE_DELAY = 2  # Seconds for exponential backoff
 
 app = Flask(__name__)
 
+# Fetches recent sensor data (last 12 hours) from the database.
 def fetch_recent_data():
-    """Fetch sensor readings from the last 12 hours."""
     try:
         conn = sqlite3.connect(DB_NAME)
     except sqlite3.Error as e:
         logging.error(f"Database connection error: {e}")
         return []
-
     try:
         cursor = conn.cursor()
         twelve_hours_ago = datetime.now() - timedelta(hours=12)
@@ -44,7 +44,6 @@ def fetch_recent_data():
         return []
     finally:
         conn.close()
-
     return [
         {
             "id": row[0],
@@ -61,8 +60,8 @@ def fetch_recent_data():
         for row in data
     ]
 
+# Retries a function with exponential backoff.
 def retry_with_backoff(func, max_attempts=3, base_delay=2):
-    """Retry a function with exponential backoff."""
     for attempt in range(max_attempts):
         if func():
             return True
@@ -72,13 +71,12 @@ def retry_with_backoff(func, max_attempts=3, base_delay=2):
     logging.error("All retry attempts failed.")
     return False
 
+# Sends the fetched sensor data to the backend URL.
 def send_data_to_backend():
-    """Send sensor data to the backend using retry logic."""
     data = fetch_recent_data()
     if not data:
         logging.info("No data to send.")
         return False
-
     def send_request():
         try:
             response = requests.post(BACKEND_API_URL, json={"sensor_data": data}, timeout=10)
@@ -91,36 +89,34 @@ def send_data_to_backend():
         except requests.RequestException as e:
             logging.error(f"Error sending data: {e}")
             return False
-
     return retry_with_backoff(send_request, max_attempts=RETRY_ATTEMPTS, base_delay=BASE_DELAY)
 
+# Flask endpoint to trigger data sending.
 @app.route("/send-data", methods=["POST"])
 def send_data():
-    """API endpoint to trigger data sending."""
     if send_data_to_backend():
         return jsonify({"message": "Data sent successfully"}), 200
     else:
         return jsonify({"message": "Failed to send data"}), 500
 
+# Safely executes a given task and logs any exceptions.
 def safe_task_execution(task):
-    """Execute a scheduled task safely."""
     try:
         task()
     except Exception as e:
         logging.error(f"Scheduled task failed: {e}")
 
+# Schedules data sending at 00:00 and 12:00 daily.
 def schedule_data_sending():
-    """Schedule data sending at 00:00 and 12:00 daily."""
     schedule.every().day.at("00:00").do(lambda: safe_task_execution(send_data_to_backend))
     schedule.every().day.at("12:00").do(lambda: safe_task_execution(send_data_to_backend))
     logging.info("Scheduled jobs registered successfully.")
-
     while True:
         schedule.run_pending()
         time.sleep(1)
 
+# Runs the scheduler in a separate daemon thread.
 def run_schedule_in_thread():
-    """Run the scheduler in a separate thread."""
     thread = threading.Thread(target=schedule_data_sending)
     thread.daemon = True
     thread.start()
