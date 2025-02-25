@@ -20,9 +20,9 @@ import weather_api  # Module for geolocation and weather data retrieval
 # ===========================
 # User Configuration Section
 # ===========================
-SENSOR_READ_INTERVAL = 10         # Seconds between sensor readings
+SENSOR_READ_INTERVAL = 900         # Seconds between sensor readings
 DATA_RETENTION_DAYS = 7           # Days to retain data in the database
-WEATHER_FETCH_INTERVAL = 90       # Seconds between weather API calls
+WEATHER_FETCH_INTERVAL = 900       # Seconds between weather API calls
 MIN_ADC = 5000                    # ADC value corresponding to 100% moisture
 MAX_ADC = 20000                   # ADC value corresponding to 0% moisture
 ENABLE_CSV_OUTPUT = True          # Set to True to also output data to CSV

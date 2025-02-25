@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+weather_api.py
+
+This module determines the device's geolocation using IP-based services
+and fetches current weather data from the free Open-Meteo API.
+"""
 
 import os
 import requests
@@ -8,7 +14,7 @@ import logging
 FALLBACK_LAT = os.getenv("FALLBACK_LAT", "")
 FALLBACK_LON = os.getenv("FALLBACK_LON", "")
 
-# Queries ipinfo.io for geolocation; returns (lat, lon, location_name) if successful.
+# Queries ipinfo.io for geolocation; returns (lat, lon, location_name).
 def get_ipinfo_location():
     try:
         response = requests.get("https://ipinfo.io/json", timeout=10)
@@ -30,7 +36,7 @@ def get_ipinfo_location():
         logging.error(f"Failed to get location from ipinfo.io: {e}")
     return None, None, None
 
-# Queries geoplugin.net for geolocation; returns (lat, lon, location_name) if successful.
+# Queries geoplugin.net for geolocation; returns (lat, lon, location_name).
 def get_geoplugin_location():
     try:
         response = requests.get("http://www.geoplugin.net/json.gp", timeout=10)
@@ -52,7 +58,7 @@ def get_geoplugin_location():
         logging.error(f"Failed to get location from geoplugin.net: {e}")
     return None, None, None
 
-# Attempts to detect location by trying multiple services; falls back if needed.
+# Attempts to detect location by trying multiple services; falls back if necessary.
 def detect_location():
     lat, lon, loc_name = get_ipinfo_location()
     if lat is not None and lon is not None:
