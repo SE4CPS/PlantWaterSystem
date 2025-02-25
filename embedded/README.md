@@ -57,7 +57,7 @@ This guide will walk you through setting up a new Raspberry Pi for your Soil Moi
 Run the following command to clone the repository, install dependencies, and configure the system automatically:
 
 ```bash
-bash <(curl -L https://raw.githubusercontent.com/SE4CPS/PlantWaterSystem/embedded-code/Embedded/setup.sh)
+bash <(curl -L [https://raw.githubusercontent.com/SE4CPS/PlantWaterSystem/embedded-code/Embedded/setup.sh](https://raw.githubusercontent.com/SE4CPS/PlantWaterSystem/refs/heads/main/embedded/setup.sh))
 ```
 
 This command performs the following tasks:
