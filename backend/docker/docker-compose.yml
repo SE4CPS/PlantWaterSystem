@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  api:
+    build: ../
+    container_name: sproutly-api
+    networks:
+      - sproutly-network
+    expose:
+      - "8000"
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - sproutly-network
+    depends_on:
+      - api
+
+networks:
+  sproutly-network:
+    driver: bridge

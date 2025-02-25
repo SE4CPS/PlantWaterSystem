@@ -1,0 +1,23 @@
+/* Home Page CSS */
+
+.homePage{
+    display: flex;
+    flex-direction: column;
+    padding: 44px 82px 94px 82px;
+}
+
+.nameBar{
+    font-family: "Poppins", serif;
+    font-size: 42px;
+    font-weight: 800;
+    color: #4C5740;
+}
+
+.plantViewer{
+    padding-top: 31px;
+    display: grid;
+    justify-content: center;
+    grid-template-columns: auto auto auto auto;
+    row-gap: 30px;
+    column-gap: 24px;
+}
