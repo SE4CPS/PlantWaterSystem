@@ -8,13 +8,13 @@ import logging
 FALLBACK_LAT = os.getenv("FALLBACK_LAT", "")
 FALLBACK_LON = os.getenv("FALLBACK_LON", "")
 
-# Queries ipinfo.io for geolocation; returns (lat, lon, location_name).
+# Queries ipinfo.io for geolocation; returns (lat, lon, location_name) if successful.
 def get_ipinfo_location():
     try:
         response = requests.get("https://ipinfo.io/json", timeout=10)
         response.raise_for_status()
         data = response.json()
-        loc_str = data.get("loc", None)
+        loc_str = data.get("loc", None)  # e.g., "40.7128,-74.0060"
         if loc_str:
             lat_str, lon_str = loc_str.split(",")
             lat = float(lat_str)
@@ -30,7 +30,7 @@ def get_ipinfo_location():
         logging.error(f"Failed to get location from ipinfo.io: {e}")
     return None, None, None
 
-# Queries geoplugin.net for geolocation; returns (lat, lon, location_name).
+# Queries geoplugin.net for geolocation; returns (lat, lon, location_name) if successful.
 def get_geoplugin_location():
     try:
         response = requests.get("http://www.geoplugin.net/json.gp", timeout=10)
@@ -52,7 +52,7 @@ def get_geoplugin_location():
         logging.error(f"Failed to get location from geoplugin.net: {e}")
     return None, None, None
 
-# Attempts multiple geolocation services and returns (lat, lon, location_name); falls back if needed.
+# Attempts to detect location by trying multiple services; falls back if needed.
 def detect_location():
     lat, lon, loc_name = get_ipinfo_location()
     if lat is not None and lon is not None:
@@ -74,7 +74,7 @@ def detect_location():
     logging.warning("All location methods failed. Returning (None, None, 'Unknown').")
     return None, None, "Unknown"
 
-# Fetches current weather data from Open-Meteo for the provided lat/lon.
+# Fetches current weather data from Open-Meteo for the specified lat/lon.
 def get_weather_data(lat, lon):
     if lat is None or lon is None:
         logging.warning("Latitude/Longitude not available. Cannot fetch weather data.")

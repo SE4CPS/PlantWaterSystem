@@ -3,7 +3,7 @@
 
 echo "Starting PlantWaterSystem setup..."
 
-# Clone the repository if it doesn't exist locally
+# Clone repository if not already present
 if [ ! -d "PlantWaterSystem" ]; then
     echo "Cloning the PlantWaterSystem repository..."
     git clone -b embedded-code https://github.com/SE4CPS/PlantWaterSystem.git
@@ -48,7 +48,7 @@ else
     echo "Warning: No I2C device detected. Please check connections."
 fi
 
-# Set executable permission for plant_monitor.py
+# Set executable permissions for plant_monitor.py
 if [ -f "plant_monitor.py" ]; then
     echo "Setting executable permission for plant_monitor.py..."
     chmod +x plant_monitor.py

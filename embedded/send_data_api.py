@@ -10,7 +10,7 @@ import logging
 import os
 from datetime import datetime, timedelta
 
-# Setup logging to file "api_log.log"
+# Setup logging for the API server
 logging.basicConfig(filename="api_log.log", level=logging.INFO,
                     format="%(asctime)s - %(levelname)s - %(message)s")
 
@@ -22,7 +22,7 @@ BASE_DELAY = 2  # Seconds for exponential backoff
 
 app = Flask(__name__)
 
-# Fetches recent sensor data (last 12 hours) from the database.
+# Retrieves sensor data from the last 12 hours from the database.
 def fetch_recent_data():
     try:
         conn = sqlite3.connect(DB_NAME)
@@ -71,7 +71,7 @@ def retry_with_backoff(func, max_attempts=3, base_delay=2):
     logging.error("All retry attempts failed.")
     return False
 
-# Sends the fetched sensor data to the backend URL.
+# Sends fetched sensor data to the backend URL.
 def send_data_to_backend():
     data = fetch_recent_data()
     if not data:
@@ -115,7 +115,7 @@ def schedule_data_sending():
         schedule.run_pending()
         time.sleep(1)
 
-# Runs the scheduler in a separate daemon thread.
+# Runs the scheduler in a separate thread.
 def run_schedule_in_thread():
     thread = threading.Thread(target=schedule_data_sending)
     thread.daemon = True
@@ -123,4 +123,5 @@ def run_schedule_in_thread():
 
 if __name__ == "__main__":
     run_schedule_in_thread()
-    app.run(host="0.0.0.0", port=5000)
+    # Changed port to 5001 to avoid conflict if port 5000 is in use.
+    app.run(host="0.0.0.0", port=5001)
