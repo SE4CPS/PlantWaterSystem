@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import subprocess
 import time
 import sqlite3
@@ -13,7 +14,7 @@ import sys
 import os
 from datetime import datetime, timedelta
 
-# Import the weather module
+# Import the weather module (using Open-Meteo)
 import weather_api
 
 # Setup logging
@@ -35,7 +36,7 @@ RETENTION_DAYS = args.retention_days
 i2c = busio.I2C(board.SCL, board.SDA)
 ads = ADS.ADS1115(i2c)
 
-# Start `send_data_api.py` subprocess with error handling
+# Start send_data_api.py as a subprocess (it’s also managed via systemd if desired)
 try:
     api_process = subprocess.Popen(["python3", "send_data_api.py"])
 except Exception as e:
@@ -63,9 +64,11 @@ for sensor in SENSORS:
 
 # Global SQLite connection
 conn = None
-
-# Retry logic for sensor reading
 MAX_RETRIES = 3
+
+# Global variables to store detected device location (set once at startup)
+DEVICE_LAT = None
+DEVICE_LON = None
 
 def read_sensor_with_retries(sensor):
     for attempt in range(MAX_RETRIES):
@@ -78,20 +81,20 @@ def read_sensor_with_retries(sensor):
     return 0, 0, "Error"
 
 def handle_shutdown(signum, frame):
-    """Handle shutdown signals gracefully."""
+    """Gracefully handle shutdown signals."""
     print("Received shutdown signal...")
     GPIO.cleanup()
     logging.info("GPIO Cleanup Done.")
     if conn:
         conn.close()
-    api_process.terminate()  # Terminate the API subprocess
+    api_process.terminate()
     sys.exit(0)
 
 signal.signal(signal.SIGTERM, handle_shutdown)
 signal.signal(signal.SIGINT, handle_shutdown)
 
 def setup_database():
-    """Create or update SQLite table with new weather columns."""
+    """Create or update SQLite table with sensor and weather columns."""
     cursor = conn.cursor()
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS moisture_data (
@@ -106,25 +109,17 @@ def setup_database():
             weather_wind_speed REAL
         )
     """)
-
-    # If table existed previously, attempt to add new columns safely:
-    # try:
-    #     cursor.execute("ALTER TABLE moisture_data ADD COLUMN weather_temp REAL")
-    # except sqlite3.OperationalError:
-    #     pass
-    # ... (repeat for other columns) ...
-
     conn.commit()
 
 def save_to_database(sensor_id, moisture_level, digital_status,
                      weather_temp, weather_humidity,
                      weather_sunlight, weather_wind_speed):
-    """Save sensor data plus weather info to SQLite."""
+    """Save sensor and weather data to SQLite."""
     try:
         cursor = conn.cursor()
         cursor.execute("""
             INSERT INTO moisture_data 
-            (sensor_id, moisture_level, digital_status, 
+            (sensor_id, moisture_level, digital_status,
              weather_temp, weather_humidity, weather_sunlight, weather_wind_speed)
             VALUES (?, ?, ?, ?, ?, ?, ?)
         """, (sensor_id, moisture_level, digital_status,
@@ -134,14 +129,14 @@ def save_to_database(sensor_id, moisture_level, digital_status,
         logging.error(f"Database error: {e}")
 
 def convert_adc_to_moisture(adc_value):
-    """Convert raw ADC value to moisture percentage."""
+    """Convert raw ADC value to a moisture percentage."""
     min_adc = 5000
     max_adc = 20000
     moisture_level = ((max_adc - adc_value) / (max_adc - min_adc)) * 100
     return max(0, min(100, moisture_level))
 
 def read_sensor_channel(sensor):
-    """Read data from a single sensor channel."""
+    """Read a single sensor channel."""
     try:
         chan = AnalogIn(ads, sensor["analog"])
         adc_value = chan.value
@@ -160,11 +155,11 @@ def read_sensor_channel(sensor):
 
 def read_sensors():
     """
-    Read data from all active sensors, fetch weather data once per loop,
-    and store everything in the DB.
+    Read sensor data and fetch current weather data using the previously
+    detected location. Save the combined data to the SQLite database.
     """
-    # Get the weather data for this entire loop
-    w_temp, w_humidity, w_sunlight, w_wind_speed = weather_api.get_weather_data()
+    # Get current weather data from Open-Meteo using stored DEVICE_LAT, DEVICE_LON
+    w_temp, w_humidity, w_sunlight, w_wind_speed = weather_api.get_weather_data(DEVICE_LAT, DEVICE_LON)
 
     for index, sensor in enumerate(SENSORS, start=1):
         if not sensor["active"]:
@@ -174,16 +169,15 @@ def read_sensors():
 
         print(
             f"Sensor {index} - ADC: {adc_value}, Moisture: {moisture_level:.2f}%, "
-            f"Digital: {digital_status}, T: {w_temp}, H: {w_humidity}, "
+            f"Digital: {digital_status}, Temp: {w_temp}, Humidity: {w_humidity}, "
             f"Sunlight: {w_sunlight}, Wind: {w_wind_speed}"
         )
         logging.info(
             f"Sensor {index} - ADC: {adc_value}, Moisture: {moisture_level:.2f}%, "
-            f"Digital: {digital_status}, Weather T: {w_temp}, H: {w_humidity}, "
+            f"Digital: {digital_status}, Weather Temp: {w_temp}, Humidity: {w_humidity}, "
             f"Sunlight: {w_sunlight}, Wind: {w_wind_speed}"
         )
 
-        # Save sensor data plus weather data to the DB
         save_to_database(index, moisture_level, digital_status,
                          w_temp, w_humidity, w_sunlight, w_wind_speed)
 
@@ -192,38 +186,38 @@ def read_sensors():
         logging.warning("Alert triggered on ALRT_PIN.")
 
 def manage_data_retention():
-    """Delete records older than the retention period."""
+    """Delete old records from the database beyond the retention period."""
     try:
         cutoff_date = datetime.now() - timedelta(days=RETENTION_DAYS)
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM moisture_data WHERE timestamp < ?", (cutoff_date.strftime("%Y-%m-%d %H:%M:%S"),))
+        cursor.execute("DELETE FROM moisture_data WHERE timestamp < ?",
+                       (cutoff_date.strftime("%Y-%m-%d %H:%M:%S"),))
         conn.commit()
         logging.info(f"Old data deleted up to {cutoff_date}.")
     except sqlite3.Error as e:
         logging.error(f"Data retention error: {e}")
 
 def sensor_health_check():
-    """Monitor sensors for consistent or missing values."""
+    """Perform a simple health check on sensor data."""
     try:
         cursor = conn.cursor()
         for sensor_id in range(1, len(SENSORS) + 1):
             if not SENSORS[sensor_id - 1]["active"]:
                 continue
 
-            cursor.execute("""
-                SELECT AVG(moisture_level) FROM moisture_data WHERE sensor_id = ?
-            """, (sensor_id,))
+            cursor.execute("SELECT AVG(moisture_level) FROM moisture_data WHERE sensor_id = ?", (sensor_id,))
             avg_moisture = cursor.fetchone()[0]
             if avg_moisture is None:
                 logging.warning(f"No data recorded for Sensor {sensor_id}.")
             elif avg_moisture < 10:
-                logging.warning(f"Low average moisture level for Sensor {sensor_id}: {avg_moisture:.2f}%")
+                logging.warning(f"Low average moisture for Sensor {sensor_id}: {avg_moisture:.2f}%")
     except sqlite3.Error as e:
         logging.error(f"Health check error: {e}")
 
 def main():
-    """Main function to read sensors and store data in SQLite."""
-    global conn
+    global conn, DEVICE_LAT, DEVICE_LON
+
+    # Connect to the SQLite database
     try:
         conn = sqlite3.connect(DB_NAME)
     except sqlite3.Error as e:
@@ -231,6 +225,11 @@ def main():
         sys.exit(1)
 
     setup_database()
+
+    # Detect device location once at startup using our weather module
+    DEVICE_LAT, DEVICE_LON = weather_api.detect_location()
+    logging.info(f"Final device location set to: {DEVICE_LAT}, {DEVICE_LON}")
+
     print("Starting Multi-Sensor Plant Monitoring...")
     GPIO.output(ADDR_PIN, GPIO.HIGH)
 
