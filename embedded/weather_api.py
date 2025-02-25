@@ -10,7 +10,7 @@ FALLBACK_LON = os.getenv("FALLBACK_LON", "")
 def get_ipinfo_location():
     """
     Try to get location using ipinfo.io.
-    Returns (latitude, longitude) or (None, None) on failure.
+    Returns (latitude, longitude, location_name) or (None, None, None) on failure.
     """
     try:
         response = requests.get("https://ipinfo.io/json", timeout=10)
@@ -19,15 +19,23 @@ def get_ipinfo_location():
         loc_str = data.get("loc", None)  # e.g., "40.7128,-74.0060"
         if loc_str:
             lat_str, lon_str = loc_str.split(",")
-            return float(lat_str), float(lon_str)
+            lat = float(lat_str)
+            lon = float(lon_str)
+            city = data.get("city", "")
+            region = data.get("region", "")
+            country = data.get("country", "")
+            location_name = ", ".join(filter(None, [city, region, country]))
+            if not location_name:
+                location_name = f"{lat},{lon}"
+            return lat, lon, location_name
     except Exception as e:
         logging.error(f"Failed to get location from ipinfo.io: {e}")
-    return None, None
+    return None, None, None
 
 def get_geoplugin_location():
     """
     Try to get location using geoplugin.net.
-    Returns (latitude, longitude) or (None, None) on failure.
+    Returns (latitude, longitude, location_name) or (None, None, None) on failure.
     """
     try:
         response = requests.get("http://www.geoplugin.net/json.gp", timeout=10)
@@ -36,41 +44,47 @@ def get_geoplugin_location():
         lat_str = data.get("geoplugin_latitude", None)
         lon_str = data.get("geoplugin_longitude", None)
         if lat_str and lon_str:
-            return float(lat_str), float(lon_str)
+            lat = float(lat_str)
+            lon = float(lon_str)
+            city = data.get("geoplugin_city", "")
+            region = data.get("geoplugin_region", "")
+            country = data.get("geoplugin_countryName", "")
+            location_name = ", ".join(filter(None, [city, region, country]))
+            if not location_name:
+                location_name = f"{lat},{lon}"
+            return lat, lon, location_name
     except Exception as e:
         logging.error(f"Failed to get location from geoplugin.net: {e}")
-    return None, None
+    return None, None, None
 
 def detect_location():
     """
     Attempt multiple IP-based geolocation methods.
     If they fail, use fallback coordinates from the environment.
-    Returns (latitude, longitude) or (None, None) if all methods fail.
+    Returns (latitude, longitude, location_name) or (None, None, "Unknown") if all methods fail.
     """
-    # Try ipinfo.io
-    lat, lon = get_ipinfo_location()
+    lat, lon, loc_name = get_ipinfo_location()
     if lat is not None and lon is not None:
-        logging.info(f"Got location from ipinfo.io: {lat}, {lon}")
-        return lat, lon
+        logging.info(f"Got location from ipinfo.io: {lat}, {lon}, {loc_name}")
+        return lat, lon, loc_name
 
-    # Try geoplugin.net
-    lat, lon = get_geoplugin_location()
+    lat, lon, loc_name = get_geoplugin_location()
     if lat is not None and lon is not None:
-        logging.info(f"Got location from geoplugin.net: {lat}, {lon}")
-        return lat, lon
+        logging.info(f"Got location from geoplugin.net: {lat}, {lon}, {loc_name}")
+        return lat, lon, loc_name
 
-    # Fallback: use environment variables if available
     if FALLBACK_LAT and FALLBACK_LON:
         try:
             lat = float(FALLBACK_LAT)
             lon = float(FALLBACK_LON)
+            loc_name = f"{lat},{lon}"
             logging.info(f"Using fallback coordinates from environment: {lat}, {lon}")
-            return lat, lon
+            return lat, lon, loc_name
         except ValueError:
             logging.error("Invalid fallback coordinates; check FALLBACK_LAT and FALLBACK_LON.")
 
-    logging.warning("All location methods failed. Returning (None, None).")
-    return None, None
+    logging.warning("All location methods failed. Returning (None, None, 'Unknown').")
+    return None, None, "Unknown"
 
 def get_weather_data(lat, lon):
     """
@@ -108,7 +122,6 @@ def get_weather_data(lat, lon):
         weather_wind_speed = current.get("windspeed")
         current_time = current.get("time")
 
-        # Default humidity and sunlight to None
         weather_humidity = None
         weather_sunlight = None
 
@@ -125,7 +138,6 @@ def get_weather_data(lat, lon):
                 if index < len(hourly_radiation):
                     weather_sunlight = hourly_radiation[index]
             except ValueError:
-                # current_time not found; use first available values
                 if hourly_humidity:
                     weather_humidity = hourly_humidity[0]
                 if hourly_radiation:

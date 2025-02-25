@@ -66,10 +66,12 @@ for sensor in SENSORS:
 conn = None
 MAX_RETRIES = 3
 
-# Global variables to store detected device location (set once at startup)
+# Global variables for location and weather caching
 DEVICE_LAT = None
 DEVICE_LON = None
-DEVICE_LOCATION = None  # String version: "lat,lon"
+DEVICE_LOCATION = None  # e.g. "Mountain View, California, US (37.3860,-122.0838)"
+last_weather_time = 0
+last_weather_data = None  # Cached weather data tuple
 
 def read_sensor_with_retries(sensor):
     for attempt in range(MAX_RETRIES):
@@ -117,7 +119,6 @@ def setup_database():
         cursor.execute("ALTER TABLE moisture_data ADD COLUMN location TEXT")
         conn.commit()
     except sqlite3.OperationalError:
-        # Column already exists
         pass
 
 def save_to_database(sensor_id, moisture_level, digital_status,
@@ -164,11 +165,16 @@ def read_sensor_channel(sensor):
 
 def read_sensors():
     """
-    Read sensor data and fetch current weather data using the previously
-    detected location. Save the combined data to the database.
+    Read sensor data and fetch current weather data (cached at 90-second intervals)
+    using the previously detected location. Save the combined data to the database.
     """
-    # Get current weather data from Open-Meteo using stored DEVICE_LAT, DEVICE_LON
-    w_temp, w_humidity, w_sunlight, w_wind_speed = weather_api.get_weather_data(DEVICE_LAT, DEVICE_LON)
+    global last_weather_time, last_weather_data
+    current_sec = time.time()
+    if last_weather_time == 0 or (current_sec - last_weather_time) >= 90:
+        last_weather_data = weather_api.get_weather_data(DEVICE_LAT, DEVICE_LON)
+        last_weather_time = current_sec
+    # Use cached weather data
+    w_temp, w_humidity, w_sunlight, w_wind_speed = last_weather_data if last_weather_data is not None else (None, None, None, None)
 
     for index, sensor in enumerate(SENSORS, start=1):
         if not sensor["active"]:
@@ -235,9 +241,9 @@ def main():
     setup_database()
 
     # Detect device location once at startup using the weather module
-    DEVICE_LAT, DEVICE_LON = weather_api.detect_location()
+    DEVICE_LAT, DEVICE_LON, loc_name = weather_api.detect_location()
     if DEVICE_LAT is not None and DEVICE_LON is not None:
-        DEVICE_LOCATION = f"{DEVICE_LAT},{DEVICE_LON}"
+        DEVICE_LOCATION = f"{loc_name} ({DEVICE_LAT},{DEVICE_LON})"
     else:
         DEVICE_LOCATION = "Unknown"
     # Print the detected location to the terminal
