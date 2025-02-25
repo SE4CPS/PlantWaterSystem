@@ -1,8 +1,9 @@
 #!/bin/bash
+# PlantWaterSystem setup script
 
 echo "Starting PlantWaterSystem setup..."
 
-# Step 1: Clone the repository (if not already present)
+# Clone the repository if it doesn't exist locally
 if [ ! -d "PlantWaterSystem" ]; then
     echo "Cloning the PlantWaterSystem repository..."
     git clone -b embedded-code https://github.com/SE4CPS/PlantWaterSystem.git
@@ -10,11 +11,11 @@ fi
 
 cd PlantWaterSystem/embedded || exit
 
-# Step 2: Update Raspberry Pi OS
+# Update Raspberry Pi OS
 echo "Updating Raspberry Pi OS..."
 sudo apt update && sudo apt upgrade -y
 
-# Step 3: Enable I2C Communication
+# Enable I2C communication
 echo "Enabling I2C communication..."
 CONFIG_FILE="/boot/config.txt"
 I2C_LINE="dtparam=i2c_arm=on"
@@ -31,14 +32,14 @@ fi
 echo "Installing I2C tools..."
 sudo apt install -y i2c-tools python3-smbus
 
-# Step 4: Install required packages
+# Install required packages
 echo "Installing required packages..."
 sudo apt install -y python3-pip sqlite3
 
 echo "Installing necessary Python libraries..."
-sudo pip3 install RPi.GPIO adafruit-circuitpython-ads1x15 requests flask --break-system-packages
+sudo pip3 install RPi.GPIO adafruit-circuitpython-ads1x15 requests flask schedule --break-system-packages
 
-# Step 5: Verify I2C connection
+# Verify I2C connection
 echo "Verifying I2C connection..."
 i2cdetect -y 1
 if i2cdetect -y 1 | grep -q "48"; then
@@ -47,7 +48,7 @@ else
     echo "Warning: No I2C device detected. Please check connections."
 fi
 
-# Step 6: Set permissions for plant_monitor.py
+# Set executable permission for plant_monitor.py
 if [ -f "plant_monitor.py" ]; then
     echo "Setting executable permission for plant_monitor.py..."
     chmod +x plant_monitor.py
@@ -55,7 +56,7 @@ else
     echo "Warning: plant_monitor.py not found!"
 fi
 
-# Step 7: Setup systemd service for plant_monitor
+# Setup systemd service for plant_monitor
 SERVICE_FILE="/etc/systemd/system/plant_monitor.service"
 cat <<EOF | sudo tee $SERVICE_FILE
 [Unit]
@@ -81,7 +82,7 @@ sudo systemctl daemon-reload
 sudo systemctl enable plant_monitor.service
 sudo systemctl start plant_monitor.service
 
-# Step 8: Optional setup for send_data_api.py service
+# Optional: Setup systemd service for send_data_api
 SEND_API_SERVICE_FILE="/etc/systemd/system/send_data_api.service"
 read -p "Do you want to set up send_data_api.py as a service? (y/n): " SETUP_SEND_API
 if [[ "$SETUP_SEND_API" == "y" || "$SETUP_SEND_API" == "Y" ]]; then
@@ -104,7 +105,6 @@ User=pi
 [Install]
 WantedBy=multi-user.target
 EOF
-
     sudo systemctl daemon-reload
     sudo systemctl enable send_data_api.service
     sudo systemctl start send_data_api.service
@@ -112,7 +112,7 @@ else
     echo "Skipping send_data_api service setup."
 fi
 
-# Step 9: Reboot if necessary
+# Reboot if necessary
 if [ "$REBOOT_REQUIRED" = true ]; then
     echo "I2C configuration updated. Reboot is required."
     read -p "Reboot now? (y/n): " REBOOT_ANSWER
