@@ -57,11 +57,11 @@ SENSORS = [
     {"analog": ADS.P3, "digital": 23, "active": True},
 ]
 
-# Additional GPIO pins for configuration and alerts
-ADDR_PIN = 7   # GPIO pin for address configuration
-ALRT_PIN = 0   # GPIO pin for alerts
+# Additional GPIO pins for configuration and alerts.
+ADDR_PIN = 7   # GPIO pin for address configuration.
+ALRT_PIN = 0   # GPIO pin for alerts.
 
-# Setup GPIO mode and pins
+# Setup GPIO mode and pins.
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(ADDR_PIN, GPIO.OUT)
 GPIO.setup(ALRT_PIN, GPIO.IN)
@@ -69,14 +69,14 @@ for sensor in SENSORS:
     if sensor["active"]:
         GPIO.setup(sensor["digital"], GPIO.IN)
 
-# Global variables for database connection and retry settings
+# Global variables for database connection and retry settings.
 conn = None
 MAX_RETRIES = 3
 
-# Global variables for location and weather caching
+# Global variables for location and weather caching.
 DEVICE_LAT = None
 DEVICE_LON = None
-DEVICE_LOCATION = None  # e.g., "Stockton, California, US (37.9577,-121.2908)"
+DEVICE_LOCATION = None  # This will store only the city name, e.g., "Stockton, California, US"
 last_weather_time = 0
 last_weather_data = None  # Cached tuple: (temp, humidity, sunlight, wind_speed)
 
@@ -84,21 +84,16 @@ last_weather_data = None  # Cached tuple: (temp, humidity, sunlight, wind_speed)
 # Function Definitions
 # ---------------------------
 
-# Writes a record to the CSV file (if enabled).
+# Writes a record to a CSV file (if enabled).
 def save_to_csv(record):
-    """
-    Saves the provided record (a list of values) to the CSV file.
-    If the file does not exist, writes a header first.
-    """
     if not ENABLE_CSV_OUTPUT:
         return
     file_exists = os.path.isfile(CSV_FILENAME)
     try:
         with open(CSV_FILENAME, mode="a", newline="") as csvfile:
             writer = csv.writer(csvfile)
-            # If file doesn't exist, write header row.
             if not file_exists:
-                header = ["timestamp", "sensor_id", "moisture_level", "digital_status",
+                header = ["timestamp", "sensor_id", "adc_value", "moisture_level", "digital_status",
                           "weather_temp", "weather_humidity", "weather_sunlight",
                           "weather_wind_speed", "location", "weather_fetched"]
                 writer.writerow(header)
@@ -106,7 +101,7 @@ def save_to_csv(record):
     except Exception as e:
         logging.error(f"Error writing to CSV file: {e}")
 
-# Attempts to read sensor data with retry logic.
+# Reads sensor data with retries in case of transient errors.
 def read_sensor_with_retries(sensor):
     for attempt in range(MAX_RETRIES):
         try:
@@ -130,8 +125,8 @@ def handle_shutdown(signum, frame):
 signal.signal(signal.SIGTERM, handle_shutdown)
 signal.signal(signal.SIGINT, handle_shutdown)
 
-# Sets up the SQLite database table with columns for sensor data, weather data,
-# location, and the time when weather data was fetched.
+# Creates or updates the SQLite database table with columns for sensor data, weather data,
+# location (only city name), raw ADC value, and weather fetch timestamp.
 def setup_database():
     cursor = conn.cursor()
     cursor.execute("""
@@ -139,6 +134,7 @@ def setup_database():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
             sensor_id INTEGER,
+            adc_value REAL,
             moisture_level REAL,
             digital_status TEXT,
             weather_temp REAL,
@@ -151,6 +147,11 @@ def setup_database():
     """)
     conn.commit()
     try:
+        cursor.execute("ALTER TABLE moisture_data ADD COLUMN adc_value REAL")
+        conn.commit()
+    except sqlite3.OperationalError:
+        pass
+    try:
         cursor.execute("ALTER TABLE moisture_data ADD COLUMN location TEXT")
         conn.commit()
     except sqlite3.OperationalError:
@@ -162,30 +163,30 @@ def setup_database():
         pass
 
 # Inserts a record into the database.
-def save_to_database(sensor_id, moisture_level, digital_status,
+def save_to_database(sensor_id, adc_value, moisture_level, digital_status,
                      weather_temp, weather_humidity, weather_sunlight,
                      weather_wind_speed, location, weather_fetched):
     try:
         cursor = conn.cursor()
         cursor.execute("""
             INSERT INTO moisture_data 
-            (sensor_id, moisture_level, digital_status,
+            (sensor_id, adc_value, moisture_level, digital_status,
              weather_temp, weather_humidity, weather_sunlight, weather_wind_speed,
              location, weather_fetched)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (sensor_id, moisture_level, digital_status,
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (sensor_id, adc_value, moisture_level, digital_status,
               weather_temp, weather_humidity, weather_sunlight, weather_wind_speed,
               location, weather_fetched))
         conn.commit()
     except sqlite3.Error as e:
         logging.error(f"Database error: {e}")
 
-# Converts raw ADC value to a moisture percentage using MIN_ADC and MAX_ADC.
+# Converts a raw ADC value to a moisture percentage using MIN_ADC and MAX_ADC.
 def convert_adc_to_moisture(adc_value):
     moisture_level = ((MAX_ADC - adc_value) / (MAX_ADC - MIN_ADC)) * 100
     return max(0, min(100, moisture_level))
 
-# Reads a single sensor channel (ADC and digital input).
+# Reads the ADC value and digital state from a sensor.
 def read_sensor_channel(sensor):
     try:
         chan = AnalogIn(ads, sensor["analog"])
@@ -203,7 +204,7 @@ def read_sensor_channel(sensor):
         logging.error(f"Unexpected error on sensor {sensor['analog']}: {e}")
         return 0, 0, "Error"
 
-# Reads all sensor data, obtains weather data (with caching), and saves the record to both the database and CSV file.
+# Reads all sensors, obtains weather data (using cache), and saves records to the DB and CSV.
 def read_sensors():
     global last_weather_time, last_weather_data
     current_sec = time.time()
@@ -213,7 +214,6 @@ def read_sensors():
     w_temp, w_humidity, w_sunlight, w_wind_speed = (
         last_weather_data if last_weather_data is not None else (None, None, None, None)
     )
-    # Format the timestamp when weather data was fetched.
     weather_fetched_str = datetime.fromtimestamp(last_weather_time).strftime('%Y-%m-%d %H:%M:%S') if last_weather_time else "Unknown"
     for index, sensor in enumerate(SENSORS, start=1):
         if not sensor["active"]:
@@ -221,19 +221,19 @@ def read_sensors():
         adc_value, moisture_level, digital_status = read_sensor_with_retries(sensor)
         print(f"Sensor {index} - ADC: {adc_value}, Moisture: {moisture_level:.2f}%, Digital: {digital_status}, Temp: {w_temp}, Humidity: {w_humidity}, Sunlight: {w_sunlight}, Wind: {w_wind_speed}")
         logging.info(f"Sensor {index} - ADC: {adc_value}, Moisture: {moisture_level:.2f}%, Digital: {digital_status}, Weather Temp: {w_temp}, Humidity: {w_humidity}, Sunlight: {w_sunlight}, Wind: {w_wind_speed}")
-        # Save record to the database.
-        save_to_database(index, moisture_level, digital_status,
+        # Save record to database.
+        save_to_database(index, adc_value, moisture_level, digital_status,
                          w_temp, w_humidity, w_sunlight, w_wind_speed,
                          DEVICE_LOCATION, weather_fetched_str)
-        # Save the same record to CSV as a temporary backup.
-        record = [datetime.now().strftime('%Y-%m-%d %H:%M:%S'), index, f"{moisture_level:.2f}", digital_status,
+        # Also save to CSV as temporary backup.
+        record = [datetime.now().strftime('%Y-%m-%d %H:%M:%S'), index, adc_value, f"{moisture_level:.2f}", digital_status,
                   w_temp, w_humidity, w_sunlight, w_wind_speed, DEVICE_LOCATION, weather_fetched_str]
         save_to_csv(record)
     if GPIO.input(ALRT_PIN) == GPIO.HIGH:
         print("Alert! Check sensor readings.")
         logging.warning("Alert triggered on ALRT_PIN.")
 
-# Deletes database records older than DATA_RETENTION_DAYS.
+# Deletes records older than DATA_RETENTION_DAYS from the database.
 def manage_data_retention():
     try:
         cutoff_date = datetime.now() - timedelta(days=DATA_RETENTION_DAYS)
@@ -245,7 +245,7 @@ def manage_data_retention():
     except sqlite3.Error as e:
         logging.error(f"Data retention error: {e}")
 
-# Checks sensor health by logging if average moisture is too low.
+# Performs a health check on sensor data and logs warnings if average moisture is too low.
 def sensor_health_check():
     try:
         cursor = conn.cursor()
@@ -261,7 +261,7 @@ def sensor_health_check():
     except sqlite3.Error as e:
         logging.error(f"Health check error: {e}")
 
-# Main function: connects to the database, detects location, prints it, and enters the monitoring loop.
+# Main function: connects to the database, detects location, and enters the monitoring loop.
 def main():
     global conn, DEVICE_LAT, DEVICE_LON, DEVICE_LOCATION
     try:
@@ -270,10 +270,10 @@ def main():
         logging.error(f"Failed to connect to the database: {e}")
         sys.exit(1)
     setup_database()
-    # Detect device location (lat, lon, and location name).
+    # Detect location; we still fetch lat and lon for weather data, but we only use the city name for display.
     DEVICE_LAT, DEVICE_LON, loc_name = weather_api.detect_location()
-    if DEVICE_LAT is not None and DEVICE_LON is not None:
-        DEVICE_LOCATION = f"{loc_name} ({DEVICE_LAT},{DEVICE_LON})"
+    if loc_name:
+        DEVICE_LOCATION = loc_name  # Only store/display the city name.
     else:
         DEVICE_LOCATION = "Unknown"
     print(f"Detected device location: {DEVICE_LOCATION}")

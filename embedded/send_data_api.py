@@ -1,10 +1,4 @@
 #!/usr/bin/env python3
-"""
-send_data_api.py
-
-This Flask server exposes an endpoint to trigger sending of sensor and weather data
-to a backend URL. It also schedules automatic sending twice daily.
-"""
 
 from flask import Flask, jsonify
 import sqlite3
@@ -16,19 +10,16 @@ import logging
 import os
 from datetime import datetime, timedelta
 
-# Setup logging for the API server.
 logging.basicConfig(filename="api_log.log", level=logging.INFO,
                     format="%(asctime)s - %(levelname)s - %(message)s")
 
-# Configuration variables.
 DB_NAME = os.getenv("DB_NAME", "plant_sensor_data.db")
 BACKEND_API_URL = os.getenv("BACKEND_API_URL", "https://backend.example.com/receive-data")
 RETRY_ATTEMPTS = 3
-BASE_DELAY = 2  # Seconds for exponential backoff.
+BASE_DELAY = 2
 
 app = Flask(__name__)
 
-# Retrieves all sensor data from the database.
 def fetch_recent_data():
     try:
         conn = sqlite3.connect(DB_NAME)
@@ -37,7 +28,6 @@ def fetch_recent_data():
         return []
     try:
         cursor = conn.cursor()
-        # Now fetch ALL records from the database.
         cursor.execute("""
             SELECT id, timestamp, sensor_id, adc_value, moisture_level, digital_status,
                    weather_temp, weather_humidity, weather_sunlight, weather_wind_speed, location, weather_fetched
@@ -67,7 +57,6 @@ def fetch_recent_data():
         for row in data
     ]
 
-# Retries a function with exponential backoff.
 def retry_with_backoff(func, max_attempts=3, base_delay=2):
     for attempt in range(max_attempts):
         if func():
@@ -78,7 +67,6 @@ def retry_with_backoff(func, max_attempts=3, base_delay=2):
     logging.error("All retry attempts failed.")
     return False
 
-# Sends all sensor data from the DB to the backend.
 def send_data_to_backend():
     data = fetch_recent_data()
     if not data:
@@ -98,7 +86,6 @@ def send_data_to_backend():
             return False
     return retry_with_backoff(send_request, max_attempts=RETRY_ATTEMPTS, base_delay=BASE_DELAY)
 
-# Flask endpoint to trigger data sending.
 @app.route("/send-data", methods=["POST"])
 def send_data():
     if send_data_to_backend():
@@ -106,14 +93,12 @@ def send_data():
     else:
         return jsonify({"message": "Failed to send data"}), 500
 
-# Safely executes a given task and logs any exceptions.
 def safe_task_execution(task):
     try:
         task()
     except Exception as e:
         logging.error(f"Scheduled task failed: {e}")
 
-# Schedules data sending at 00:00 and 12:00 daily.
 def schedule_data_sending():
     schedule.every().day.at("00:00").do(lambda: safe_task_execution(send_data_to_backend))
     schedule.every().day.at("12:00").do(lambda: safe_task_execution(send_data_to_backend))
@@ -122,7 +107,6 @@ def schedule_data_sending():
         schedule.run_pending()
         time.sleep(1)
 
-# Runs the scheduler in a separate daemon thread.
 def run_schedule_in_thread():
     thread = threading.Thread(target=schedule_data_sending)
     thread.daemon = True
@@ -130,5 +114,4 @@ def run_schedule_in_thread():
 
 if __name__ == "__main__":
     run_schedule_in_thread()
-    # Running Flask on port 5001 to avoid conflicts.
     app.run(host="0.0.0.0", port=5001)
