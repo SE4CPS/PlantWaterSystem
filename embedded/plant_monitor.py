@@ -36,7 +36,7 @@ RETENTION_DAYS = args.retention_days
 i2c = busio.I2C(board.SCL, board.SDA)
 ads = ADS.ADS1115(i2c)
 
-# Start send_data_api.py as a subprocess (it can also be managed via systemd)
+# Start send_data_api.py as a subprocess (or manage via systemd)
 try:
     api_process = subprocess.Popen(["python3", "send_data_api.py"])
 except Exception as e:
@@ -69,6 +69,7 @@ MAX_RETRIES = 3
 # Global variables to store detected device location (set once at startup)
 DEVICE_LAT = None
 DEVICE_LON = None
+DEVICE_LOCATION = None  # String version: "lat,lon"
 
 def read_sensor_with_retries(sensor):
     for attempt in range(MAX_RETRIES):
@@ -94,7 +95,7 @@ signal.signal(signal.SIGTERM, handle_shutdown)
 signal.signal(signal.SIGINT, handle_shutdown)
 
 def setup_database():
-    """Create or update SQLite table with sensor and weather columns."""
+    """Create or update SQLite table with sensor, weather, and location columns."""
     cursor = conn.cursor()
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS moisture_data (
@@ -106,24 +107,32 @@ def setup_database():
             weather_temp REAL,
             weather_humidity REAL,
             weather_sunlight REAL,
-            weather_wind_speed REAL
+            weather_wind_speed REAL,
+            location TEXT
         )
     """)
     conn.commit()
+    # In case the table existed without the 'location' column, try to add it:
+    try:
+        cursor.execute("ALTER TABLE moisture_data ADD COLUMN location TEXT")
+        conn.commit()
+    except sqlite3.OperationalError:
+        # Column already exists
+        pass
 
 def save_to_database(sensor_id, moisture_level, digital_status,
                      weather_temp, weather_humidity,
-                     weather_sunlight, weather_wind_speed):
-    """Save sensor and weather data to SQLite."""
+                     weather_sunlight, weather_wind_speed, location):
+    """Save sensor, weather, and location data to SQLite."""
     try:
         cursor = conn.cursor()
         cursor.execute("""
             INSERT INTO moisture_data 
             (sensor_id, moisture_level, digital_status,
-             weather_temp, weather_humidity, weather_sunlight, weather_wind_speed)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+             weather_temp, weather_humidity, weather_sunlight, weather_wind_speed, location)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         """, (sensor_id, moisture_level, digital_status,
-              weather_temp, weather_humidity, weather_sunlight, weather_wind_speed))
+              weather_temp, weather_humidity, weather_sunlight, weather_wind_speed, location))
         conn.commit()
     except sqlite3.Error as e:
         logging.error(f"Database error: {e}")
@@ -179,7 +188,7 @@ def read_sensors():
         )
 
         save_to_database(index, moisture_level, digital_status,
-                         w_temp, w_humidity, w_sunlight, w_wind_speed)
+                         w_temp, w_humidity, w_sunlight, w_wind_speed, DEVICE_LOCATION)
 
     if GPIO.input(ALRT_PIN) == GPIO.HIGH:
         print("Alert! Check sensor readings.")
@@ -214,7 +223,7 @@ def sensor_health_check():
         logging.error(f"Health check error: {e}")
 
 def main():
-    global conn, DEVICE_LAT, DEVICE_LON
+    global conn, DEVICE_LAT, DEVICE_LON, DEVICE_LOCATION
 
     # Connect to the SQLite database
     try:
@@ -227,7 +236,13 @@ def main():
 
     # Detect device location once at startup using the weather module
     DEVICE_LAT, DEVICE_LON = weather_api.detect_location()
-    logging.info(f"Final device location set to: {DEVICE_LAT}, {DEVICE_LON}")
+    if DEVICE_LAT is not None and DEVICE_LON is not None:
+        DEVICE_LOCATION = f"{DEVICE_LAT},{DEVICE_LON}"
+    else:
+        DEVICE_LOCATION = "Unknown"
+    # Print the detected location to the terminal
+    print(f"Detected device location: {DEVICE_LOCATION}")
+    logging.info(f"Final device location set to: {DEVICE_LOCATION}")
 
     print("Starting Multi-Sensor Plant Monitoring...")
     GPIO.output(ADDR_PIN, GPIO.HIGH)

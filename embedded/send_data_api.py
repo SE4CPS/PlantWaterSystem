@@ -17,7 +17,7 @@ logging.basicConfig(filename="api_log.log", level=logging.INFO,
 DB_NAME = os.getenv("DB_NAME", "plant_sensor_data.db")
 BACKEND_API_URL = os.getenv("BACKEND_API_URL", "https://backend.example.com/receive-data")
 RETRY_ATTEMPTS = 3
-BASE_DELAY = 2  # Base delay for exponential backoff in seconds
+BASE_DELAY = 2  # Base delay (in seconds) for exponential backoff
 
 app = Flask(__name__)
 
@@ -34,7 +34,7 @@ def fetch_recent_data():
         twelve_hours_ago = datetime.now() - timedelta(hours=12)
         cursor.execute("""
             SELECT id, timestamp, sensor_id, moisture_level, digital_status,
-                   weather_temp, weather_humidity, weather_sunlight, weather_wind_speed
+                   weather_temp, weather_humidity, weather_sunlight, weather_wind_speed, location
             FROM moisture_data
             WHERE timestamp >= ?
         """, (twelve_hours_ago.strftime("%Y-%m-%d %H:%M:%S"),))
@@ -55,7 +55,8 @@ def fetch_recent_data():
             "weather_temp": row[5],
             "weather_humidity": row[6],
             "weather_sunlight": row[7],
-            "weather_wind_speed": row[8]
+            "weather_wind_speed": row[8],
+            "location": row[9]
         }
         for row in data
     ]
@@ -106,4 +107,24 @@ def safe_task_execution(task):
     try:
         task()
     except Exception as e:
+        logging.error(f"Scheduled task failed: {e}")
 
+def schedule_data_sending():
+    """Schedule data sending at 00:00 and 12:00 daily."""
+    schedule.every().day.at("00:00").do(lambda: safe_task_execution(send_data_to_backend))
+    schedule.every().day.at("12:00").do(lambda: safe_task_execution(send_data_to_backend))
+    logging.info("Scheduled jobs registered successfully.")
+
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+def run_schedule_in_thread():
+    """Run the scheduler in a separate thread."""
+    thread = threading.Thread(target=schedule_data_sending)
+    thread.daemon = True
+    thread.start()
+
+if __name__ == "__main__":
+    run_schedule_in_thread()
+    app.run(host="0.0.0.0", port=5000)
