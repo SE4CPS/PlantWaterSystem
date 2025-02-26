@@ -1,8 +1,12 @@
 import React from 'react'
+import '../Styles/custom/plantDetailPage.css'
+import PlantDetailCard from '../Components/PlantDetailCard'
 
 function PlantDetailPage() {
   return (
-    <div>PlantDetailPage</div>
+    <div className='plant-detail-page'>
+      <PlantDetailCard status='good' />
+    </div>
   )
 }
 
