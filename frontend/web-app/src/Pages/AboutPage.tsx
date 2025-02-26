@@ -5,7 +5,7 @@ function AboutPage() {
   return (
     <div className='font-poppins about-container'>
       <h1>What is Sproutly?</h1>
-      <p>🌱 Sproutly helps you take care of your plants by tracking watering times and sending reminders. Perfect for plant lovers or beginners! ✨</p>
+      <p>🌱 Sproutly helps you take care of your plants by tracking watering times and sending you reminders. Sproutly is a perfect tool for plant lovers or beginners! ✨</p>
       <h1>How can I use Sproutly?</h1>
       <div className="bullet-container">
         <div className="bullet">
