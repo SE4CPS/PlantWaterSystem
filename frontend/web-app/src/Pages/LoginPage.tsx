@@ -1,5 +1,5 @@
 import React from 'react';
-import '../Styles/LoginPage.css'; 
+import '../Styles/custom/loginPage.css'; 
 import sproutlyLogo from '../Images/sproutly-logo.svg';
 import sproutlyText from '../Images/sproutly-text.svg';
 import googleLogo from '../Images/google-logo.svg'
