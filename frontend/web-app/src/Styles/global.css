@@ -13,3 +13,8 @@ body{
 .text-white{
     color: #FFFFFF;
 }
+
+.font-poppins{
+    font-family: 'Poppins', sans-serif;
+    color: #4C5740;
+}

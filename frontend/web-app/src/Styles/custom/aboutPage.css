@@ -1,0 +1,47 @@
+.about-container {
+    color: #4C5740;
+    padding: 20px 200px;
+}
+
+.bullet {
+    display: flex;
+    flex-direction: row;
+}
+
+.bullet-number {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 50px;
+    background-color: #AFD582;
+    border-radius: 100%;
+    margin: 0 20px;
+}
+
+.bullet-title {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+h1 {
+    font-size: 26px;
+}
+
+h2 {
+    font-size: 19px;
+}
+
+p {
+    font-size: 18px;
+}
+
+.bullet-text p {
+    margin-top: 5px;
+}
+
+.faq-link {
+    color: #AFD582;
+    font-weight: 700;
+}

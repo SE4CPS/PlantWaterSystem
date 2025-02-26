@@ -21,7 +21,7 @@ function HomePage() {
 
   return (
     <div className='homePage'>
-      <div className='nameBar'>Vy's Plants</div>
+      <div className='nameBar'>Vy&rsquo;s Plants</div>
       <div className='plantViewer'>
         <PlantCard status='dry'/>
         <PlantCard status='good'/>
