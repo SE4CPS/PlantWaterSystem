@@ -11,10 +11,20 @@ on:
 jobs:
   run-workflow:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
+      - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Run Simple Command
-        run: echo "Backend folder updated. Running workflow..."
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: cd backend && pip install -r requirements.txt
+
+      - name: Run Linting
+        run: cd backend && pylint **/*.py
+
+      - name: Run Tests
+        run: cd backend && pytest
