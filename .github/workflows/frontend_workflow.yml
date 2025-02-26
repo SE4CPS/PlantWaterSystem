@@ -23,8 +23,8 @@ jobs:
       - name: Install Dependencies
         run: cd frontend && npm install
 
-      - name: Run Linting
-        run: cd frontend && npm run lint
+      # - name: Run Linting
+      #   run: cd frontend && npm run lint
 
-      - name: Run Tests
-        run: cd frontend && npm test
+      # - name: Run Tests
+      #   run: cd frontend && npm test

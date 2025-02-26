@@ -7,3 +7,6 @@ class PlantRepository:
 
     def add_plant(self, plant: PlantSchema):
         return self.dal.create_plant(plant)
+    
+    def get_plants(self):
+        return self.dal.get_plants()
