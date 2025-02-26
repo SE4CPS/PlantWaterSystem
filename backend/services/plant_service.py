@@ -9,6 +9,9 @@ class PlantService:
     def create_plant(self, plant: PlantSchema):
         print("im her in service")
         return self.repository.add_plant(plant)
+    
+    def get_plants(self):
+        return self.repository.get_plants()
 
 
 def get_service():
