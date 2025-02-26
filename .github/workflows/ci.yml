@@ -1,0 +1,49 @@
+name: CI Checks
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  frontend-checks:
+    if: contains(github.event.pull_request.changed_files, 'frontend/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install Dependencies
+        run: cd frontend && npm install
+
+      - name: Run Linting
+        run: cd frontend && npm run lint
+
+      - name: Run Tests
+        run: cd frontend && npm test
+
+  backend-checks:
+    if: contains(github.event.pull_request.changed_files, 'backend/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: cd backend && pip install -r requirements.txt
+
+      - name: Run Linting
+        run: cd backend && pylint **/*.py
+
+      - name: Run Tests
+        run: cd backend && pytest
