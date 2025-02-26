@@ -55,6 +55,7 @@
     width: 29px;
     height: 29px;
     align-self: flex-end;
+    cursor: pointer;
 }
 
 .plant-detail-card-edit-button{
@@ -70,6 +71,7 @@
     font-weight: 700;
     font-size: 25px;
     transition: 0.4s;
+    cursor: pointer;
 }
 
 .plant-detail-card-edit-button:hover{
@@ -88,8 +90,43 @@
     font-weight: 700;
     font-size: 25px;
     transition: 0.4s;
+    cursor: pointer;
 }
 
 .plant-detail-card-delete-button:hover{
     background-color: red;
 }
+
+.plant-detail-card-history{
+    padding: 0px 100px 51px 100px;
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 37px;
+}
+
+.plant-detail-card-history > .title{
+    font-size: 30px;
+    line-height: 45px;
+    padding-bottom: 20px;
+}
+
+.history-table{
+    text-align: center;
+}
+
+.history-table td{
+    width: 200px;
+    height: 62px;
+}
+
+.history-table > tbody > tr > :nth-child(1){
+    text-align: left;
+    width: 180px;
+}
+
+
+.history-table > thead > tr > :nth-child(1){
+    text-align: left;
+    width: 180px;
+}
+
