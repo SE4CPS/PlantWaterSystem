@@ -77,3 +77,56 @@ class PlantDAL:
         finally:
             # Ensure that the connection is released
             release_connection(self.conn)
+
+    def get_plants(self):
+        try:
+           
+            self.cursor.execute( "SELECT PlantID, PlantName, ScientificName, Threshhold FROM plant;")
+
+            plants= self.cursor.fetchall()
+
+            if not plants:
+                return {
+                    "status": "success",
+                    "message": "No plants found",
+                    "data": []
+                }
+            
+            plant_list=[
+            {
+                "PlantID": plant[0],
+                "PlantName": plant[1],
+                "ScientificName": plant[2],
+                "Threshhold": plant[3]
+            }
+                for plant in plants
+            ]
+
+            return {
+                "status": "success",
+                "data": plant_list
+            }
+
+        except (psycopg2.Error, DatabaseError) as db_error:
+            # Handle other database errors
+            self.conn.rollback()  # Rollback transaction on error
+            error_message = f"Database error: {db_error}"
+            print(f"Database error: {db_error}")
+            return {
+                "status": "error",
+                "error": error_message
+            }
+
+        except Exception as e:
+            # Catch any other unexpected errors
+            self.conn.rollback()  # Rollback transaction on error
+            error_message = f"Unexpected error: {e}"
+            print(f"Unexpected error: {e}")
+            return {
+                "status": "error",
+                "error": error_message
+            }
+
+        finally:
+            # Ensure that the connection is released
+            release_connection(self.conn)

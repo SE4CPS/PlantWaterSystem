@@ -23,10 +23,6 @@ const router = createBrowserRouter([
         element: <SignUpPage />,
     },
     {
-        path: '/display',
-        element: <DisplayPage />
-    },
-    {
         path: '/',
         element: <NavBar />,
         children: [
@@ -45,7 +41,11 @@ const router = createBrowserRouter([
             {
                 path: '/faq',
                 element: <FaqPage />,
-            }
+            },
+            {
+                path: '/display',
+                element: <DisplayPage />
+            },
         ]
     },
 ]);

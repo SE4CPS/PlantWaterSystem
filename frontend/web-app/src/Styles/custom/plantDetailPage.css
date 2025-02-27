@@ -1,0 +1,132 @@
+/* Plant Detail Page CSS */
+
+.plant-detail-page{
+    display: flex;
+    flex-direction: column;
+    padding: 41px 82px 34px 82px;
+    justify-content: center;
+    align-items: center;
+}
+
+.plant-detail-card{
+    width: 100%;
+    height: 800px;
+    border-radius: 37px;
+}
+
+.plant-detail-card-information{
+    display: flex;
+    flex-direction: row;
+    padding: 27px 100px 27px 100px;
+    justify-content: space-between;
+}
+
+.plant-detail-card-information > .detail-and-image-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.plant-detail-card-details{
+    display: flex;
+    flex-direction: column;
+    margin-left: 41px;
+    font-weight: 400;
+    font-size: 25px;
+    line-height: 37px;
+    justify-content: space-between;
+}
+
+.plant-detail-card-details b{
+    font-weight: 700;
+}
+
+.plant-detail-card-image{
+    width: 196px;
+    height: 196px;
+}
+
+.plant-detail-card-button-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.plant-detail-card-close-button{
+    margin-bottom: 31px;
+    width: 29px;
+    height: 29px;
+    align-self: flex-end;
+    cursor: pointer;
+}
+
+.plant-detail-card-edit-button{
+    all: unset;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 123px;
+    height: 47px;
+    background-color: #AFD582;
+    border-radius: 15px;
+    font-weight: 700;
+    font-size: 25px;
+    transition: 0.4s;
+    cursor: pointer;
+}
+
+.plant-detail-card-edit-button:hover{
+    background-color: #77B42D;
+}
+
+.plant-detail-card-delete-button{
+    all: unset;
+    width: 123px;
+    height: 47px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #EDAC9A;
+    border-radius: 15px;
+    font-weight: 700;
+    font-size: 25px;
+    transition: 0.4s;
+    cursor: pointer;
+}
+
+.plant-detail-card-delete-button:hover{
+    background-color: red;
+}
+
+.plant-detail-card-history{
+    padding: 0px 100px 51px 100px;
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 37px;
+}
+
+.plant-detail-card-history > .title{
+    font-size: 30px;
+    line-height: 45px;
+    padding-bottom: 20px;
+}
+
+.history-table{
+    text-align: center;
+}
+
+.history-table td{
+    width: 200px;
+    height: 62px;
+}
+
+.history-table > tbody > tr > :nth-child(1){
+    text-align: left;
+    width: 180px;
+}
+
+
+.history-table > thead > tr > :nth-child(1){
+    text-align: left;
+    width: 180px;
+}
+

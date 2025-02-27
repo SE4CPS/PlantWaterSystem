@@ -21,5 +21,6 @@ app.add_middleware(
 app.include_router(create_plant)
 
 if __name__ == "__main__":
+    print("-----------")
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

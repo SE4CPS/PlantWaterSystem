@@ -1,5 +1,4 @@
 import React from 'react'
-import '../Styles/custom/addNewPlantCard.css'
 
 function AddNewPlantCard() {
   return (

@@ -11,10 +11,21 @@ on:
 jobs:
   run-workflow:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
+      - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Run Simple Command
-        run: echo "Frontend folder updated. Running workflow..."
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install Dependencies
+        run: cd frontend/web-app && npm install
+
+      # - name: Run Linting
+      #   run: cd frontend && npm run lint
+
+      # - name: Run Tests
+      #   run: cd frontend && npm test
+
