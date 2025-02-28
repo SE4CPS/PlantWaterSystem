@@ -5,6 +5,7 @@ import AddNewPlantCard from '../Components/AddNewPlantCard'
 import plantController from '../Controller/PlantController'
 import { GetPlantData } from '../Interfaces/plantInterface'
 import handleApiError from '../Utils/apiService'
+import { toast } from 'react-toastify'
 
 function HomePage() {
 
@@ -15,6 +16,9 @@ function HomePage() {
       try {
         const response = await plantController.getPlants();
         setPlantData(response.data);
+        toast.success("User's plants fetched successfully", {
+          position: 'top-right',
+        })
       } catch (error:unknown) {
         handleApiError(error)
       }
