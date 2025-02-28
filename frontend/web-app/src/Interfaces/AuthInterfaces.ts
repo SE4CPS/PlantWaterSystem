@@ -13,3 +13,7 @@ export interface AuthContextAction{
         authToken: string,
     }
 }
+
+export interface UserData{
+    username: string; 
+}
