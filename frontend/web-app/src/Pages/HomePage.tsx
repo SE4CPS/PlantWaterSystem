@@ -4,6 +4,7 @@ import PlantCard from '../Components/PlantCard'
 import AddNewPlantCard from '../Components/AddNewPlantCard'
 import plantController from '../Controller/PlantController'
 import { GetPlantData } from '../Interfaces/plantInterface'
+import handleApiError from '../Utils/apiService'
 
 function HomePage() {
 
@@ -11,8 +12,12 @@ function HomePage() {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const response = await plantController.getPlants();
-      setPlantData(response.data);
+      try {
+        const response = await plantController.getPlants();
+        setPlantData(response.data);
+      } catch (error:unknown) {
+        handleApiError(error)
+      }
     }
     fetchUserData();
   }, [])
