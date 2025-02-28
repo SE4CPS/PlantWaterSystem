@@ -1,3 +1,4 @@
+import React, { ReactNode } from "react";
 import { createContext, useReducer } from "react";
 import { AuthContextAction, AuthContextState } from "../Interfaces/AuthInterfaces";
 
@@ -22,7 +23,7 @@ const reducer = (state: AuthContextState, action: AuthContextAction): AuthContex
     }
 }
 
-export const AuthProvider = ({children}: {children: any}) => {
+export const AuthProvider = ({children}: {children: ReactNode}) => {
     const [{authUser, authToken, isLoading}, dispatch] = useReducer(reducer, initialState);
     const values = {
         authUser,
