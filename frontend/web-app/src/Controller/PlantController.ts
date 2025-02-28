@@ -5,13 +5,11 @@ import { toast } from "react-toastify";
 import { responseErrorObject } from "../Utils/global";
 
 // Dummy AuthController
-class AuthController{
-    public getUsers= async (): Promise<AxiosResponse> =>{
+class PlantController{
+    public getPlants= async (): Promise<AxiosResponse> =>{
         try{
-            const body={ "PlantID":50009, "PlantName": "orchids", "ScientificName": "ordcha", "Threshhold": 20.0 }
-            const response = await axiosInstance.post('/plant/data', body);
-            // const usersData = authService.getUsers(response.data);
-            return response;
+            const response = await axiosInstance.get('/plant/data');
+            return response.data;
             // eslint-disable-next-line
         }catch(error: any){
             if(error instanceof Error){
@@ -28,6 +26,6 @@ class AuthController{
     }
 }
 
-const authController = new AuthController();
+const plantController = new PlantController();
 
-export default authController;
+export default plantController;
