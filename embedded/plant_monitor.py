@@ -208,26 +208,38 @@ def read_sensor_channel(sensor):
 def read_sensors():
     global last_weather_time, last_weather_data
     current_sec = time.time()
+    # Attempt to fetch new weather data only if the interval has passed.
     if last_weather_time == 0 or (current_sec - last_weather_time) >= WEATHER_FETCH_INTERVAL:
-        last_weather_data = weather_api.get_weather_data(DEVICE_LAT, DEVICE_LON)
-        last_weather_time = current_sec
+        new_weather_data = weather_api.get_weather_data(DEVICE_LAT, DEVICE_LON)
+        # Check if new_weather_data is valid (at least one field is non-None)
+        if new_weather_data and any(field is not None for field in new_weather_data):
+            last_weather_data = new_weather_data
+            last_weather_time = current_sec
+        # If not valid, we keep the old weather data and do not update last_weather_time.
+
+    # Use the cached weather data (or None values if not available)
     w_temp, w_humidity, w_sunlight, w_wind_speed = (
         last_weather_data if last_weather_data is not None else (None, None, None, None)
     )
-    weather_fetched_str = datetime.fromtimestamp(last_weather_time).strftime('%Y-%m-%d %H:%M:%S') if last_weather_time else "Unknown"
+    # Format the timestamp from the last successful weather fetch.
+    weather_fetched_str = (datetime.fromtimestamp(last_weather_time).strftime('%Y-%m-%d %H:%M:%S')
+                           if last_weather_time else "Unknown")
+
     for index, sensor in enumerate(SENSORS, start=1):
         if not sensor["active"]:
             continue
         adc_value, moisture_level, digital_status = read_sensor_with_retries(sensor)
-        print(f"Sensor {index} - ADC: {adc_value}, Moisture: {moisture_level:.2f}%, Digital: {digital_status}, Temp: {w_temp}, Humidity: {w_humidity}, Sunlight: {w_sunlight}, Wind: {w_wind_speed}")
-        logging.info(f"Sensor {index} - ADC: {adc_value}, Moisture: {moisture_level:.2f}%, Digital: {digital_status}, Weather Temp: {w_temp}, Humidity: {w_humidity}, Sunlight: {w_sunlight}, Wind: {w_wind_speed}")
+        print(f"Sensor {index} - ADC: {adc_value}, Moisture: {moisture_level:.2f}%, Digital: {digital_status}, "
+              f"Temp: {w_temp}, Humidity: {w_humidity}, Sunlight: {w_sunlight}, Wind: {w_wind_speed}")
+        logging.info(f"Sensor {index} - ADC: {adc_value}, Moisture: {moisture_level:.2f}%, Digital: {digital_status}, "
+                     f"Weather Temp: {w_temp}, Humidity: {w_humidity}, Sunlight: {w_sunlight}, Wind: {w_wind_speed}")
         # Save record to database.
         save_to_database(index, adc_value, moisture_level, digital_status,
                          w_temp, w_humidity, w_sunlight, w_wind_speed,
                          DEVICE_LOCATION, weather_fetched_str)
-        # Also save to CSV as temporary backup.
-        record = [datetime.now().strftime('%Y-%m-%d %H:%M:%S'), index, adc_value, f"{moisture_level:.2f}", digital_status,
-                  w_temp, w_humidity, w_sunlight, w_wind_speed, DEVICE_LOCATION, weather_fetched_str]
+        # Save record to CSV as temporary backup.
+        record = [datetime.now().strftime('%Y-%m-%d %H:%M:%S'), index, adc_value, f"{moisture_level:.2f}",
+                  digital_status, w_temp, w_humidity, w_sunlight, w_wind_speed, DEVICE_LOCATION, weather_fetched_str]
         save_to_csv(record)
     if GPIO.input(ALRT_PIN) == GPIO.HIGH:
         print("Alert! Check sensor readings.")
