@@ -14,7 +14,7 @@ logging.basicConfig(filename="api_log.log", level=logging.INFO,
                     format="%(asctime)s - %(levelname)s - %(message)s")
 
 DB_NAME = os.getenv("DB_NAME", "plant_sensor_data.db")
-BACKEND_API_URL = os.getenv("BACKEND_API_URL", "https://sprout-ly.com//api/sensor/data")
+BACKEND_API_URL = os.getenv("BACKEND_API_URL", "https://sprout-ly.com/api/sensor/data")
 RETRY_ATTEMPTS = 3
 BASE_DELAY = 2
 
