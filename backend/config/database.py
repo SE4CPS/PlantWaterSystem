@@ -8,6 +8,7 @@ engine = create_engine(DATABASE_URL)
 Base = declarative_base()
 
 def get_connection():
+    print("hey i'm here ----")
     return connection_pool.getconn()
 
 def release_connection(conn):

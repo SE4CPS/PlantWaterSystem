@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # Backend Service
   api:
-    build: ./backend  # Path to your backend code
+    image: bhandarenakul/sproutly-test:backend-latest-$(Build.SourceVersion)  # Pull image from Docker Hub
     container_name: sproutly-api
     networks:
       - sproutly-network
@@ -15,19 +15,18 @@ services:
 
   # Frontend Service
   frontend:
-    build:
-      context: ./frontend  # Path to your frontend code
-      # dockerfile: Dockerfile  # Ensure this is pointing to the correct Dockerfile for frontend
+    image: bhandarenakul/sproutly-test:frontend-latest-$(Build.SourceVersion)  # Pull image from Docker Hub
     container_name: sproutly-frontend
     ports:
-      - "3000:3000"  # Expose React app at port 3000
+      - "3000:3000"
     networks:
       - sproutly-network
     depends_on:
       - api
     environment:
-      - REACT_APP_API_URL=http://sproutly-api:8000  # Backend URL for frontend to connect
+      - REACT_APP_API_URL=http://sproutly-api:8000  # Backend URL for frontend
 
+  # Nginx Reverse Proxy
   # Nginx Service (acting as reverse proxy)
   nginx:
     image: nginx:latest
