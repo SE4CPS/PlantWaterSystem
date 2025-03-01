@@ -1,138 +1,161 @@
-#!/bin/bash
-# PlantWaterSystem setup script
+#!/usr/bin/env python3
 
-echo "Starting PlantWaterSystem setup..."
+from flask import Flask, jsonify, request
+import sqlite3
+import requests
+import schedule
+import time
+import threading
+import logging
+import os
+from datetime import datetime, timedelta
 
-# Get active user and home directory.
-ACTIVE_USER=$(whoami)
-ACTIVE_HOME=$HOME
+# Setup logging for the API server.
+logging.basicConfig(filename="api_log.log", level=logging.INFO,
+                    format="%(asctime)s - %(levelname)s - %(message)s")
 
-echo "Active user: $ACTIVE_USER"
-echo "Home directory: $ACTIVE_HOME"
+# Global configuration variables.
+DB_NAME = os.getenv("DB_NAME", "plant_sensor_data.db")
+BACKEND_API_URL = os.getenv("BACKEND_API_URL", "https://sprout-ly.com/api/sensor/data")
+RETRY_ATTEMPTS = 3
+BASE_DELAY = 2  # Seconds for exponential backoff.
 
-# Step 1: Clone the repository if not already present.
-if [ ! -d "PlantWaterSystem" ]; then
-    echo "Cloning the PlantWaterSystem repository..."
-    git clone https://github.com/SE4CPS/PlantWaterSystem.git
-fi
+app = Flask(__name__)
 
-cd PlantWaterSystem/embedded || exit
+# Global variable to store the last sent timestamp as a string (format: 'YYYY-MM-DD HH:MM:SS').
+LAST_SENT_TIMESTAMP = None
 
-# Step 2: Update Raspberry Pi OS.
-echo "Updating Raspberry Pi OS..."
-sudo apt update && sudo apt upgrade -y
+# Fetches sensor data from the database.
+# If 'after' is provided, only records with timestamp > after are fetched.
+def fetch_recent_data(after=None):
+    try:
+        conn = sqlite3.connect(DB_NAME)
+    except sqlite3.Error as e:
+        logging.error(f"Database connection error: {e}")
+        return []
+    try:
+        cursor = conn.cursor()
+        if after:
+            cursor.execute("""
+                SELECT id, timestamp, sensor_id, adc_value, moisture_level, digital_status,
+                       weather_temp, weather_humidity, weather_sunlight, weather_wind_speed, location, weather_fetched
+                FROM moisture_data
+                WHERE timestamp > ?
+            """, (after,))
+        else:
+            cursor.execute("""
+                SELECT id, timestamp, sensor_id, adc_value, moisture_level, digital_status,
+                       weather_temp, weather_humidity, weather_sunlight, weather_wind_speed, location, weather_fetched
+                FROM moisture_data
+            """)
+        data = cursor.fetchall()
+    except sqlite3.Error as e:
+        logging.error(f"Database query error: {e}")
+        return []
+    finally:
+        conn.close()
+    return [
+        {
+            "id": row[0],
+            "timestamp": row[1],
+            "sensor_id": row[2],
+            "adc_value": row[3],
+            "moisture_level": row[4],
+            "digital_status": row[5],
+            "weather_temp": row[6],
+            "weather_humidity": row[7],
+            "weather_sunlight": row[8],
+            "weather_wind_speed": row[9],
+            "location": row[10],
+            "weather_fetched": row[11]
+        }
+        for row in data
+    ]
 
-# Step 3: Enable I2C communication.
-echo "Enabling I2C communication..."
-CONFIG_FILE="/boot/config.txt"
-I2C_LINE="dtparam=i2c_arm=on"
-REBOOT_REQUIRED=false
-if ! grep -q "$I2C_LINE" "$CONFIG_FILE"; then
-    echo "I2C not enabled. Adding configuration..."
-    sudo bash -c "echo '$I2C_LINE' >> $CONFIG_FILE"
-    REBOOT_REQUIRED=true
-else
-    echo "I2C is already enabled."
-fi
+# Retries a given function with exponential backoff.
+def retry_with_backoff(func, max_attempts=3, base_delay=2):
+    for attempt in range(max_attempts):
+        if func():
+            return True
+        delay = base_delay * (2 ** attempt)
+        logging.warning(f"Retrying after {delay} seconds...")
+        time.sleep(delay)
+    logging.error("All retry attempts failed.")
+    return False
 
-# Step 4: Install I2C tools and python3-smbus.
-echo "Installing I2C tools..."
-sudo apt install -y i2c-tools python3-smbus
+# Sends sensor data to the backend.
+# If 'after' is provided, only data with timestamp > after is sent.
+def send_data_to_backend(after=None):
+    data = fetch_recent_data(after)
+    if not data:
+        logging.info("No new data to send.")
+        return False, None
+    def send_request():
+        try:
+            response = requests.post(BACKEND_API_URL, json={"sensor_data": data}, timeout=10)
+            if response.status_code == 200:
+                logging.info("Data sent successfully.")
+                return True
+            else:
+                logging.error(f"Failed to send data ({response.status_code}): {response.text}")
+                return False
+        except requests.RequestException as e:
+            logging.error(f"Error sending data: {e}")
+            return False
+    success = retry_with_backoff(send_request, max_attempts=RETRY_ATTEMPTS, base_delay=BASE_DELAY)
+    return success, data if success else None
 
-# Step 5: Install required packages.
-echo "Installing required packages..."
-sudo apt install -y python3-pip sqlite3
+# Flask endpoint for on-demand data sending.
+@app.route("/send-current", methods=["GET", "POST"])
+def send_current_data():
+    global LAST_SENT_TIMESTAMP
+    success, data = send_data_to_backend(after=LAST_SENT_TIMESTAMP)
+    if success and data:
+        # Update LAST_SENT_TIMESTAMP to the maximum timestamp in the data.
+        try:
+            # Timestamps in DB are in format "YYYY-MM-DD HH:MM:SS" and are lexicographically sortable.
+            max_ts = max(record["timestamp"] for record in data)
+            LAST_SENT_TIMESTAMP = max_ts
+        except Exception as e:
+            logging.error(f"Error updating LAST_SENT_TIMESTAMP: {e}")
+        return jsonify({"message": "Current data sent successfully"}), 200
+    elif success:
+        # If no new data was found, do not update LAST_SENT_TIMESTAMP.
+        return jsonify({"message": "No new data to send"}), 200
+    else:
+        return jsonify({"message": "Failed to send current data"}), 500
 
-echo "Installing necessary Python libraries..."
-sudo pip3 install RPi.GPIO adafruit-circuitpython-ads1x15 requests flask schedule --break-system-packages
+# Existing endpoint for scheduled data sending (sends all data).
+@app.route("/send-data", methods=["POST"])
+def send_data():
+    success, _ = send_data_to_backend()  # Send all data.
+    if success:
+        return jsonify({"message": "Data sent successfully"}), 200
+    else:
+        return jsonify({"message": "Failed to send data"}), 500
 
-# Step 6: Verify I2C connection.
-echo "Verifying I2C connection..."
-i2cdetect -y 1
-if i2cdetect -y 1 | grep -q "48"; then
-    echo "I2C device detected at address 0x48."
-else
-    echo "Warning: No I2C device detected. Please check connections."
-fi
+# Safely executes a given task and logs exceptions.
+def safe_task_execution(task):
+    try:
+        task()
+    except Exception as e:
+        logging.error(f"Scheduled task failed: {e}")
 
-# Step 7: Set executable permission for plant_monitor.py.
-if [ -f "plant_monitor.py" ]; then
-    echo "Setting executable permission for plant_monitor.py..."
-    chmod +x plant_monitor.py
-else
-    echo "Warning: plant_monitor.py not found!"
-fi
+# Schedules data sending at 00:00 and 12:00 daily.
+def schedule_data_sending():
+    schedule.every().day.at("00:00").do(lambda: safe_task_execution(send_data_to_backend))
+    schedule.every().day.at("12:00").do(lambda: safe_task_execution(send_data_to_backend))
+    logging.info("Scheduled jobs registered successfully.")
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
-# Step 8: Setup systemd service for plant_monitor.
-SERVICE_FILE="/etc/systemd/system/plant_monitor.service"
-cat <<EOF | sudo tee $SERVICE_FILE
-[Unit]
-Description=Plant Moisture Monitoring Service
-After=multi-user.target
+# Runs the scheduler in a separate daemon thread.
+def run_schedule_in_thread():
+    thread = threading.Thread(target=schedule_data_sending)
+    thread.daemon = True
+    thread.start()
 
-[Service]
-ExecStart=/usr/bin/python3 $ACTIVE_HOME/PlantWaterSystem/embedded/plant_monitor.py
-WorkingDirectory=$ACTIVE_HOME/PlantWaterSystem/embedded
-StandardOutput=inherit
-StandardError=inherit
-Restart=always
-RestartSec=5
-TimeoutStopSec=10
-User=$ACTIVE_USER
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-echo "Reloading systemd daemon..."
-sudo systemctl daemon-reload
-sudo systemctl enable plant_monitor.service
-sudo systemctl start plant_monitor.service
-
-# Step 9: Optional: Setup systemd service for send_data_api.
-SEND_API_SERVICE_FILE="/etc/systemd/system/send_data_api.service"
-read -p "Do you want to set up send_data_api.py as a service? (y/n): " SETUP_SEND_API
-if [[ "$SETUP_SEND_API" == "y" || "$SETUP_SEND_API" == "Y" ]]; then
-    echo "Setting up send_data_api service..."
-    cat <<EOF | sudo tee $SEND_API_SERVICE_FILE
-[Unit]
-Description=Send Data API Service
-After=multi-user.target
-
-[Service]
-ExecStart=/usr/bin/python3 $ACTIVE_HOME/PlantWaterSystem/embedded/send_data_api.py
-WorkingDirectory=$ACTIVE_HOME/PlantWaterSystem/embedded
-StandardOutput=inherit
-StandardError=inherit
-Restart=always
-RestartSec=5
-TimeoutStopSec=10
-User=$ACTIVE_USER
-
-[Install]
-WantedBy=multi-user.target
-EOF
-    sudo systemctl daemon-reload
-    sudo systemctl enable send_data_api.service
-    sudo systemctl start send_data_api.service
-else
-    echo "Skipping send_data_api service setup."
-fi
-
-# Step 10: Reboot if necessary.
-if [ "$REBOOT_REQUIRED" = true ]; then
-    echo "I2C configuration updated. Reboot is required."
-    read -p "Reboot now? (y/n): " REBOOT_ANSWER
-    if [[ "$REBOOT_ANSWER" == "y" || "$REBOOT_ANSWER" == "Y" ]]; then
-        echo "Rebooting..."
-        sudo reboot
-    else
-        echo "Please reboot later to apply changes."
-    fi
-else
-    echo "No reboot required."
-fi
-
-echo "Setup complete. Check services with:"
-echo "sudo systemctl status plant_monitor.service"
-echo "sudo systemctl status send_data_api.service (if configured)"
+if __name__ == "__main__":
+    run_schedule_in_thread()
+    app.run(host="0.0.0.0", port=5001, debug=False)
