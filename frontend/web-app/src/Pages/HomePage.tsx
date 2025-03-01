@@ -1,20 +1,18 @@
-import React, { useEffect } from 'react'
-import authController from '../Controller/AuthController'
+import React, { useEffect, useState } from 'react'
 import '../Styles/custom/homePage.css'
 import PlantCard from '../Components/PlantCard'
 import AddNewPlantCard from '../Components/AddNewPlantCard'
+import plantController from '../Controller/PlantController'
+import { GetPlantData } from '../Interfaces/plantInterface'
 
 function HomePage() {
-// example of using APIs
-// you need not necessarily call APIs in useEffect
-// you may also call them through other ways 
-// but make sure to keep them in async functions 
-// and use await while calling them to resolve Promise.
+
+  const [plantData, setPlantData] = useState<Array<GetPlantData>>([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const data = await authController.getUsers();
-      console.log(data);
+      const response = await plantController.getPlants();
+      setPlantData(response.data);
     }
     fetchUserData();
   }, [])
@@ -23,13 +21,11 @@ function HomePage() {
     <div className='homePage'>
       <div className='nameBar'>Vy&rsquo;s Plants</div>
       <div className='plantViewer'>
-        <PlantCard status='dry'/>
-        <PlantCard status='good'/>
-        <PlantCard status='dry'/>
-        <PlantCard status='good'/>
-        <PlantCard status='good'/>
-        <PlantCard status='dry'/>
-        <PlantCard status='good'/>
+        {
+          plantData.map((data, index)=>{
+            return <PlantCard key={index} status='good' name={data.PlantName} />
+          })
+        }
         <AddNewPlantCard />
       </div>
     </div>

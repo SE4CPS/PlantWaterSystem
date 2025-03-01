@@ -18,14 +18,17 @@
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.12.1",
     "react-scripts": "^5.0.0",
+    "react-toastify": "^11.0.5",
     "typescript": "^4.0.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "npm run lint && react-scripts start",
+    "dev": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}' --ext .js,.jsx,.ts,.tsx --max-warnings=0"
   },
   "eslintConfig": {
     "extends": [
@@ -46,8 +49,11 @@
     ]
   },
   "devDependencies": {
-    "eslint": "^9.20.1",
+    "@eslint/js": "^9.21.0",
+    "eslint": "^9.21.0",
     "eslint-plugin-react": "^7.37.4",
-    "eslint-plugin-react-hooks": "^5.1.0"
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "globals": "^16.0.0",
+    "typescript-eslint": "^8.25.0"
   }
 }

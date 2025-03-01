@@ -14,7 +14,7 @@ function AboutPage() {
           </div>
           <div className="bullet-text">
             <h2 className="bullet-title">Add your plants</h2>
-            <p>Click on the "+" button on the home screen to add a new plant.</p>
+            <p>Click on the &quot;+&quot; button on the home screen to add a new plant.</p>
           </div>
         </div>
 
@@ -44,7 +44,7 @@ function AboutPage() {
           </div>
           <div className="bullet-text">
             <h2 className="bullet-title">Monitor plant health</h2>
-            <p>Check if your plant is in "Good" or "Dry" condition.</p>
+            <p>Check if your plant is in &quot;Good&quot; or &quot;Dry&quot; condition.</p>
           </div>
         </div>
       </div>
