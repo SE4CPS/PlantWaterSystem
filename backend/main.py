@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from controller.plant_controller import create_plant
 from controller.moisture_controller import add_moisture_data
+from controller.auth_controller import auth_router
 from config.database import Base, engine
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -21,6 +22,7 @@ app.add_middleware(
 # Include Routes
 app.include_router(create_plant)
 app.include_router(add_moisture_data)
+app.include_router(auth_router)
 
 if __name__ == "__main__":
     import uvicorn

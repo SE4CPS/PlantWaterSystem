@@ -5,5 +5,5 @@ class UserRepository:
     def __init__(self, dal: UserDAL):
         self.dal = dal
 
-    def verify_user(self, user: UserSchema):
-        return self.dal.verify_user(user)
+    def get_user(self, username: str):
+        return self.dal.get_user(username)
