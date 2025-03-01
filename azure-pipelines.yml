@@ -1,0 +1,72 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  - main
+
+pr:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+  - stage: BuildAndPush
+    displayName: Build and Push Docker Images
+    jobs:
+      - job: BuildAndPushDockerImages
+        displayName: Build and Push Docker Images to Docker Hub
+        steps:
+          - checkout: self
+
+          - script: |
+              COMMIT_ID=$(Build.SourceVersion)
+              docker login -u bhandarenakul -p $(DOCKER_PASSWORD)
+              docker build -t bhandarenakul/sproutly-test:backend-latest-$COMMIT_ID ./backend
+              docker build -t bhandarenakul/sproutly-test:frontend-latest-$COMMIT_ID ./frontend
+              docker push bhandarenakul/sproutly-test:backend-latest-$COMMIT_ID
+              docker push bhandarenakul/sproutly-test:frontend-latest-$COMMIT_ID
+            displayName: "Build & Push Docker Images"
+
+  - stage: Deploy
+    displayName: Deploy to Azure VM
+    dependsOn: BuildAndPush
+    jobs:
+      - deployment: DeployToVM
+        displayName: Deploy to Azure Virtual Machine
+        environment:
+         name: testing
+         resourceName: sproutly
+         resourceType: virtualMachine
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+                - script: |
+                    COMMIT_ID=$(Build.SourceVersion)
+                    docker login -u bhandarenakul -p $(DOCKER_PASSWORD)
+                    
+                    # Install docker-compose if not available
+                    sudo apt-get update
+                    sudo apt-get install -y docker-compose
+
+                    # Stop and remove running containers
+                    docker stop sproutly-api sproutly-frontend nginx || true
+                    docker rm sproutly-api sproutly-frontend nginx || true
+
+                    # # Pull latest images from Docker Hub
+                    # docker pull bhandarenakul/sproutly-test:backend-latest
+                    # docker pull bhandarenakul/sproutly-test:frontend-latest
+                    
+                    sed -i "s|bhandarenakul/sproutly-test:backend-latest-.*|bhandarenakul/sproutly-test:backend-latest-$COMMIT_ID|g" docker-compose.yml
+                    sed -i "s|bhandarenakul/sproutly-test:frontend-latest-.*|bhandarenakul/sproutly-test:frontend-latest-$COMMIT_ID|g" docker-compose.yml
+                   
+                    # Run Docker Compose
+                    sudo docker-compose -f docker-compose.yml up -d
+                  displayName: "Deploy Application"
+

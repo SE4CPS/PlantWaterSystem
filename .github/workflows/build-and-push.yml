@@ -1,0 +1,35 @@
+name: Build & Push Docker Images
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "bhandarenakul" --password-stdin
+
+      - name: Build & Push Frontend Image
+        if: contains(github.event.head_commit.modified, 'frontend/')
+        run: |
+          docker build -t bhandarenakul/sproutly-test:frontend-latest ./frontend
+          docker push bhandarenakul/sproutly-test:frontend-latest
+
+      - name: Build & Push Backend Image
+        if: contains(github.event.head_commit.modified, 'backend/')
+        run: |
+          docker build -t bhandarenakul/sproutly-test:backend-latest ./backend
+          docker push bhandarenakul/sproutly-test:backend-latest
+
+      - name: Trigger Azure Deployment
+        run: |
+          curl -X POST -u "bhandarenakul:${{ secrets.AZURE_PAT }}" \
+            -H "Content-Type: application/json" \
+            --data '{"eventType": "trigger"}' \
+            "https://dev.azure.com/YOUR_ORG/YOUR_PROJECT/_apis/build/builds?api-version=6.0"
