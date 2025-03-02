@@ -1,12 +1,4 @@
 #!/usr/bin/env python3
-"""
-Plant Moisture Monitoring System
-
-This script reads moisture sensor data using an ADS1115 ADC, fetches current weather data
-(with caching every WEATHER_FETCH_INTERVAL seconds), and stores the combined data in an SQLite
-database as well as a temporary CSV file. Only the location name (e.g., "Stockton, California, US")
-is used for display and storage.
-"""
 
 import subprocess
 import time
