@@ -228,3 +228,10 @@
  * Running on http://127.0.0.1:5001
  * Running on http://10.0.0.180:5001
 2025-03-01 18:35:30,880 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-02 00:00:01,770 - ERROR - Failed to send data (405): 
+2025-03-02 00:00:01,774 - WARNING - Retrying after 2 seconds...
+2025-03-02 00:00:04,965 - ERROR - Failed to send data (405): 
+2025-03-02 00:00:04,967 - WARNING - Retrying after 4 seconds...
+2025-03-02 00:00:09,945 - ERROR - Failed to send data (405): 
+2025-03-02 00:00:09,948 - WARNING - Retrying after 8 seconds...
+2025-03-02 00:00:17,949 - ERROR - All retry attempts failed.
