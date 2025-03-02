@@ -1,0 +1,5 @@
+RPi.GPIO
+adafruit-circuitpython-ads1x15
+requests
+flask
+schedule
