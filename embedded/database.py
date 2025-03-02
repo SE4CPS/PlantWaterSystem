@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 def setup_database(conn):
     cursor = conn.cursor()
-    # Create the table with device_id before sensor_id
+    # Create table with device_id before sensor_id
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS moisture_data (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -24,7 +24,7 @@ def setup_database(conn):
         )
     """)
     conn.commit()
-    # The following ALTER statements are kept for backward compatibility.
+    # Backward compatibility ALTER statements (if needed)
     try:
         cursor.execute("ALTER TABLE moisture_data ADD COLUMN device_id TEXT")
         conn.commit()

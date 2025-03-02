@@ -12,8 +12,8 @@ def save_to_csv(record):
             writer = csv.writer(csvfile)
             if not file_exists:
                 header = ["timestamp", "device_id", "sensor_id", "adc_value", "moisture_level", "digital_status",
-                          "weather_temp", "weather_humidity", "weather_sunlight", "weather_wind_speed",
-                          "location", "weather_fetched"]
+                          "weather_temp", "weather_humidity", "weather_sunlight",
+                          "weather_wind_speed", "location", "weather_fetched"]
                 writer.writerow(header)
             writer.writerow(record)
     except Exception as e:

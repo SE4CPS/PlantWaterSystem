@@ -23,18 +23,18 @@ from adafruit_ads1x15.analog_in import AnalogIn
 logging.basicConfig(filename="sensor_log.log", level=logging.INFO,
                     format="%(asctime)s - %(levelname)s - %(message)s")
 
-# Initialize I2C and ADS1115
+# Initialize I2C and ADS1115 instance
 i2c = busio.I2C(board.SCL, board.SDA)
 ads = ADS.ADS1115(i2c)
 
-# Start send_data_api.py subprocess
+# Start the send_data_api.py process (managed as a subprocess)
 try:
     api_process = subprocess.Popen(["python3", "send_data_api.py"])
 except Exception as e:
     logging.error(f"Failed to start send_data_api.py subprocess: {e}")
     sys.exit(1)
 
-# Sensor configurations (analog channel and digital GPIO pin)
+# Sensor configurations: each sensor defined with analog channel and digital GPIO pin.
 SENSORS = [
     {"analog": ADS.P0, "digital": 14, "active": True},
     {"analog": ADS.P1, "digital": 15, "active": True},
@@ -42,7 +42,7 @@ SENSORS = [
     {"analog": ADS.P3, "digital": 23, "active": True},
 ]
 
-# Additional GPIO pins
+# Additional GPIO pins for configuration and alerts.
 ADDR_PIN = 7   # For address configuration
 ALRT_PIN = 0   # For alerts
 
@@ -56,20 +56,22 @@ for sensor in SENSORS:
 conn = None
 MAX_RETRIES = 3
 
-# Location and weather caching variables
+# Global variables for location and weather caching.
 DEVICE_LAT = None
 DEVICE_LON = None
-DEVICE_LOCATION = None  # Only the city name will be stored
+DEVICE_LOCATION = None  # Only the city name will be stored/displayed
 last_weather_time = 0
-last_weather_data = None  # (weather_temp, weather_humidity, weather_sunlight, weather_wind_speed)
+last_weather_data = None  # Cached tuple: (weather_temp, weather_humidity, weather_sunlight, weather_wind_speed)
 
 # --- Sensor Functions (integrated) ---
 
 def convert_adc_to_moisture(adc_value):
+    # Convert raw ADC value to moisture percentage and round to 2 decimals
     moisture_level = ((MAX_ADC - adc_value) / (MAX_ADC - MIN_ADC)) * 100
-    return max(0, min(100, moisture_level))
+    return round(max(0, min(100, moisture_level)), 2)
 
 def read_sensor_channel(sensor):
+    # Read the ADC value and digital state for a sensor
     try:
         chan = AnalogIn(ads, sensor["analog"])
         adc_value = chan.value
@@ -87,6 +89,7 @@ def read_sensor_channel(sensor):
         return 0, 0, "Error"
 
 def read_sensor_with_retries(sensor):
+    # Attempt to read sensor data multiple times in case of errors
     for attempt in range(MAX_RETRIES):
         try:
             return read_sensor_channel(sensor)
@@ -99,9 +102,11 @@ def read_sensor_with_retries(sensor):
 # --- End of Sensor Functions ---
 
 def save_to_csv(record):
+    # Save a record to the CSV file via the utils module
     utils.save_to_csv(record)
 
 def handle_shutdown(signum, frame):
+    # Gracefully shut down: cleanup GPIO, close DB, terminate subprocess.
     print("Received shutdown signal...")
     GPIO.cleanup()
     logging.info("GPIO Cleanup Done.")
@@ -121,7 +126,7 @@ def main_loop():
         logging.error(f"Failed to connect to the database: {e}")
         sys.exit(1)
     database.setup_database(conn)
-    # Detect location; store only city name
+    # Detect device location; use only the city name.
     DEVICE_LAT, DEVICE_LON, loc_name = weather_api.detect_location()
     DEVICE_LOCATION = loc_name if loc_name else "Unknown"
     print(f"Detected device location: {DEVICE_LOCATION}")
@@ -129,6 +134,7 @@ def main_loop():
     GPIO.output(ADDR_PIN, GPIO.HIGH)
     while True:
         current_sec = time.time()
+        # Fetch new weather data if the configured interval has passed.
         if last_weather_time == 0 or (current_sec - last_weather_time) >= WEATHER_FETCH_INTERVAL:
             new_weather = weather_api.get_weather_data(DEVICE_LAT, DEVICE_LON)
             if new_weather and any(field is not None for field in new_weather):
@@ -144,8 +150,7 @@ def main_loop():
                   f"Temp: {w_temp}, Humidity: {w_humidity}, Sunlight: {w_sunlight}, Wind: {w_wind_speed}")
             logging.info(f"Sensor {index} - ADC: {adc_value}, Moisture: {moisture_level:.2f}%, Digital: {digital_status}, "
                          f"Weather Temp: {w_temp}, Humidity: {w_humidity}, Sunlight: {w_sunlight}, Wind: {w_wind_speed}")
-            # Record tuple: DEVICE_ID, sensor_id, adc_value, moisture_level, digital_status, weather_temp,
-            # weather_humidity, weather_sunlight, weather_wind_speed, location, weather_fetched
+            # Create a record tuple with DEVICE_ID before sensor_id.
             record = (DEVICE_ID, index, adc_value, moisture_level, digital_status,
                       w_temp, w_humidity, w_sunlight, w_wind_speed,
                       DEVICE_LOCATION, weather_fetched_str)

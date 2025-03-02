@@ -13,7 +13,7 @@ logging.basicConfig(filename="api_log.log", level=logging.INFO,
                     format="%(asctime)s - %(levelname)s - %(message)s")
 
 app = Flask(__name__)
-LAST_SENT_TIMESTAMP = None  # Tracks last sent timestamp
+LAST_SENT_TIMESTAMP = None  # Tracks the last sent record's timestamp
 
 def fetch_recent_data(after=None):
     try:
