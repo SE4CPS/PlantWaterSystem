@@ -3186,3 +3186,9 @@
 2025-03-01 18:16:50,223 - INFO - Sensor 2 - ADC: 15695, Moisture: 28.70%, Digital: Dry, Weather Temp: 12.3, Humidity: 71, Sunlight: 0.0, Wind: 12.5
 2025-03-01 18:16:50,249 - INFO - Sensor 3 - ADC: 17240, Moisture: 18.40%, Digital: Dry, Weather Temp: 12.3, Humidity: 71, Sunlight: 0.0, Wind: 12.5
 2025-03-01 18:16:50,272 - INFO - Sensor 4 - ADC: 16497, Moisture: 23.35%, Digital: Dry, Weather Temp: 12.3, Humidity: 71, Sunlight: 0.0, Wind: 12.5
+2025-03-01 18:35:30,024 - INFO - Location from ipinfo.io: 37.9577, -121.2908, Stockton, California, US
+2025-03-01 18:35:30,024 - INFO - Final device location set to: Stockton, California, US
+2025-03-01 18:35:31,096 - INFO - Sensor 1 - ADC: 15279, Moisture: 31.47%, Digital: Dry, Weather Temp: 11.8, Humidity: 71, Sunlight: 0.0, Wind: 8.7
+2025-03-01 18:35:31,123 - INFO - Sensor 2 - ADC: 15684, Moisture: 28.77%, Digital: Dry, Weather Temp: 11.8, Humidity: 71, Sunlight: 0.0, Wind: 8.7
+2025-03-01 18:35:31,147 - INFO - Sensor 3 - ADC: 17248, Moisture: 18.35%, Digital: Dry, Weather Temp: 11.8, Humidity: 71, Sunlight: 0.0, Wind: 8.7
+2025-03-01 18:35:31,171 - INFO - Sensor 4 - ADC: 16506, Moisture: 23.29%, Digital: Dry, Weather Temp: 11.8, Humidity: 71, Sunlight: 0.0, Wind: 8.7
