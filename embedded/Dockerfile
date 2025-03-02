@@ -14,5 +14,5 @@ COPY . .
 # Expose port 5001 (for Flask API)
 EXPOSE 5001
 
-# Run the plant_monitor.py as the main process
+# Run plant_monitor.py as the main process
 CMD ["python", "plant_monitor.py"]

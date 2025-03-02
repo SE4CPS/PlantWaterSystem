@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import subprocess
 import time
 import sqlite3
@@ -10,34 +8,35 @@ import os
 import csv
 from datetime import datetime, timedelta
 
-from config import SENSOR_READ_INTERVAL, DATA_RETENTION_DAYS, WEATHER_FETCH_INTERVAL, MIN_ADC, MAX_ADC, ENABLE_CSV_OUTPUT, CSV_FILENAME, DB_NAME
+from config import (SENSOR_READ_INTERVAL, DATA_RETENTION_DAYS, WEATHER_FETCH_INTERVAL,
+                    MIN_ADC, MAX_ADC, ENABLE_CSV_OUTPUT, CSV_FILENAME, DB_NAME, DEVICE_ID)
 import weather_api
 import database
 import utils
 
-# Hardware imports
+# Hardware libraries
 import board
 import busio
 import RPi.GPIO as GPIO
 import adafruit_ads1x15.ads1115 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
 
-# Setup logging
+# Configure logging
 logging.basicConfig(filename="sensor_log.log", level=logging.INFO,
                     format="%(asctime)s - %(levelname)s - %(message)s")
 
-# Initialize I2C interface and ADS1115 ADC
+# Initialize I2C and ADS1115 instance
 i2c = busio.I2C(board.SCL, board.SDA)
 ads = ADS.ADS1115(i2c)
 
-# Start send_data_api.py process
+# Start send_data_api.py as a subprocess
 try:
     api_process = subprocess.Popen(["python3", "send_data_api.py"])
 except Exception as e:
     logging.error(f"Failed to start send_data_api.py subprocess: {e}")
     sys.exit(1)
 
-# Sensor configuration: each sensor uses an analog channel and a digital GPIO pin.
+# Sensor configurations: each sensor defined with analog channel and digital GPIO pin.
 SENSORS = [
     {"analog": ADS.P0, "digital": 14, "active": True},
     {"analog": ADS.P1, "digital": 15, "active": True},
@@ -45,11 +44,11 @@ SENSORS = [
     {"analog": ADS.P3, "digital": 23, "active": True},
 ]
 
-# Additional GPIO pins for configuration and alerts.
-ADDR_PIN = 7   # GPIO pin for address configuration.
-ALRT_PIN = 0   # GPIO pin for alerts.
+# Additional GPIO pins
+ADDR_PIN = 7   # For address configuration
+ALRT_PIN = 0   # For alerts
 
-# Setup GPIO mode and pins.
+# Setup GPIO mode and pin directions
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(ADDR_PIN, GPIO.OUT)
 GPIO.setup(ALRT_PIN, GPIO.IN)
@@ -57,29 +56,26 @@ for sensor in SENSORS:
     if sensor["active"]:
         GPIO.setup(sensor["digital"], GPIO.IN)
 
-# Global variables for database connection and retry settings.
+# Global variables for DB connection and retry count
 conn = None
 MAX_RETRIES = 3
 
-# Global variables for location and weather caching.
+# Global variables for location and weather caching
 DEVICE_LAT = None
 DEVICE_LON = None
-DEVICE_LOCATION = None  # Will store only the city name.
+DEVICE_LOCATION = None  # Only the city name will be stored
 last_weather_time = 0
 last_weather_data = None  # Cached tuple: (weather_temp, weather_humidity, weather_sunlight, weather_wind_speed)
 
 # --- Sensor Functions (integrated here) ---
 
 def convert_adc_to_moisture(adc_value):
-    """Converts a raw ADC value to a moisture percentage using MIN_ADC and MAX_ADC."""
+    # Convert raw ADC value to moisture percentage using configuration limits
     moisture_level = ((MAX_ADC - adc_value) / (MAX_ADC - MIN_ADC)) * 100
     return max(0, min(100, moisture_level))
 
 def read_sensor_channel(sensor):
-    """
-    Reads the ADC channel and digital state for a given sensor.
-    Returns (adc_value, moisture_level, digital_status).
-    """
+    # Read the ADC value and digital state for a sensor
     try:
         chan = AnalogIn(ads, sensor["analog"])
         adc_value = chan.value
@@ -97,7 +93,7 @@ def read_sensor_channel(sensor):
         return 0, 0, "Error"
 
 def read_sensor_with_retries(sensor):
-    """Attempts to read sensor data with retries."""
+    # Try reading sensor data multiple times in case of errors
     for attempt in range(MAX_RETRIES):
         try:
             return read_sensor_channel(sensor)
@@ -109,12 +105,12 @@ def read_sensor_with_retries(sensor):
 
 # --- End of Sensor Functions ---
 
-# Writes a record to CSV using utils.
 def save_to_csv(record):
+    # Delegate CSV saving to utils module
     utils.save_to_csv(record)
 
-# Handles graceful shutdown.
 def handle_shutdown(signum, frame):
+    # Clean up GPIO, close DB, and terminate subprocess on shutdown signal
     print("Received shutdown signal...")
     GPIO.cleanup()
     logging.info("GPIO Cleanup Done.")
@@ -127,7 +123,6 @@ signal.signal(signal.SIGTERM, handle_shutdown)
 signal.signal(signal.SIGINT, handle_shutdown)
 
 def main_loop():
-    """Main loop: sets up DB, detects location, reads sensors, and saves records."""
     global conn, DEVICE_LAT, DEVICE_LON, DEVICE_LOCATION, last_weather_time, last_weather_data
     try:
         conn = sqlite3.connect(DB_NAME)
@@ -135,7 +130,7 @@ def main_loop():
         logging.error(f"Failed to connect to the database: {e}")
         sys.exit(1)
     database.setup_database(conn)
-    # Detect location (lat and lon used internally; only city name is stored)
+    # Detect device location; use only the city name for storage/display.
     DEVICE_LAT, DEVICE_LON, loc_name = weather_api.detect_location()
     DEVICE_LOCATION = loc_name if loc_name else "Unknown"
     print(f"Detected device location: {DEVICE_LOCATION}")
@@ -143,7 +138,7 @@ def main_loop():
     GPIO.output(ADDR_PIN, GPIO.HIGH)
     while True:
         current_sec = time.time()
-        # Fetch new weather data only if the interval has passed.
+        # Retrieve new weather data if the configured interval has passed.
         if last_weather_time == 0 or (current_sec - last_weather_time) >= WEATHER_FETCH_INTERVAL:
             new_weather = weather_api.get_weather_data(DEVICE_LAT, DEVICE_LON)
             if new_weather and any(field is not None for field in new_weather):
@@ -159,13 +154,14 @@ def main_loop():
                   f"Temp: {w_temp}, Humidity: {w_humidity}, Sunlight: {w_sunlight}, Wind: {w_wind_speed}")
             logging.info(f"Sensor {index} - ADC: {adc_value}, Moisture: {moisture_level:.2f}%, Digital: {digital_status}, "
                          f"Weather Temp: {w_temp}, Humidity: {w_humidity}, Sunlight: {w_sunlight}, Wind: {w_wind_speed}")
+            # Create a record tuple including the DEVICE_ID.
             record = (index, adc_value, moisture_level, digital_status,
                       w_temp, w_humidity, w_sunlight, w_wind_speed,
-                      DEVICE_LOCATION, weather_fetched_str)
+                      DEVICE_LOCATION, weather_fetched_str, DEVICE_ID)
             database.save_record(conn, record)
             csv_record = [datetime.now().strftime('%Y-%m-%d %H:%M:%S'), index, adc_value, f"{moisture_level:.2f}",
                           digital_status, w_temp, w_humidity, w_sunlight, w_wind_speed,
-                          DEVICE_LOCATION, weather_fetched_str]
+                          DEVICE_LOCATION, weather_fetched_str, DEVICE_ID]
             save_to_csv(csv_record)
         database.delete_old_records(conn)
         time.sleep(SENSOR_READ_INTERVAL)

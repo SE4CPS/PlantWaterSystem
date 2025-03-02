@@ -1,15 +1,9 @@
-#!/usr/bin/env python3
-
 import os
 import csv
 import logging
 from config import ENABLE_CSV_OUTPUT, CSV_FILENAME
 
 def save_to_csv(record):
-    """
-    Saves the provided record (a list of values) to the CSV file.
-    If the file does not exist, writes a header first.
-    """
     if not ENABLE_CSV_OUTPUT:
         return
     file_exists = os.path.isfile(CSV_FILENAME)
@@ -19,7 +13,7 @@ def save_to_csv(record):
             if not file_exists:
                 header = ["timestamp", "sensor_id", "adc_value", "moisture_level", "digital_status",
                           "weather_temp", "weather_humidity", "weather_sunlight",
-                          "weather_wind_speed", "location", "weather_fetched"]
+                          "weather_wind_speed", "location", "weather_fetched", "device_id"]
                 writer.writerow(header)
             writer.writerow(record)
     except Exception as e:
