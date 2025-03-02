@@ -3164,3 +3164,25 @@
 2025-03-01 18:09:41,258 - INFO - Sensor 4 - ADC: 16496, Moisture: 23.36%, Digital: Dry, Weather Temp: 12.7, Humidity: 77, Sunlight: 50.8, Wind: 12.8
 2025-03-01 18:09:47,398 - INFO - GPIO Cleanup Done.
 2025-03-01 18:09:47,399 - INFO - GPIO Cleanup Done.
+2025-03-01 18:14:05,619 - INFO - Location from ipinfo.io: 37.9577, -121.2908, Stockton, California, US
+2025-03-01 18:14:05,619 - INFO - Final device location set to: Stockton, California, US
+2025-03-01 18:14:06,872 - INFO - Sensor 1 - ADC: 15258, Moisture: 31.61%, Digital: Dry, Weather Temp: 12.7, Humidity: 77, Sunlight: 50.8, Wind: 12.8
+2025-03-01 18:14:06,905 - INFO - Sensor 2 - ADC: 15697, Moisture: 28.69%, Digital: Dry, Weather Temp: 12.7, Humidity: 77, Sunlight: 50.8, Wind: 12.8
+2025-03-01 18:14:06,935 - INFO - Sensor 3 - ADC: 17227, Moisture: 18.49%, Digital: Dry, Weather Temp: 12.7, Humidity: 77, Sunlight: 50.8, Wind: 12.8
+2025-03-01 18:14:07,029 - INFO - Sensor 4 - ADC: 16509, Moisture: 23.27%, Digital: Dry, Weather Temp: 12.7, Humidity: 77, Sunlight: 50.8, Wind: 12.8
+2025-03-01 18:14:11,896 - INFO - GPIO Cleanup Done.
+2025-03-01 18:14:11,897 - INFO - GPIO Cleanup Done.
+2025-03-01 18:16:21,395 - INFO - Location from ipinfo.io: 37.9577, -121.2908, Stockton, California, US
+2025-03-01 18:16:21,396 - INFO - Final device location set to: Stockton, California, US
+2025-03-01 18:16:22,577 - INFO - Sensor 1 - ADC: 15262, Moisture: 31.59%, Digital: Dry, Weather Temp: 12.3, Humidity: 71, Sunlight: 0.0, Wind: 12.5
+2025-03-01 18:16:22,603 - INFO - Sensor 2 - ADC: 15695, Moisture: 28.70%, Digital: Dry, Weather Temp: 12.3, Humidity: 71, Sunlight: 0.0, Wind: 12.5
+2025-03-01 18:16:22,627 - INFO - Sensor 3 - ADC: 17230, Moisture: 18.47%, Digital: Dry, Weather Temp: 12.3, Humidity: 71, Sunlight: 0.0, Wind: 12.5
+2025-03-01 18:16:22,651 - INFO - Sensor 4 - ADC: 16507, Moisture: 23.29%, Digital: Dry, Weather Temp: 12.3, Humidity: 71, Sunlight: 0.0, Wind: 12.5
+2025-03-01 18:16:35,881 - INFO - GPIO Cleanup Done.
+2025-03-01 18:16:35,883 - INFO - GPIO Cleanup Done.
+2025-03-01 18:16:48,987 - INFO - Location from ipinfo.io: 37.9577, -121.2908, Stockton, California, US
+2025-03-01 18:16:48,988 - INFO - Final device location set to: Stockton, California, US
+2025-03-01 18:16:50,122 - INFO - Sensor 1 - ADC: 15257, Moisture: 31.62%, Digital: Dry, Weather Temp: 12.3, Humidity: 71, Sunlight: 0.0, Wind: 12.5
+2025-03-01 18:16:50,223 - INFO - Sensor 2 - ADC: 15695, Moisture: 28.70%, Digital: Dry, Weather Temp: 12.3, Humidity: 71, Sunlight: 0.0, Wind: 12.5
+2025-03-01 18:16:50,249 - INFO - Sensor 3 - ADC: 17240, Moisture: 18.40%, Digital: Dry, Weather Temp: 12.3, Humidity: 71, Sunlight: 0.0, Wind: 12.5
+2025-03-01 18:16:50,272 - INFO - Sensor 4 - ADC: 16497, Moisture: 23.35%, Digital: Dry, Weather Temp: 12.3, Humidity: 71, Sunlight: 0.0, Wind: 12.5
