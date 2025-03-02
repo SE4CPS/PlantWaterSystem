@@ -1,4 +1,12 @@
 #!/usr/bin/env python3
+"""
+Plant Moisture Monitoring System
+
+This script reads moisture sensor data using an ADS1115 ADC, fetches current weather data
+(with caching every WEATHER_FETCH_INTERVAL seconds), and stores the combined data in an SQLite
+database as well as a temporary CSV file. Only the location name (e.g., "Stockton, California, US")
+is used for display and storage.
+"""
 
 import subprocess
 import time
@@ -100,4 +108,90 @@ def read_sensor_channel(sensor):
 
 def read_sensor_with_retries(sensor):
     """Attempts to read sensor data with retries."""
-    for
+    for attempt in range(MAX_RETRIES):
+        try:
+            return read_sensor_channel(sensor)
+        except Exception as e:
+            logging.warning(f"Retry {attempt + 1} for sensor {sensor['analog']} due to error: {e}")
+            time.sleep(1)
+    logging.error(f"Failed to read sensor {sensor['analog']} after {MAX_RETRIES} attempts.")
+    return 0, 0, "Error"
+
+# ---------------------------
+# End of Sensor Functions
+# ---------------------------
+
+# Writes a record to a CSV file (if enabled).
+def save_to_csv(record):
+    utils.save_to_csv(record)
+
+# Handles graceful shutdown.
+def handle_shutdown(signum, frame):
+    print("Received shutdown signal...")
+    GPIO.cleanup()
+    logging.info("GPIO Cleanup Done.")
+    if conn:
+        conn.close()
+    api_process.terminate()
+    sys.exit(0)
+
+signal.signal(signal.SIGTERM, handle_shutdown)
+signal.signal(signal.SIGINT, handle_shutdown)
+
+def main_loop():
+    """Main loop: sets up the database, detects location, reads sensor data, and saves records."""
+    global conn, DEVICE_LAT, DEVICE_LON, DEVICE_LOCATION, last_weather_time, last_weather_data
+    try:
+        conn = sqlite3.connect(DB_NAME)
+    except sqlite3.Error as e:
+        logging.error(f"Failed to connect to the database: {e}")
+        sys.exit(1)
+    database.setup_database(conn)
+    # Detect location (lat, lon used internally; only city name is stored)
+    DEVICE_LAT, DEVICE_LON, loc_name = weather_api.detect_location()
+    if loc_name:
+        DEVICE_LOCATION = loc_name
+    else:
+        DEVICE_LOCATION = "Unknown"
+    print(f"Detected device location: {DEVICE_LOCATION}")
+    logging.info(f"Final device location set to: {DEVICE_LOCATION}")
+    GPIO.output(ADDR_PIN, GPIO.HIGH)
+    while True:
+        current_sec = time.time()
+        # Fetch new weather data only if interval has passed.
+        if last_weather_time == 0 or (current_sec - last_weather_time) >= WEATHER_FETCH_INTERVAL:
+            new_weather = weather_api.get_weather_data(DEVICE_LAT, DEVICE_LON)
+            if new_weather and any(field is not None for field in new_weather):
+                last_weather_data = new_weather
+                last_weather_time = current_sec
+        w_temp, w_humidity, w_sunlight, w_wind_speed = (last_weather_data if last_weather_data else (None, None, None, None))
+        weather_fetched_str = datetime.fromtimestamp(last_weather_time).strftime('%Y-%m-%d %H:%M:%S') if last_weather_time else "Unknown"
+        for index, sensor in enumerate(SENSORS, start=1):
+            if not sensor["active"]:
+                continue
+            adc_value, moisture_level, digital_status = read_sensor_with_retries(sensor)
+            print(f"Sensor {index} - ADC: {adc_value}, Moisture: {moisture_level:.2f}%, Digital: {digital_status}, "
+                  f"Temp: {w_temp}, Humidity: {w_humidity}, Sunlight: {w_sunlight}, Wind: {w_wind_speed}")
+            logging.info(f"Sensor {index} - ADC: {adc_value}, Moisture: {moisture_level:.2f}%, Digital: {digital_status}, "
+                         f"Weather Temp: {w_temp}, Humidity: {w_humidity}, Sunlight: {w_sunlight}, Wind: {w_wind_speed}")
+            record = (index, adc_value, moisture_level, digital_status,
+                      w_temp, w_humidity, w_sunlight, w_wind_speed,
+                      DEVICE_LOCATION, weather_fetched_str)
+            database.save_record(conn, record)
+            csv_record = [datetime.now().strftime('%Y-%m-%d %H:%M:%S'), index, adc_value, f"{moisture_level:.2f}",
+                          digital_status, w_temp, w_humidity, w_sunlight, w_wind_speed,
+                          DEVICE_LOCATION, weather_fetched_str]
+            save_to_csv(csv_record)
+        database.delete_old_records(conn)
+        time.sleep(SENSOR_READ_INTERVAL)
+
+try:
+    main_loop()
+except KeyboardInterrupt:
+    print("Exiting...")
+finally:
+    GPIO.cleanup()
+    if conn:
+        conn.close()
+    logging.info("GPIO Cleanup Done.")
+    print("GPIO Cleanup Done.")
