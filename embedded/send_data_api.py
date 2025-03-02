@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import sqlite3
 import requests
 import schedule
@@ -9,18 +9,18 @@ import threading
 import logging
 import os
 from datetime import datetime, timedelta
+from config import DB_NAME, BACKEND_API_URL, RETRY_ATTEMPTS, BASE_DELAY
 
 logging.basicConfig(filename="api_log.log", level=logging.INFO,
                     format="%(asctime)s - %(levelname)s - %(message)s")
 
-DB_NAME = os.getenv("DB_NAME", "plant_sensor_data.db")
-BACKEND_API_URL = os.getenv("BACKEND_API_URL", "https://sprout-ly.com/api/sensor/data")
-RETRY_ATTEMPTS = 3
-BASE_DELAY = 2
-
 app = Flask(__name__)
 
-def fetch_recent_data():
+# Global variable to store the last sent timestamp (as a string).
+LAST_SENT_TIMESTAMP = None
+
+def fetch_recent_data(after=None):
+    """Fetches sensor records from the database. If 'after' is provided, only records newer than that are returned."""
     try:
         conn = sqlite3.connect(DB_NAME)
     except sqlite3.Error as e:
@@ -28,11 +28,19 @@ def fetch_recent_data():
         return []
     try:
         cursor = conn.cursor()
-        cursor.execute("""
-            SELECT id, timestamp, sensor_id, adc_value, moisture_level, digital_status,
-                   weather_temp, weather_humidity, weather_sunlight, weather_wind_speed, location, weather_fetched
-            FROM moisture_data
-        """)
+        if after:
+            cursor.execute("""
+                SELECT id, timestamp, sensor_id, adc_value, moisture_level, digital_status,
+                       weather_temp, weather_humidity, weather_sunlight, weather_wind_speed, location, weather_fetched
+                FROM moisture_data
+                WHERE timestamp > ?
+            """, (after,))
+        else:
+            cursor.execute("""
+                SELECT id, timestamp, sensor_id, adc_value, moisture_level, digital_status,
+                       weather_temp, weather_humidity, weather_sunlight, weather_wind_speed, location, weather_fetched
+                FROM moisture_data
+            """)
         data = cursor.fetchall()
     except sqlite3.Error as e:
         logging.error(f"Database query error: {e}")
@@ -57,7 +65,8 @@ def fetch_recent_data():
         for row in data
     ]
 
-def retry_with_backoff(func, max_attempts=3, base_delay=2):
+def retry_with_backoff(func, max_attempts=RETRY_ATTEMPTS, base_delay=BASE_DELAY):
+    """Retries a function with exponential backoff."""
     for attempt in range(max_attempts):
         if func():
             return True
@@ -67,11 +76,16 @@ def retry_with_backoff(func, max_attempts=3, base_delay=2):
     logging.error("All retry attempts failed.")
     return False
 
-def send_data_to_backend():
-    data = fetch_recent_data()
+def send_data_to_backend(after=None):
+    """
+    Sends sensor data to the backend API.
+    If 'after' is provided, only records with a timestamp later than 'after' are sent.
+    Returns (success, data_sent).
+    """
+    data = fetch_recent_data(after)
     if not data:
-        logging.info("No data to send.")
-        return False
+        logging.info("No new data to send.")
+        return False, None
     def send_request():
         try:
             response = requests.post(BACKEND_API_URL, json={"sensor_data": data}, timeout=10)
@@ -84,22 +98,47 @@ def send_data_to_backend():
         except requests.RequestException as e:
             logging.error(f"Error sending data: {e}")
             return False
-    return retry_with_backoff(send_request, max_attempts=RETRY_ATTEMPTS, base_delay=BASE_DELAY)
+    success = retry_with_backoff(send_request)
+    return success, data if success else None
+
+@app.route("/send-current", methods=["GET", "POST"])
+def send_current_data():
+    """
+    On-demand endpoint: sends only new records (i.e., records with timestamp greater than LAST_SENT_TIMESTAMP).
+    After a successful send, updates LAST_SENT_TIMESTAMP to the maximum timestamp from the sent records.
+    """
+    global LAST_SENT_TIMESTAMP
+    success, data = send_data_to_backend(after=LAST_SENT_TIMESTAMP)
+    if success and data:
+        try:
+            max_ts = max(record["timestamp"] for record in data)
+            LAST_SENT_TIMESTAMP = max_ts
+        except Exception as e:
+            logging.error(f"Error updating LAST_SENT_TIMESTAMP: {e}")
+        return jsonify({"message": "Current data sent successfully"}), 200
+    elif success:
+        return jsonify({"message": "No new data to send"}), 200
+    else:
+        return jsonify({"message": "Failed to send current data"}), 500
 
 @app.route("/send-data", methods=["POST"])
 def send_data():
-    if send_data_to_backend():
+    """Endpoint to send all sensor data to the backend."""
+    success, _ = send_data_to_backend()
+    if success:
         return jsonify({"message": "Data sent successfully"}), 200
     else:
         return jsonify({"message": "Failed to send data"}), 500
 
 def safe_task_execution(task):
+    """Executes a task and logs any exceptions."""
     try:
         task()
     except Exception as e:
         logging.error(f"Scheduled task failed: {e}")
 
 def schedule_data_sending():
+    """Schedules data sending at 00:00 and 12:00 daily."""
     schedule.every().day.at("00:00").do(lambda: safe_task_execution(send_data_to_backend))
     schedule.every().day.at("12:00").do(lambda: safe_task_execution(send_data_to_backend))
     logging.info("Scheduled jobs registered successfully.")
@@ -108,10 +147,11 @@ def schedule_data_sending():
         time.sleep(1)
 
 def run_schedule_in_thread():
+    """Runs the scheduler in a separate daemon thread."""
     thread = threading.Thread(target=schedule_data_sending)
     thread.daemon = True
     thread.start()
 
 if __name__ == "__main__":
     run_schedule_in_thread()
-    app.run(host="0.0.0.0", port=5001)
+    app.run(host="0.0.0.0", port=5001, debug=False)

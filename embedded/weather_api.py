@@ -8,6 +8,7 @@ FALLBACK_LAT = os.getenv("FALLBACK_LAT", "")
 FALLBACK_LON = os.getenv("FALLBACK_LON", "")
 
 def get_ipinfo_location():
+    """Queries ipinfo.io for geolocation and returns (lat, lon, location_name)."""
     try:
         response = requests.get("https://ipinfo.io/json", timeout=10)
         response.raise_for_status()
@@ -29,6 +30,7 @@ def get_ipinfo_location():
     return None, None, None
 
 def get_geoplugin_location():
+    """Queries geoplugin.net for geolocation and returns (lat, lon, location_name)."""
     try:
         response = requests.get("http://www.geoplugin.net/json.gp", timeout=10)
         response.raise_for_status()
@@ -50,6 +52,10 @@ def get_geoplugin_location():
     return None, None, None
 
 def detect_location():
+    """
+    Attempts to detect the location using ipinfo.io first, then geoplugin.net.
+    Returns (lat, lon, location_name) and the location_name is used in the system.
+    """
     lat, lon, loc_name = get_ipinfo_location()
     if lat is not None and lon is not None:
         logging.info(f"Location from ipinfo.io: {lat}, {lon}, {loc_name}")
@@ -71,6 +77,10 @@ def detect_location():
     return None, None, "Unknown"
 
 def get_weather_data(lat, lon):
+    """
+    Fetches current weather data from Open-Meteo for the given latitude and longitude.
+    Returns a tuple: (weather_temp, weather_humidity, weather_sunlight, weather_wind_speed)
+    """
     if lat is None or lon is None:
         logging.warning("Latitude/Longitude not available. Cannot fetch weather data.")
         return None, None, None, None

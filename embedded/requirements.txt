@@ -1,0 +1,6 @@
+RPi.GPIO
+adafruit-circuitpython-ads1x15
+requests
+flask
+schedule
+# prometheus_client  (if needed for monitoring, but not required here)
