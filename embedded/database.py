@@ -5,10 +5,12 @@ from datetime import datetime, timedelta
 
 def setup_database(conn):
     cursor = conn.cursor()
+    # Table with device_id placed before sensor_id in logical order
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS moisture_data (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+            device_id TEXT,
             sensor_id INTEGER,
             adc_value REAL,
             moisture_level REAL,
@@ -18,11 +20,15 @@ def setup_database(conn):
             weather_sunlight REAL,
             weather_wind_speed REAL,
             location TEXT,
-            weather_fetched TEXT,
-            device_id TEXT
+            weather_fetched TEXT
         )
     """)
     conn.commit()
+    try:
+        cursor.execute("ALTER TABLE moisture_data ADD COLUMN device_id TEXT")
+        conn.commit()
+    except sqlite3.OperationalError:
+        pass
     try:
         cursor.execute("ALTER TABLE moisture_data ADD COLUMN adc_value REAL")
         conn.commit()
@@ -38,19 +44,16 @@ def setup_database(conn):
         conn.commit()
     except sqlite3.OperationalError:
         pass
-    try:
-        cursor.execute("ALTER TABLE moisture_data ADD COLUMN device_id TEXT")
-        conn.commit()
-    except sqlite3.OperationalError:
-        pass
 
 def save_record(conn, record):
+    # Record order: (device_id, sensor_id, adc_value, moisture_level, digital_status,
+    # weather_temp, weather_humidity, weather_sunlight, weather_wind_speed, location, weather_fetched)
     cursor = conn.cursor()
     cursor.execute("""
         INSERT INTO moisture_data 
-        (sensor_id, adc_value, moisture_level, digital_status,
+        (device_id, sensor_id, adc_value, moisture_level, digital_status,
          weather_temp, weather_humidity, weather_sunlight, weather_wind_speed,
-         location, weather_fetched, device_id)
+         location, weather_fetched)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, record)
     conn.commit()

@@ -13,10 +13,9 @@ logging.basicConfig(filename="api_log.log", level=logging.INFO,
                     format="%(asctime)s - %(levelname)s - %(message)s")
 
 app = Flask(__name__)
-LAST_SENT_TIMESTAMP = None  # Global to track the last sent record's timestamp
+LAST_SENT_TIMESTAMP = None  # Tracks last sent timestamp
 
 def fetch_recent_data(after=None):
-    # Retrieve records from the DB; if 'after' is provided, only newer records are returned.
     try:
         conn = sqlite3.connect(DB_NAME)
     except sqlite3.Error as e:
@@ -63,7 +62,6 @@ def fetch_recent_data(after=None):
     ]
 
 def retry_with_backoff(func, max_attempts=RETRY_ATTEMPTS, base_delay=BASE_DELAY):
-    # Retry a function with exponential backoff if it fails.
     for attempt in range(max_attempts):
         if func():
             return True
@@ -74,7 +72,6 @@ def retry_with_backoff(func, max_attempts=RETRY_ATTEMPTS, base_delay=BASE_DELAY)
     return False
 
 def send_data_to_backend(after=None):
-    # Sends sensor data to the backend API; optionally only new records.
     data = fetch_recent_data(after)
     if not data:
         logging.info("No new data to send.")
@@ -96,7 +93,6 @@ def send_data_to_backend(after=None):
 
 @app.route("/send-current", methods=["GET", "POST"])
 def send_current_data():
-    # On-demand endpoint that sends only new records and updates LAST_SENT_TIMESTAMP.
     global LAST_SENT_TIMESTAMP
     success, data = send_data_to_backend(after=LAST_SENT_TIMESTAMP)
     if success and data:
@@ -113,7 +109,6 @@ def send_current_data():
 
 @app.route("/send-data", methods=["POST"])
 def send_data():
-    # Endpoint to send all sensor data.
     success, _ = send_data_to_backend()
     if success:
         return jsonify({"message": "Data sent successfully"}), 200
@@ -121,14 +116,12 @@ def send_data():
         return jsonify({"message": "Failed to send data"}), 500
 
 def safe_task_execution(task):
-    # Execute a task safely, logging any exceptions.
     try:
         task()
     except Exception as e:
         logging.error(f"Scheduled task failed: {e}")
 
 def schedule_data_sending():
-    # Schedule sending data at 00:00 and 12:00 daily.
     schedule.every().day.at("00:00").do(lambda: safe_task_execution(send_data_to_backend))
     schedule.every().day.at("12:00").do(lambda: safe_task_execution(send_data_to_backend))
     logging.info("Scheduled jobs registered successfully.")
@@ -137,7 +130,6 @@ def schedule_data_sending():
         time.sleep(1)
 
 def run_schedule_in_thread():
-    # Run the scheduler in a separate thread.
     thread = threading.Thread(target=schedule_data_sending)
     thread.daemon = True
     thread.start()

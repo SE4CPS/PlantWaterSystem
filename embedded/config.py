@@ -16,12 +16,12 @@ CSV_FILENAME = "plant_data_temp.csv"
 # Database settings
 DB_NAME = "plant_sensor_data.db"
 
-# Backend API settings (for send_data_api)
+# Backend API settings
 BACKEND_API_URL = "https://sprout-ly.com/api/sensor/data"
 RETRY_ATTEMPTS = 3
 BASE_DELAY = 2
 
-# Function to extract the device's unique serial number from /proc/cpuinfo
+# Extract the device's unique serial number from /proc/cpuinfo
 def get_device_serial():
     try:
         with open('/proc/cpuinfo', 'r') as f:
