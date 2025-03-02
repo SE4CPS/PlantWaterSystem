@@ -29,7 +29,7 @@ services:
   # Nginx Reverse Proxy
   # Nginx Service (acting as reverse proxy)
   nginx:
-    image: nginx:nginx-$(Build.SourceVersion)
+    image: bhandarenakul/nginx:latest-$(Build.SourceVersion)
     container_name: nginx
     ports:
       - "80:80"
