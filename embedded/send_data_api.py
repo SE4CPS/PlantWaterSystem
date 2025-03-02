@@ -20,7 +20,10 @@ app = Flask(__name__)
 LAST_SENT_TIMESTAMP = None
 
 def fetch_recent_data(after=None):
-    """Fetches sensor data from the database. If 'after' is provided, returns only records newer than that timestamp."""
+    """
+    Fetches sensor records from the database.
+    If 'after' is provided, only returns records with a timestamp later than 'after'.
+    """
     try:
         conn = sqlite3.connect(DB_NAME)
     except sqlite3.Error as e:
@@ -104,7 +107,7 @@ def send_data_to_backend(after=None):
 @app.route("/send-current", methods=["GET", "POST"])
 def send_current_data():
     """
-    On-demand endpoint: sends only new sensor records (records with timestamp greater than LAST_SENT_TIMESTAMP).
+    On-demand endpoint: sends only new sensor records (with timestamp greater than LAST_SENT_TIMESTAMP).
     After a successful send, updates LAST_SENT_TIMESTAMP to the latest timestamp from the sent data.
     """
     global LAST_SENT_TIMESTAMP
@@ -131,7 +134,7 @@ def send_data():
         return jsonify({"message": "Failed to send data"}), 500
 
 def safe_task_execution(task):
-    """Executes a given task and logs exceptions."""
+    """Executes a given task and logs any exceptions."""
     try:
         task()
     except Exception as e:
@@ -148,10 +151,4 @@ def schedule_data_sending():
 
 def run_schedule_in_thread():
     """Runs the scheduler in a separate daemon thread."""
-    thread = threading.Thread(target=schedule_data_sending)
-    thread.daemon = True
-    thread.start()
-
-if __name__ == "__main__":
-    run_schedule_in_thread()
-    app.run(host="0.0.0.0", port=5001, debug=False)
+    thread = threading.Thr

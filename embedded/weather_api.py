@@ -53,8 +53,8 @@ def get_geoplugin_location():
 
 def detect_location():
     """
-    Attempts to detect location using ipinfo.io, then geoplugin.net.
-    Returns (lat, lon, location_name). Only the location_name (city) is used in the system.
+    Attempts to detect the location using ipinfo.io first, then geoplugin.net.
+    Returns (lat, lon, location_name). Only the location_name is used in the system.
     """
     lat, lon, loc_name = get_ipinfo_location()
     if lat is not None and lon is not None:
@@ -106,24 +106,3 @@ def get_weather_data(lat, lon):
         hourly_time = hourly.get("time", [])
         hourly_humidity = hourly.get("relativehumidity_2m", [])
         hourly_radiation = hourly.get("shortwave_radiation", [])
-        if current_time and hourly_time:
-            try:
-                index = hourly_time.index(current_time)
-                if index < len(hourly_humidity):
-                    weather_humidity = hourly_humidity[index]
-                if index < len(hourly_radiation):
-                    weather_sunlight = hourly_radiation[index]
-            except ValueError:
-                if hourly_humidity:
-                    weather_humidity = hourly_humidity[0]
-                if hourly_radiation:
-                    weather_sunlight = hourly_radiation[0]
-        else:
-            if hourly_humidity:
-                weather_humidity = hourly_humidity[0]
-            if hourly_radiation:
-                weather_sunlight = hourly_radiation[0]
-        return weather_temp, weather_humidity, weather_sunlight, weather_wind_speed
-    except Exception as e:
-        logging.error(f"Failed to retrieve weather data: {e}")
-        return None, None, None, None
