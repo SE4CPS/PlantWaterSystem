@@ -22,7 +22,7 @@ import RPi.GPIO as GPIO
 import adafruit_ads1x15.ads1115 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
 
-# Setup logging to file "sensor_log.log"
+# Setup logging
 logging.basicConfig(filename="sensor_log.log", level=logging.INFO,
                     format="%(asctime)s - %(levelname)s - %(message)s")
 
@@ -30,7 +30,7 @@ logging.basicConfig(filename="sensor_log.log", level=logging.INFO,
 i2c = busio.I2C(board.SCL, board.SDA)
 ads = ADS.ADS1115(i2c)
 
-# Start the send_data_api.py process (if not using systemd)
+# Start send_data_api.py process
 try:
     api_process = subprocess.Popen(["python3", "send_data_api.py"])
 except Exception as e:
@@ -68,9 +68,7 @@ DEVICE_LOCATION = None  # Will store only the city name.
 last_weather_time = 0
 last_weather_data = None  # Cached tuple: (weather_temp, weather_humidity, weather_sunlight, weather_wind_speed)
 
-# ---------------------------
-# Sensor Functions (integrated directly)
-# ---------------------------
+# --- Sensor Functions (integrated here) ---
 
 def convert_adc_to_moisture(adc_value):
     """Converts a raw ADC value to a moisture percentage using MIN_ADC and MAX_ADC."""
@@ -80,7 +78,7 @@ def convert_adc_to_moisture(adc_value):
 def read_sensor_channel(sensor):
     """
     Reads the ADC channel and digital state for a given sensor.
-    Returns a tuple: (adc_value, moisture_level, digital_status)
+    Returns (adc_value, moisture_level, digital_status).
     """
     try:
         chan = AnalogIn(ads, sensor["analog"])
@@ -104,16 +102,14 @@ def read_sensor_with_retries(sensor):
         try:
             return read_sensor_channel(sensor)
         except Exception as e:
-            logging.warning(f"Retry {attempt + 1} for sensor {sensor['analog']} due to error: {e}")
+            logging.warning(f"Retry {attempt+1} for sensor {sensor['analog']} due to error: {e}")
             time.sleep(1)
     logging.error(f"Failed to read sensor {sensor['analog']} after {MAX_RETRIES} attempts.")
     return 0, 0, "Error"
 
-# ---------------------------
-# End of Sensor Functions
-# ---------------------------
+# --- End of Sensor Functions ---
 
-# Writes a record to a CSV file (if enabled).
+# Writes a record to CSV using utils.
 def save_to_csv(record):
     utils.save_to_csv(record)
 
@@ -131,7 +127,7 @@ signal.signal(signal.SIGTERM, handle_shutdown)
 signal.signal(signal.SIGINT, handle_shutdown)
 
 def main_loop():
-    """Main loop: sets up the database, detects location, reads sensor data, and saves records."""
+    """Main loop: sets up DB, detects location, reads sensors, and saves records."""
     global conn, DEVICE_LAT, DEVICE_LON, DEVICE_LOCATION, last_weather_time, last_weather_data
     try:
         conn = sqlite3.connect(DB_NAME)
@@ -139,18 +135,15 @@ def main_loop():
         logging.error(f"Failed to connect to the database: {e}")
         sys.exit(1)
     database.setup_database(conn)
-    # Detect location (lat, lon used internally; only city name is stored)
+    # Detect location (lat and lon used internally; only city name is stored)
     DEVICE_LAT, DEVICE_LON, loc_name = weather_api.detect_location()
-    if loc_name:
-        DEVICE_LOCATION = loc_name
-    else:
-        DEVICE_LOCATION = "Unknown"
+    DEVICE_LOCATION = loc_name if loc_name else "Unknown"
     print(f"Detected device location: {DEVICE_LOCATION}")
     logging.info(f"Final device location set to: {DEVICE_LOCATION}")
     GPIO.output(ADDR_PIN, GPIO.HIGH)
     while True:
         current_sec = time.time()
-        # Fetch new weather data only if interval has passed.
+        # Fetch new weather data only if the interval has passed.
         if last_weather_time == 0 or (current_sec - last_weather_time) >= WEATHER_FETCH_INTERVAL:
             new_weather = weather_api.get_weather_data(DEVICE_LAT, DEVICE_LON)
             if new_weather and any(field is not None for field in new_weather):

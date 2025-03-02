@@ -13,7 +13,7 @@ def get_ipinfo_location():
         response = requests.get("https://ipinfo.io/json", timeout=10)
         response.raise_for_status()
         data = response.json()
-        loc_str = data.get("loc", None)
+        loc_str = data.get("loc", None)  # e.g., "40.7128,-74.0060"
         if loc_str:
             lat_str, lon_str = loc_str.split(",")
             lat = float(lat_str)
@@ -79,7 +79,7 @@ def detect_location():
 def get_weather_data(lat, lon):
     """
     Fetches current weather data from Open-Meteo for the given latitude and longitude.
-    Returns a tuple: (weather_temp, weather_humidity, weather_sunlight, weather_wind_speed)
+    Returns (weather_temp, weather_humidity, weather_sunlight, weather_wind_speed).
     """
     if lat is None or lon is None:
         logging.warning("Latitude/Longitude not available. Cannot fetch weather data.")
@@ -106,3 +106,24 @@ def get_weather_data(lat, lon):
         hourly_time = hourly.get("time", [])
         hourly_humidity = hourly.get("relativehumidity_2m", [])
         hourly_radiation = hourly.get("shortwave_radiation", [])
+        if current_time and hourly_time:
+            try:
+                index = hourly_time.index(current_time)
+                if index < len(hourly_humidity):
+                    weather_humidity = hourly_humidity[index]
+                if index < len(hourly_radiation):
+                    weather_sunlight = hourly_radiation[index]
+            except ValueError:
+                if hourly_humidity:
+                    weather_humidity = hourly_humidity[0]
+                if hourly_radiation:
+                    weather_sunlight = hourly_radiation[0]
+        else:
+            if hourly_humidity:
+                weather_humidity = hourly_humidity[0]
+            if hourly_radiation:
+                weather_sunlight = hourly_radiation[0]
+        return weather_temp, weather_humidity, weather_sunlight, weather_wind_speed
+    except Exception as e:
+        logging.error(f"Failed to retrieve weather data: {e}")
+        return None, None, None, None

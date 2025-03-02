@@ -151,4 +151,10 @@ def schedule_data_sending():
 
 def run_schedule_in_thread():
     """Runs the scheduler in a separate daemon thread."""
-    thread = threading.Thr
+    thread = threading.Thread(target=schedule_data_sending)
+    thread.daemon = True
+    thread.start()
+
+if __name__ == "__main__":
+    run_schedule_in_thread()
+    app.run(host="0.0.0.0", port=5001, debug=False)
