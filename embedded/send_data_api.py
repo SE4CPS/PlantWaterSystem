@@ -16,11 +16,11 @@ logging.basicConfig(filename="api_log.log", level=logging.INFO,
 
 app = Flask(__name__)
 
-# Global variable to store the last sent timestamp (as a string).
+# Global variable to store the last sent timestamp.
 LAST_SENT_TIMESTAMP = None
 
 def fetch_recent_data(after=None):
-    """Fetches sensor records from the database. If 'after' is provided, only records newer than that are returned."""
+    """Fetches sensor data from the database. If 'after' is provided, returns only records newer than that timestamp."""
     try:
         conn = sqlite3.connect(DB_NAME)
     except sqlite3.Error as e:
@@ -79,7 +79,7 @@ def retry_with_backoff(func, max_attempts=RETRY_ATTEMPTS, base_delay=BASE_DELAY)
 def send_data_to_backend(after=None):
     """
     Sends sensor data to the backend API.
-    If 'after' is provided, only records with a timestamp later than 'after' are sent.
+    If 'after' is provided, sends only records with timestamp later than 'after'.
     Returns (success, data_sent).
     """
     data = fetch_recent_data(after)
@@ -104,8 +104,8 @@ def send_data_to_backend(after=None):
 @app.route("/send-current", methods=["GET", "POST"])
 def send_current_data():
     """
-    On-demand endpoint: sends only new records (i.e., records with timestamp greater than LAST_SENT_TIMESTAMP).
-    After a successful send, updates LAST_SENT_TIMESTAMP to the maximum timestamp from the sent records.
+    On-demand endpoint: sends only new sensor records (records with timestamp greater than LAST_SENT_TIMESTAMP).
+    After a successful send, updates LAST_SENT_TIMESTAMP to the latest timestamp from the sent data.
     """
     global LAST_SENT_TIMESTAMP
     success, data = send_data_to_backend(after=LAST_SENT_TIMESTAMP)
@@ -131,7 +131,7 @@ def send_data():
         return jsonify({"message": "Failed to send data"}), 500
 
 def safe_task_execution(task):
-    """Executes a task and logs any exceptions."""
+    """Executes a given task and logs exceptions."""
     try:
         task()
     except Exception as e:

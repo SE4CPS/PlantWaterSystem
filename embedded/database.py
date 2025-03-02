@@ -6,7 +6,7 @@ import logging
 from datetime import datetime, timedelta
 
 def setup_database(conn):
-    """Creates the moisture_data table if it does not exist, adding columns for adc_value, location, and weather_fetched."""
+    """Creates the moisture_data table if it doesn't exist, with necessary columns."""
     cursor = conn.cursor()
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS moisture_data (
@@ -25,7 +25,6 @@ def setup_database(conn):
         )
     """)
     conn.commit()
-    # Attempt to add columns if they don't exist (ignore errors if already present)
     try:
         cursor.execute("ALTER TABLE moisture_data ADD COLUMN adc_value REAL")
         conn.commit()

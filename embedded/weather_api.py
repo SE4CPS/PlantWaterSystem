@@ -53,8 +53,8 @@ def get_geoplugin_location():
 
 def detect_location():
     """
-    Attempts to detect the location using ipinfo.io first, then geoplugin.net.
-    Returns (lat, lon, location_name) and the location_name is used in the system.
+    Attempts to detect location using ipinfo.io, then geoplugin.net.
+    Returns (lat, lon, location_name). Only the location_name (city) is used in the system.
     """
     lat, lon, loc_name = get_ipinfo_location()
     if lat is not None and lon is not None:

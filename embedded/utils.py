@@ -8,7 +8,7 @@ from config import ENABLE_CSV_OUTPUT, CSV_FILENAME
 def save_to_csv(record):
     """
     Saves the provided record (a list of values) to the CSV file.
-    Writes a header if the file does not exist.
+    If the file does not exist, writes a header first.
     """
     if not ENABLE_CSV_OUTPUT:
         return
