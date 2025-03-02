@@ -2632,3 +2632,527 @@
 2025-02-28 22:27:25,435 - INFO - Sensor 3 - ADC: 17103, Moisture: 19.31%, Digital: Dry, Weather Temp: 13.9, Humidity: 94, Sunlight: 0.0, Wind: 6.5
 2025-02-28 22:27:25,462 - INFO - Sensor 4 - ADC: 16234, Moisture: 25.11%, Digital: Dry, Weather Temp: 13.9, Humidity: 94, Sunlight: 0.0, Wind: 6.5
 2025-02-28 22:27:25,476 - INFO - Old data deleted up to 2025-02-21 22:27:25.474586.
+2025-02-28 22:42:26,458 - INFO - Sensor 1 - ADC: 14938, Moisture: 33.75%, Digital: Dry, Weather Temp: 13.8, Humidity: 94, Sunlight: 0.0, Wind: 6.2
+2025-02-28 22:42:26,489 - INFO - Sensor 2 - ADC: 15349, Moisture: 31.01%, Digital: Dry, Weather Temp: 13.8, Humidity: 94, Sunlight: 0.0, Wind: 6.2
+2025-02-28 22:42:26,513 - INFO - Sensor 3 - ADC: 17096, Moisture: 19.36%, Digital: Dry, Weather Temp: 13.8, Humidity: 94, Sunlight: 0.0, Wind: 6.2
+2025-02-28 22:42:26,537 - INFO - Sensor 4 - ADC: 16230, Moisture: 25.13%, Digital: Dry, Weather Temp: 13.8, Humidity: 94, Sunlight: 0.0, Wind: 6.2
+2025-02-28 22:42:26,552 - INFO - Old data deleted up to 2025-02-21 22:42:26.550111.
+2025-02-28 22:43:30,482 - INFO - GPIO Cleanup Done.
+2025-02-28 22:43:30,540 - INFO - GPIO Cleanup Done.
+2025-02-28 22:43:34,674 - INFO - Location from ipinfo.io: 37.9577, -121.2908, Stockton, California, US
+2025-02-28 22:43:34,674 - INFO - Final device location set to: Stockton, California, US
+2025-02-28 22:43:35,953 - INFO - Sensor 1 - ADC: 14933, Moisture: 33.78%, Digital: Dry, Weather Temp: 13.8, Humidity: 94, Sunlight: 0.0, Wind: 6.2
+2025-02-28 22:43:36,503 - INFO - Sensor 2 - ADC: 15345, Moisture: 31.03%, Digital: Dry, Weather Temp: 13.8, Humidity: 94, Sunlight: 0.0, Wind: 6.2
+2025-02-28 22:43:36,560 - INFO - Sensor 3 - ADC: 17088, Moisture: 19.41%, Digital: Dry, Weather Temp: 13.8, Humidity: 94, Sunlight: 0.0, Wind: 6.2
+2025-02-28 22:43:36,612 - INFO - Sensor 4 - ADC: 16238, Moisture: 25.08%, Digital: Dry, Weather Temp: 13.8, Humidity: 94, Sunlight: 0.0, Wind: 6.2
+2025-02-28 22:43:36,662 - INFO - Old data deleted up to 2025-02-21 22:43:36.658421.
+2025-02-28 22:58:37,722 - INFO - Sensor 1 - ADC: 14940, Moisture: 33.73%, Digital: Dry, Weather Temp: 13.5, Humidity: 94, Sunlight: 0.0, Wind: 4.9
+2025-02-28 22:58:37,758 - INFO - Sensor 2 - ADC: 15348, Moisture: 31.01%, Digital: Dry, Weather Temp: 13.5, Humidity: 94, Sunlight: 0.0, Wind: 4.9
+2025-02-28 22:58:37,781 - INFO - Sensor 3 - ADC: 17091, Moisture: 19.39%, Digital: Dry, Weather Temp: 13.5, Humidity: 94, Sunlight: 0.0, Wind: 4.9
+2025-02-28 22:58:37,809 - INFO - Sensor 4 - ADC: 16231, Moisture: 25.13%, Digital: Dry, Weather Temp: 13.5, Humidity: 94, Sunlight: 0.0, Wind: 4.9
+2025-02-28 22:58:37,824 - INFO - Old data deleted up to 2025-02-21 22:58:37.822544.
+2025-02-28 23:13:38,968 - INFO - Sensor 1 - ADC: 14950, Moisture: 33.67%, Digital: Dry, Weather Temp: 13.3, Humidity: 66, Sunlight: 0.0, Wind: 3.6
+2025-02-28 23:13:38,996 - INFO - Sensor 2 - ADC: 15335, Moisture: 31.10%, Digital: Dry, Weather Temp: 13.3, Humidity: 66, Sunlight: 0.0, Wind: 3.6
+2025-02-28 23:13:39,022 - INFO - Sensor 3 - ADC: 17111, Moisture: 19.26%, Digital: Dry, Weather Temp: 13.3, Humidity: 66, Sunlight: 0.0, Wind: 3.6
+2025-02-28 23:13:39,050 - INFO - Sensor 4 - ADC: 16250, Moisture: 25.00%, Digital: Dry, Weather Temp: 13.3, Humidity: 66, Sunlight: 0.0, Wind: 3.6
+2025-02-28 23:13:39,068 - INFO - Old data deleted up to 2025-02-21 23:13:39.065336.
+2025-02-28 23:28:40,108 - INFO - Sensor 1 - ADC: 14960, Moisture: 33.60%, Digital: Dry, Weather Temp: 13.0, Humidity: 94, Sunlight: 0.0, Wind: 2.8
+2025-02-28 23:28:40,134 - INFO - Sensor 2 - ADC: 15358, Moisture: 30.95%, Digital: Dry, Weather Temp: 13.0, Humidity: 94, Sunlight: 0.0, Wind: 2.8
+2025-02-28 23:28:40,157 - INFO - Sensor 3 - ADC: 17105, Moisture: 19.30%, Digital: Dry, Weather Temp: 13.0, Humidity: 94, Sunlight: 0.0, Wind: 2.8
+2025-02-28 23:28:40,180 - INFO - Sensor 4 - ADC: 16264, Moisture: 24.91%, Digital: Dry, Weather Temp: 13.0, Humidity: 94, Sunlight: 0.0, Wind: 2.8
+2025-02-28 23:28:40,197 - INFO - Old data deleted up to 2025-02-21 23:28:40.195650.
+2025-02-28 23:43:41,247 - INFO - Sensor 1 - ADC: 14991, Moisture: 33.39%, Digital: Dry, Weather Temp: 11.7, Humidity: 94, Sunlight: 0.0, Wind: 1.8
+2025-02-28 23:43:41,274 - INFO - Sensor 2 - ADC: 15352, Moisture: 30.99%, Digital: Dry, Weather Temp: 11.7, Humidity: 94, Sunlight: 0.0, Wind: 1.8
+2025-02-28 23:43:41,300 - INFO - Sensor 3 - ADC: 17135, Moisture: 19.10%, Digital: Dry, Weather Temp: 11.7, Humidity: 94, Sunlight: 0.0, Wind: 1.8
+2025-02-28 23:43:41,325 - INFO - Sensor 4 - ADC: 16269, Moisture: 24.87%, Digital: Dry, Weather Temp: 11.7, Humidity: 94, Sunlight: 0.0, Wind: 1.8
+2025-02-28 23:43:41,343 - INFO - Old data deleted up to 2025-02-21 23:43:41.340575.
+2025-02-28 23:58:42,399 - INFO - Sensor 1 - ADC: 14997, Moisture: 33.35%, Digital: Dry, Weather Temp: 11.5, Humidity: 94, Sunlight: 0.0, Wind: 5.2
+2025-02-28 23:58:42,422 - INFO - Sensor 2 - ADC: 15367, Moisture: 30.89%, Digital: Dry, Weather Temp: 11.5, Humidity: 94, Sunlight: 0.0, Wind: 5.2
+2025-02-28 23:58:42,445 - INFO - Sensor 3 - ADC: 17128, Moisture: 19.15%, Digital: Dry, Weather Temp: 11.5, Humidity: 94, Sunlight: 0.0, Wind: 5.2
+2025-02-28 23:58:42,471 - INFO - Sensor 4 - ADC: 16293, Moisture: 24.71%, Digital: Dry, Weather Temp: 11.5, Humidity: 94, Sunlight: 0.0, Wind: 5.2
+2025-02-28 23:58:42,486 - INFO - Old data deleted up to 2025-02-21 23:58:42.484620.
+2025-03-01 00:13:43,621 - INFO - Sensor 1 - ADC: 15036, Moisture: 33.09%, Digital: Dry, Weather Temp: 11.4, Humidity: 75, Sunlight: 0.0, Wind: 4.0
+2025-03-01 00:13:43,651 - INFO - Sensor 2 - ADC: 15367, Moisture: 30.89%, Digital: Dry, Weather Temp: 11.4, Humidity: 75, Sunlight: 0.0, Wind: 4.0
+2025-03-01 00:13:43,685 - INFO - Sensor 3 - ADC: 17133, Moisture: 19.11%, Digital: Dry, Weather Temp: 11.4, Humidity: 75, Sunlight: 0.0, Wind: 4.0
+2025-03-01 00:13:43,709 - INFO - Sensor 4 - ADC: 16292, Moisture: 24.72%, Digital: Dry, Weather Temp: 11.4, Humidity: 75, Sunlight: 0.0, Wind: 4.0
+2025-03-01 00:13:43,726 - INFO - Old data deleted up to 2025-02-22 00:13:43.723978.
+2025-03-01 00:28:44,807 - INFO - Sensor 1 - ADC: 15038, Moisture: 33.08%, Digital: Dry, Weather Temp: 11.3, Humidity: 75, Sunlight: 0.0, Wind: 0.5
+2025-03-01 00:28:44,829 - INFO - Sensor 2 - ADC: 15401, Moisture: 30.66%, Digital: Dry, Weather Temp: 11.3, Humidity: 75, Sunlight: 0.0, Wind: 0.5
+2025-03-01 00:28:44,854 - INFO - Sensor 3 - ADC: 17126, Moisture: 19.16%, Digital: Dry, Weather Temp: 11.3, Humidity: 75, Sunlight: 0.0, Wind: 0.5
+2025-03-01 00:28:44,877 - INFO - Sensor 4 - ADC: 16293, Moisture: 24.71%, Digital: Dry, Weather Temp: 11.3, Humidity: 75, Sunlight: 0.0, Wind: 0.5
+2025-03-01 00:28:44,892 - INFO - Old data deleted up to 2025-02-22 00:28:44.890779.
+2025-03-01 00:43:45,960 - INFO - Sensor 1 - ADC: 15058, Moisture: 32.95%, Digital: Dry, Weather Temp: 11.2, Humidity: 75, Sunlight: 0.0, Wind: 4.0
+2025-03-01 00:43:45,983 - INFO - Sensor 2 - ADC: 15405, Moisture: 30.63%, Digital: Dry, Weather Temp: 11.2, Humidity: 75, Sunlight: 0.0, Wind: 4.0
+2025-03-01 00:43:46,007 - INFO - Sensor 3 - ADC: 17164, Moisture: 18.91%, Digital: Dry, Weather Temp: 11.2, Humidity: 75, Sunlight: 0.0, Wind: 4.0
+2025-03-01 00:43:46,033 - INFO - Sensor 4 - ADC: 16314, Moisture: 24.57%, Digital: Dry, Weather Temp: 11.2, Humidity: 75, Sunlight: 0.0, Wind: 4.0
+2025-03-01 00:43:46,048 - INFO - Old data deleted up to 2025-02-22 00:43:46.046127.
+2025-03-01 00:58:47,060 - INFO - Sensor 1 - ADC: 15056, Moisture: 32.96%, Digital: Dry, Weather Temp: 11.0, Humidity: 75, Sunlight: 0.0, Wind: 6.6
+2025-03-01 00:58:47,084 - INFO - Sensor 2 - ADC: 15422, Moisture: 30.52%, Digital: Dry, Weather Temp: 11.0, Humidity: 75, Sunlight: 0.0, Wind: 6.6
+2025-03-01 00:58:47,107 - INFO - Sensor 3 - ADC: 17142, Moisture: 19.05%, Digital: Dry, Weather Temp: 11.0, Humidity: 75, Sunlight: 0.0, Wind: 6.6
+2025-03-01 00:58:47,133 - INFO - Sensor 4 - ADC: 16316, Moisture: 24.56%, Digital: Dry, Weather Temp: 11.0, Humidity: 75, Sunlight: 0.0, Wind: 6.6
+2025-03-01 00:58:47,150 - INFO - Old data deleted up to 2025-02-22 00:58:47.148144.
+2025-03-01 01:13:48,166 - INFO - Sensor 1 - ADC: 15072, Moisture: 32.85%, Digital: Dry, Weather Temp: 10.9, Humidity: 78, Sunlight: 0.0, Wind: 8.4
+2025-03-01 01:13:48,192 - INFO - Sensor 2 - ADC: 15451, Moisture: 30.33%, Digital: Dry, Weather Temp: 10.9, Humidity: 78, Sunlight: 0.0, Wind: 8.4
+2025-03-01 01:13:48,215 - INFO - Sensor 3 - ADC: 17166, Moisture: 18.89%, Digital: Dry, Weather Temp: 10.9, Humidity: 78, Sunlight: 0.0, Wind: 8.4
+2025-03-01 01:13:48,243 - INFO - Sensor 4 - ADC: 16336, Moisture: 24.43%, Digital: Dry, Weather Temp: 10.9, Humidity: 78, Sunlight: 0.0, Wind: 8.4
+2025-03-01 01:13:48,258 - INFO - Old data deleted up to 2025-02-22 01:13:48.256247.
+2025-03-01 01:28:49,233 - INFO - Sensor 1 - ADC: 15097, Moisture: 32.69%, Digital: Dry, Weather Temp: 10.7, Humidity: 75, Sunlight: 0.0, Wind: 8.1
+2025-03-01 01:28:49,258 - INFO - Sensor 2 - ADC: 15459, Moisture: 30.27%, Digital: Dry, Weather Temp: 10.7, Humidity: 75, Sunlight: 0.0, Wind: 8.1
+2025-03-01 01:28:49,281 - INFO - Sensor 3 - ADC: 17196, Moisture: 18.69%, Digital: Dry, Weather Temp: 10.7, Humidity: 75, Sunlight: 0.0, Wind: 8.1
+2025-03-01 01:28:49,313 - INFO - Sensor 4 - ADC: 16356, Moisture: 24.29%, Digital: Dry, Weather Temp: 10.7, Humidity: 75, Sunlight: 0.0, Wind: 8.1
+2025-03-01 01:28:49,330 - INFO - Old data deleted up to 2025-02-22 01:28:49.328266.
+2025-03-01 01:43:50,382 - INFO - Sensor 1 - ADC: 15117, Moisture: 32.55%, Digital: Dry, Weather Temp: 10.6, Humidity: 75, Sunlight: 0.0, Wind: 7.5
+2025-03-01 01:43:50,405 - INFO - Sensor 2 - ADC: 15506, Moisture: 29.96%, Digital: Dry, Weather Temp: 10.6, Humidity: 75, Sunlight: 0.0, Wind: 7.5
+2025-03-01 01:43:50,428 - INFO - Sensor 3 - ADC: 17207, Moisture: 18.62%, Digital: Dry, Weather Temp: 10.6, Humidity: 75, Sunlight: 0.0, Wind: 7.5
+2025-03-01 01:43:50,454 - INFO - Sensor 4 - ADC: 16388, Moisture: 24.08%, Digital: Dry, Weather Temp: 10.6, Humidity: 75, Sunlight: 0.0, Wind: 7.5
+2025-03-01 01:43:50,469 - INFO - Old data deleted up to 2025-02-22 01:43:50.467780.
+2025-03-01 01:58:51,537 - INFO - Sensor 1 - ADC: 15099, Moisture: 32.67%, Digital: Dry, Weather Temp: 10.6, Humidity: 75, Sunlight: 0.0, Wind: 7.0
+2025-03-01 01:58:51,559 - INFO - Sensor 2 - ADC: 15516, Moisture: 29.89%, Digital: Dry, Weather Temp: 10.6, Humidity: 75, Sunlight: 0.0, Wind: 7.0
+2025-03-01 01:58:51,582 - INFO - Sensor 3 - ADC: 17200, Moisture: 18.67%, Digital: Dry, Weather Temp: 10.6, Humidity: 75, Sunlight: 0.0, Wind: 7.0
+2025-03-01 01:58:51,607 - INFO - Sensor 4 - ADC: 16359, Moisture: 24.27%, Digital: Dry, Weather Temp: 10.6, Humidity: 75, Sunlight: 0.0, Wind: 7.0
+2025-03-01 01:58:51,624 - INFO - Old data deleted up to 2025-02-22 01:58:51.622519.
+2025-03-01 02:13:57,622 - INFO - Sensor 1 - ADC: 15100, Moisture: 32.67%, Digital: Dry, Weather Temp: 10.6, Humidity: 73, Sunlight: 0.0, Wind: 6.4
+2025-03-01 02:13:57,645 - INFO - Sensor 2 - ADC: 15529, Moisture: 29.81%, Digital: Dry, Weather Temp: 10.6, Humidity: 73, Sunlight: 0.0, Wind: 6.4
+2025-03-01 02:13:57,669 - INFO - Sensor 3 - ADC: 17208, Moisture: 18.61%, Digital: Dry, Weather Temp: 10.6, Humidity: 73, Sunlight: 0.0, Wind: 6.4
+2025-03-01 02:13:57,692 - INFO - Sensor 4 - ADC: 16368, Moisture: 24.21%, Digital: Dry, Weather Temp: 10.6, Humidity: 73, Sunlight: 0.0, Wind: 6.4
+2025-03-01 02:13:57,711 - INFO - Old data deleted up to 2025-02-22 02:13:57.709304.
+2025-03-01 02:28:58,802 - INFO - Sensor 1 - ADC: 15096, Moisture: 32.69%, Digital: Dry, Weather Temp: 10.5, Humidity: 75, Sunlight: 0.0, Wind: 5.4
+2025-03-01 02:28:58,825 - INFO - Sensor 2 - ADC: 15530, Moisture: 29.80%, Digital: Dry, Weather Temp: 10.5, Humidity: 75, Sunlight: 0.0, Wind: 5.4
+2025-03-01 02:28:58,848 - INFO - Sensor 3 - ADC: 17176, Moisture: 18.83%, Digital: Dry, Weather Temp: 10.5, Humidity: 75, Sunlight: 0.0, Wind: 5.4
+2025-03-01 02:28:58,878 - INFO - Sensor 4 - ADC: 16357, Moisture: 24.29%, Digital: Dry, Weather Temp: 10.5, Humidity: 75, Sunlight: 0.0, Wind: 5.4
+2025-03-01 02:28:58,894 - INFO - Old data deleted up to 2025-02-22 02:28:58.892292.
+2025-03-01 02:44:05,049 - INFO - Sensor 1 - ADC: 15106, Moisture: 32.63%, Digital: Dry, Weather Temp: 10.5, Humidity: 75, Sunlight: 0.0, Wind: 4.8
+2025-03-01 02:44:05,075 - INFO - Sensor 2 - ADC: 15521, Moisture: 29.86%, Digital: Dry, Weather Temp: 10.5, Humidity: 75, Sunlight: 0.0, Wind: 4.8
+2025-03-01 02:44:05,098 - INFO - Sensor 3 - ADC: 17183, Moisture: 18.78%, Digital: Dry, Weather Temp: 10.5, Humidity: 75, Sunlight: 0.0, Wind: 4.8
+2025-03-01 02:44:05,122 - INFO - Sensor 4 - ADC: 16350, Moisture: 24.33%, Digital: Dry, Weather Temp: 10.5, Humidity: 75, Sunlight: 0.0, Wind: 4.8
+2025-03-01 02:44:05,137 - INFO - Old data deleted up to 2025-02-22 02:44:05.135106.
+2025-03-01 02:59:06,229 - INFO - Sensor 1 - ADC: 15112, Moisture: 32.59%, Digital: Dry, Weather Temp: 10.3, Humidity: 75, Sunlight: 0.0, Wind: 5.1
+2025-03-01 02:59:06,254 - INFO - Sensor 2 - ADC: 15529, Moisture: 29.81%, Digital: Dry, Weather Temp: 10.3, Humidity: 75, Sunlight: 0.0, Wind: 5.1
+2025-03-01 02:59:06,277 - INFO - Sensor 3 - ADC: 17178, Moisture: 18.81%, Digital: Dry, Weather Temp: 10.3, Humidity: 75, Sunlight: 0.0, Wind: 5.1
+2025-03-01 02:59:06,301 - INFO - Sensor 4 - ADC: 16367, Moisture: 24.22%, Digital: Dry, Weather Temp: 10.3, Humidity: 75, Sunlight: 0.0, Wind: 5.1
+2025-03-01 02:59:06,317 - INFO - Old data deleted up to 2025-02-22 02:59:06.315296.
+2025-03-01 03:14:07,470 - INFO - Sensor 1 - ADC: 15130, Moisture: 32.47%, Digital: Dry, Weather Temp: 10.4, Humidity: 75, Sunlight: 0.0, Wind: 6.4
+2025-03-01 03:14:07,493 - INFO - Sensor 2 - ADC: 15557, Moisture: 29.62%, Digital: Dry, Weather Temp: 10.4, Humidity: 75, Sunlight: 0.0, Wind: 6.4
+2025-03-01 03:14:07,517 - INFO - Sensor 3 - ADC: 17190, Moisture: 18.73%, Digital: Dry, Weather Temp: 10.4, Humidity: 75, Sunlight: 0.0, Wind: 6.4
+2025-03-01 03:14:07,542 - INFO - Sensor 4 - ADC: 16381, Moisture: 24.13%, Digital: Dry, Weather Temp: 10.4, Humidity: 75, Sunlight: 0.0, Wind: 6.4
+2025-03-01 03:14:07,565 - INFO - Old data deleted up to 2025-02-22 03:14:07.563339.
+2025-03-01 03:29:08,589 - INFO - Sensor 1 - ADC: 15144, Moisture: 32.37%, Digital: Dry, Weather Temp: 10.3, Humidity: 71, Sunlight: 0.0, Wind: 5.9
+2025-03-01 03:29:08,618 - INFO - Sensor 2 - ADC: 15560, Moisture: 29.60%, Digital: Dry, Weather Temp: 10.3, Humidity: 71, Sunlight: 0.0, Wind: 5.9
+2025-03-01 03:29:08,640 - INFO - Sensor 3 - ADC: 17195, Moisture: 18.70%, Digital: Dry, Weather Temp: 10.3, Humidity: 71, Sunlight: 0.0, Wind: 5.9
+2025-03-01 03:29:08,667 - INFO - Sensor 4 - ADC: 16382, Moisture: 24.12%, Digital: Dry, Weather Temp: 10.3, Humidity: 71, Sunlight: 0.0, Wind: 5.9
+2025-03-01 03:29:08,684 - INFO - Old data deleted up to 2025-02-22 03:29:08.682562.
+2025-03-01 03:44:09,892 - INFO - Sensor 1 - ADC: 15150, Moisture: 32.33%, Digital: Dry, Weather Temp: 10.2, Humidity: 71, Sunlight: 0.0, Wind: 4.3
+2025-03-01 03:44:09,916 - INFO - Sensor 2 - ADC: 15567, Moisture: 29.55%, Digital: Dry, Weather Temp: 10.2, Humidity: 71, Sunlight: 0.0, Wind: 4.3
+2025-03-01 03:44:09,944 - INFO - Sensor 3 - ADC: 17185, Moisture: 18.77%, Digital: Dry, Weather Temp: 10.2, Humidity: 71, Sunlight: 0.0, Wind: 4.3
+2025-03-01 03:44:09,968 - INFO - Sensor 4 - ADC: 16379, Moisture: 24.14%, Digital: Dry, Weather Temp: 10.2, Humidity: 71, Sunlight: 0.0, Wind: 4.3
+2025-03-01 03:44:09,984 - INFO - Old data deleted up to 2025-02-22 03:44:09.982391.
+2025-03-01 03:59:11,165 - INFO - Sensor 1 - ADC: 15170, Moisture: 32.20%, Digital: Dry, Weather Temp: 9.1, Humidity: 71, Sunlight: 0.0, Wind: 7.5
+2025-03-01 03:59:11,190 - INFO - Sensor 2 - ADC: 15557, Moisture: 29.62%, Digital: Dry, Weather Temp: 9.1, Humidity: 71, Sunlight: 0.0, Wind: 7.5
+2025-03-01 03:59:11,216 - INFO - Sensor 3 - ADC: 17200, Moisture: 18.67%, Digital: Dry, Weather Temp: 9.1, Humidity: 71, Sunlight: 0.0, Wind: 7.5
+2025-03-01 03:59:11,240 - INFO - Sensor 4 - ADC: 16380, Moisture: 24.13%, Digital: Dry, Weather Temp: 9.1, Humidity: 71, Sunlight: 0.0, Wind: 7.5
+2025-03-01 03:59:11,255 - INFO - Old data deleted up to 2025-02-22 03:59:11.253872.
+2025-03-01 04:14:12,328 - INFO - Sensor 1 - ADC: 15187, Moisture: 32.09%, Digital: Dry, Weather Temp: 9.0, Humidity: 79, Sunlight: 0.0, Wind: 6.9
+2025-03-01 04:14:12,352 - INFO - Sensor 2 - ADC: 15559, Moisture: 29.61%, Digital: Dry, Weather Temp: 9.0, Humidity: 79, Sunlight: 0.0, Wind: 6.9
+2025-03-01 04:14:12,375 - INFO - Sensor 3 - ADC: 17207, Moisture: 18.62%, Digital: Dry, Weather Temp: 9.0, Humidity: 79, Sunlight: 0.0, Wind: 6.9
+2025-03-01 04:14:12,405 - INFO - Sensor 4 - ADC: 16387, Moisture: 24.09%, Digital: Dry, Weather Temp: 9.0, Humidity: 79, Sunlight: 0.0, Wind: 6.9
+2025-03-01 04:14:12,422 - INFO - Old data deleted up to 2025-02-22 04:14:12.419932.
+2025-03-01 04:29:13,462 - INFO - Sensor 1 - ADC: 15188, Moisture: 32.08%, Digital: Dry, Weather Temp: 8.9, Humidity: 71, Sunlight: 0.0, Wind: 8.0
+2025-03-01 04:29:13,487 - INFO - Sensor 2 - ADC: 15559, Moisture: 29.61%, Digital: Dry, Weather Temp: 8.9, Humidity: 71, Sunlight: 0.0, Wind: 8.0
+2025-03-01 04:29:13,510 - INFO - Sensor 3 - ADC: 17208, Moisture: 18.61%, Digital: Dry, Weather Temp: 8.9, Humidity: 71, Sunlight: 0.0, Wind: 8.0
+2025-03-01 04:29:13,536 - INFO - Sensor 4 - ADC: 16406, Moisture: 23.96%, Digital: Dry, Weather Temp: 8.9, Humidity: 71, Sunlight: 0.0, Wind: 8.0
+2025-03-01 04:29:13,553 - INFO - Old data deleted up to 2025-02-22 04:29:13.551467.
+2025-03-01 04:44:14,641 - INFO - Sensor 1 - ADC: 15207, Moisture: 31.95%, Digital: Dry, Weather Temp: 8.7, Humidity: 71, Sunlight: 0.0, Wind: 7.8
+2025-03-01 04:44:14,664 - INFO - Sensor 2 - ADC: 15556, Moisture: 29.63%, Digital: Dry, Weather Temp: 8.7, Humidity: 71, Sunlight: 0.0, Wind: 7.8
+2025-03-01 04:44:14,689 - INFO - Sensor 3 - ADC: 17219, Moisture: 18.54%, Digital: Dry, Weather Temp: 8.7, Humidity: 71, Sunlight: 0.0, Wind: 7.8
+2025-03-01 04:44:14,713 - INFO - Sensor 4 - ADC: 16411, Moisture: 23.93%, Digital: Dry, Weather Temp: 8.7, Humidity: 71, Sunlight: 0.0, Wind: 7.8
+2025-03-01 04:44:14,733 - INFO - Old data deleted up to 2025-02-22 04:44:14.731211.
+2025-03-01 04:59:15,795 - INFO - Sensor 1 - ADC: 15198, Moisture: 32.01%, Digital: Dry, Weather Temp: 8.5, Humidity: 71, Sunlight: 0.0, Wind: 7.9
+2025-03-01 04:59:15,822 - INFO - Sensor 2 - ADC: 15569, Moisture: 29.54%, Digital: Dry, Weather Temp: 8.5, Humidity: 71, Sunlight: 0.0, Wind: 7.9
+2025-03-01 04:59:15,844 - INFO - Sensor 3 - ADC: 17228, Moisture: 18.48%, Digital: Dry, Weather Temp: 8.5, Humidity: 71, Sunlight: 0.0, Wind: 7.9
+2025-03-01 04:59:15,867 - INFO - Sensor 4 - ADC: 16433, Moisture: 23.78%, Digital: Dry, Weather Temp: 8.5, Humidity: 71, Sunlight: 0.0, Wind: 7.9
+2025-03-01 04:59:15,888 - INFO - Old data deleted up to 2025-02-22 04:59:15.886734.
+2025-03-01 05:14:16,996 - INFO - Sensor 1 - ADC: 15222, Moisture: 31.85%, Digital: Dry, Weather Temp: 8.4, Humidity: 84, Sunlight: 0.0, Wind: 8.0
+2025-03-01 05:14:17,018 - INFO - Sensor 2 - ADC: 15556, Moisture: 29.63%, Digital: Dry, Weather Temp: 8.4, Humidity: 84, Sunlight: 0.0, Wind: 8.0
+2025-03-01 05:14:17,041 - INFO - Sensor 3 - ADC: 17243, Moisture: 18.38%, Digital: Dry, Weather Temp: 8.4, Humidity: 84, Sunlight: 0.0, Wind: 8.0
+2025-03-01 05:14:17,065 - INFO - Sensor 4 - ADC: 16449, Moisture: 23.67%, Digital: Dry, Weather Temp: 8.4, Humidity: 84, Sunlight: 0.0, Wind: 8.0
+2025-03-01 05:14:17,083 - INFO - Old data deleted up to 2025-02-22 05:14:17.081211.
+2025-03-01 05:29:18,181 - INFO - Sensor 1 - ADC: 15252, Moisture: 31.65%, Digital: Dry, Weather Temp: 8.4, Humidity: 71, Sunlight: 0.0, Wind: 7.6
+2025-03-01 05:29:18,206 - INFO - Sensor 2 - ADC: 15575, Moisture: 29.50%, Digital: Dry, Weather Temp: 8.4, Humidity: 71, Sunlight: 0.0, Wind: 7.6
+2025-03-01 05:29:18,230 - INFO - Sensor 3 - ADC: 17225, Moisture: 18.50%, Digital: Dry, Weather Temp: 8.4, Humidity: 71, Sunlight: 0.0, Wind: 7.6
+2025-03-01 05:29:18,252 - INFO - Sensor 4 - ADC: 16435, Moisture: 23.77%, Digital: Dry, Weather Temp: 8.4, Humidity: 71, Sunlight: 0.0, Wind: 7.6
+2025-03-01 05:29:18,270 - INFO - Old data deleted up to 2025-02-22 05:29:18.268012.
+2025-03-01 05:44:19,302 - INFO - Sensor 1 - ADC: 15229, Moisture: 31.81%, Digital: Dry, Weather Temp: 7.9, Humidity: 71, Sunlight: 0.0, Wind: 8.1
+2025-03-01 05:44:19,328 - INFO - Sensor 2 - ADC: 15565, Moisture: 29.57%, Digital: Dry, Weather Temp: 7.9, Humidity: 71, Sunlight: 0.0, Wind: 8.1
+2025-03-01 05:44:19,351 - INFO - Sensor 3 - ADC: 17239, Moisture: 18.41%, Digital: Dry, Weather Temp: 7.9, Humidity: 71, Sunlight: 0.0, Wind: 8.1
+2025-03-01 05:44:19,374 - INFO - Sensor 4 - ADC: 16455, Moisture: 23.63%, Digital: Dry, Weather Temp: 7.9, Humidity: 71, Sunlight: 0.0, Wind: 8.1
+2025-03-01 05:44:19,389 - INFO - Old data deleted up to 2025-02-22 05:44:19.387671.
+2025-03-01 05:59:20,478 - INFO - Sensor 1 - ADC: 15252, Moisture: 31.65%, Digital: Dry, Weather Temp: 7.8, Humidity: 71, Sunlight: 0.0, Wind: 8.0
+2025-03-01 05:59:20,522 - INFO - Sensor 2 - ADC: 15574, Moisture: 29.51%, Digital: Dry, Weather Temp: 7.8, Humidity: 71, Sunlight: 0.0, Wind: 8.0
+2025-03-01 05:59:20,548 - INFO - Sensor 3 - ADC: 17249, Moisture: 18.34%, Digital: Dry, Weather Temp: 7.8, Humidity: 71, Sunlight: 0.0, Wind: 8.0
+2025-03-01 05:59:20,573 - INFO - Sensor 4 - ADC: 16453, Moisture: 23.65%, Digital: Dry, Weather Temp: 7.8, Humidity: 71, Sunlight: 0.0, Wind: 8.0
+2025-03-01 05:59:20,590 - INFO - Old data deleted up to 2025-02-22 05:59:20.587872.
+2025-03-01 06:14:21,657 - INFO - Sensor 1 - ADC: 15246, Moisture: 31.69%, Digital: Dry, Weather Temp: 7.8, Humidity: 83, Sunlight: 0.0, Wind: 7.1
+2025-03-01 06:14:21,679 - INFO - Sensor 2 - ADC: 15559, Moisture: 29.61%, Digital: Dry, Weather Temp: 7.8, Humidity: 83, Sunlight: 0.0, Wind: 7.1
+2025-03-01 06:14:21,703 - INFO - Sensor 3 - ADC: 17252, Moisture: 18.32%, Digital: Dry, Weather Temp: 7.8, Humidity: 83, Sunlight: 0.0, Wind: 7.1
+2025-03-01 06:14:21,729 - INFO - Sensor 4 - ADC: 16435, Moisture: 23.77%, Digital: Dry, Weather Temp: 7.8, Humidity: 83, Sunlight: 0.0, Wind: 7.1
+2025-03-01 06:14:21,746 - INFO - Old data deleted up to 2025-02-22 06:14:21.744382.
+2025-03-01 06:29:23,164 - INFO - Sensor 1 - ADC: 15259, Moisture: 31.61%, Digital: Dry, Weather Temp: 7.8, Humidity: 71, Sunlight: 0.0, Wind: 6.1
+2025-03-01 06:29:23,195 - INFO - Sensor 2 - ADC: 15573, Moisture: 29.51%, Digital: Dry, Weather Temp: 7.8, Humidity: 71, Sunlight: 0.0, Wind: 6.1
+2025-03-01 06:29:23,220 - INFO - Sensor 3 - ADC: 17263, Moisture: 18.25%, Digital: Dry, Weather Temp: 7.8, Humidity: 71, Sunlight: 0.0, Wind: 6.1
+2025-03-01 06:29:23,243 - INFO - Sensor 4 - ADC: 16469, Moisture: 23.54%, Digital: Dry, Weather Temp: 7.8, Humidity: 71, Sunlight: 0.0, Wind: 6.1
+2025-03-01 06:29:23,260 - INFO - Old data deleted up to 2025-02-22 06:29:23.258007.
+2025-03-01 06:44:24,481 - INFO - Sensor 1 - ADC: 15237, Moisture: 31.75%, Digital: Dry, Weather Temp: 7.7, Humidity: 71, Sunlight: 0.0, Wind: 6.2
+2025-03-01 06:44:24,503 - INFO - Sensor 2 - ADC: 15555, Moisture: 29.63%, Digital: Dry, Weather Temp: 7.7, Humidity: 71, Sunlight: 0.0, Wind: 6.2
+2025-03-01 06:44:24,528 - INFO - Sensor 3 - ADC: 17272, Moisture: 18.19%, Digital: Dry, Weather Temp: 7.7, Humidity: 71, Sunlight: 0.0, Wind: 6.2
+2025-03-01 06:44:24,557 - INFO - Sensor 4 - ADC: 16479, Moisture: 23.47%, Digital: Dry, Weather Temp: 7.7, Humidity: 71, Sunlight: 0.0, Wind: 6.2
+2025-03-01 06:44:24,574 - INFO - Old data deleted up to 2025-02-22 06:44:24.572405.
+2025-03-01 06:59:25,610 - INFO - Sensor 1 - ADC: 15244, Moisture: 31.71%, Digital: Dry, Weather Temp: 7.6, Humidity: 71, Sunlight: 0.0, Wind: 4.8
+2025-03-01 06:59:25,634 - INFO - Sensor 2 - ADC: 15551, Moisture: 29.66%, Digital: Dry, Weather Temp: 7.6, Humidity: 71, Sunlight: 0.0, Wind: 4.8
+2025-03-01 06:59:25,661 - INFO - Sensor 3 - ADC: 17269, Moisture: 18.21%, Digital: Dry, Weather Temp: 7.6, Humidity: 71, Sunlight: 0.0, Wind: 4.8
+2025-03-01 06:59:25,684 - INFO - Sensor 4 - ADC: 16467, Moisture: 23.55%, Digital: Dry, Weather Temp: 7.6, Humidity: 71, Sunlight: 0.0, Wind: 4.8
+2025-03-01 06:59:25,700 - INFO - Old data deleted up to 2025-02-22 06:59:25.698205.
+2025-03-01 07:14:26,794 - INFO - Sensor 1 - ADC: 15256, Moisture: 31.63%, Digital: Dry, Weather Temp: 7.7, Humidity: 86, Sunlight: 3.2, Wind: 3.6
+2025-03-01 07:14:26,822 - INFO - Sensor 2 - ADC: 15563, Moisture: 29.58%, Digital: Dry, Weather Temp: 7.7, Humidity: 86, Sunlight: 3.2, Wind: 3.6
+2025-03-01 07:14:26,847 - INFO - Sensor 3 - ADC: 17272, Moisture: 18.19%, Digital: Dry, Weather Temp: 7.7, Humidity: 86, Sunlight: 3.2, Wind: 3.6
+2025-03-01 07:14:26,874 - INFO - Sensor 4 - ADC: 16485, Moisture: 23.43%, Digital: Dry, Weather Temp: 7.7, Humidity: 86, Sunlight: 3.2, Wind: 3.6
+2025-03-01 07:14:26,889 - INFO - Old data deleted up to 2025-02-22 07:14:26.887618.
+2025-03-01 07:29:28,014 - INFO - Sensor 1 - ADC: 15262, Moisture: 31.59%, Digital: Dry, Weather Temp: 7.8, Humidity: 71, Sunlight: 0.0, Wind: 2.7
+2025-03-01 07:29:28,073 - INFO - Sensor 2 - ADC: 15591, Moisture: 29.39%, Digital: Dry, Weather Temp: 7.8, Humidity: 71, Sunlight: 0.0, Wind: 2.7
+2025-03-01 07:29:28,119 - INFO - Sensor 3 - ADC: 17273, Moisture: 18.18%, Digital: Dry, Weather Temp: 7.8, Humidity: 71, Sunlight: 0.0, Wind: 2.7
+2025-03-01 07:29:28,180 - INFO - Sensor 4 - ADC: 16494, Moisture: 23.37%, Digital: Dry, Weather Temp: 7.8, Humidity: 71, Sunlight: 0.0, Wind: 2.7
+2025-03-01 07:29:28,219 - INFO - Old data deleted up to 2025-02-22 07:29:28.217101.
+2025-03-01 07:44:29,474 - INFO - Sensor 1 - ADC: 15270, Moisture: 31.53%, Digital: Dry, Weather Temp: 8.3, Humidity: 71, Sunlight: 0.0, Wind: 3.1
+2025-03-01 07:44:29,516 - INFO - Sensor 2 - ADC: 15574, Moisture: 29.51%, Digital: Dry, Weather Temp: 8.3, Humidity: 71, Sunlight: 0.0, Wind: 3.1
+2025-03-01 07:44:29,540 - INFO - Sensor 3 - ADC: 17271, Moisture: 18.19%, Digital: Dry, Weather Temp: 8.3, Humidity: 71, Sunlight: 0.0, Wind: 3.1
+2025-03-01 07:44:29,563 - INFO - Sensor 4 - ADC: 16481, Moisture: 23.46%, Digital: Dry, Weather Temp: 8.3, Humidity: 71, Sunlight: 0.0, Wind: 3.1
+2025-03-01 07:44:29,580 - INFO - Old data deleted up to 2025-02-22 07:44:29.578475.
+2025-03-01 07:59:30,804 - INFO - Sensor 1 - ADC: 15279, Moisture: 31.47%, Digital: Dry, Weather Temp: 8.7, Humidity: 71, Sunlight: 0.0, Wind: 2.9
+2025-03-01 07:59:30,827 - INFO - Sensor 2 - ADC: 15582, Moisture: 29.45%, Digital: Dry, Weather Temp: 8.7, Humidity: 71, Sunlight: 0.0, Wind: 2.9
+2025-03-01 07:59:30,854 - INFO - Sensor 3 - ADC: 17283, Moisture: 18.11%, Digital: Dry, Weather Temp: 8.7, Humidity: 71, Sunlight: 0.0, Wind: 2.9
+2025-03-01 07:59:30,879 - INFO - Sensor 4 - ADC: 16487, Moisture: 23.42%, Digital: Dry, Weather Temp: 8.7, Humidity: 71, Sunlight: 0.0, Wind: 2.9
+2025-03-01 07:59:30,895 - INFO - Old data deleted up to 2025-02-22 07:59:30.892856.
+2025-03-01 08:14:32,154 - INFO - Sensor 1 - ADC: 15322, Moisture: 31.19%, Digital: Dry, Weather Temp: 9.6, Humidity: 87, Sunlight: 119.0, Wind: 5.4
+2025-03-01 08:14:32,178 - INFO - Sensor 2 - ADC: 15584, Moisture: 29.44%, Digital: Dry, Weather Temp: 9.6, Humidity: 87, Sunlight: 119.0, Wind: 5.4
+2025-03-01 08:14:32,206 - INFO - Sensor 3 - ADC: 17268, Moisture: 18.21%, Digital: Dry, Weather Temp: 9.6, Humidity: 87, Sunlight: 119.0, Wind: 5.4
+2025-03-01 08:14:32,231 - INFO - Sensor 4 - ADC: 16503, Moisture: 23.31%, Digital: Dry, Weather Temp: 9.6, Humidity: 87, Sunlight: 119.0, Wind: 5.4
+2025-03-01 08:14:32,248 - INFO - Old data deleted up to 2025-02-22 08:14:32.246450.
+2025-03-01 08:29:33,261 - INFO - Sensor 1 - ADC: 15289, Moisture: 31.41%, Digital: Dry, Weather Temp: 10.3, Humidity: 71, Sunlight: 0.0, Wind: 6.5
+2025-03-01 08:29:33,287 - INFO - Sensor 2 - ADC: 15586, Moisture: 29.43%, Digital: Dry, Weather Temp: 10.3, Humidity: 71, Sunlight: 0.0, Wind: 6.5
+2025-03-01 08:29:33,311 - INFO - Sensor 3 - ADC: 17291, Moisture: 18.06%, Digital: Dry, Weather Temp: 10.3, Humidity: 71, Sunlight: 0.0, Wind: 6.5
+2025-03-01 08:29:33,335 - INFO - Sensor 4 - ADC: 16502, Moisture: 23.32%, Digital: Dry, Weather Temp: 10.3, Humidity: 71, Sunlight: 0.0, Wind: 6.5
+2025-03-01 08:29:33,350 - INFO - Old data deleted up to 2025-02-22 08:29:33.348098.
+2025-03-01 08:44:34,411 - INFO - Sensor 1 - ADC: 15284, Moisture: 31.44%, Digital: Dry, Weather Temp: 10.9, Humidity: 71, Sunlight: 0.0, Wind: 6.4
+2025-03-01 08:44:34,434 - INFO - Sensor 2 - ADC: 15580, Moisture: 29.47%, Digital: Dry, Weather Temp: 10.9, Humidity: 71, Sunlight: 0.0, Wind: 6.4
+2025-03-01 08:44:34,461 - INFO - Sensor 3 - ADC: 17281, Moisture: 18.13%, Digital: Dry, Weather Temp: 10.9, Humidity: 71, Sunlight: 0.0, Wind: 6.4
+2025-03-01 08:44:34,508 - INFO - Sensor 4 - ADC: 16516, Moisture: 23.23%, Digital: Dry, Weather Temp: 10.9, Humidity: 71, Sunlight: 0.0, Wind: 6.4
+2025-03-01 08:44:34,524 - INFO - Old data deleted up to 2025-02-22 08:44:34.522448.
+2025-03-01 08:59:36,177 - INFO - Sensor 1 - ADC: 15277, Moisture: 31.49%, Digital: Dry, Weather Temp: 11.4, Humidity: 71, Sunlight: 0.0, Wind: 6.1
+2025-03-01 08:59:36,200 - INFO - Sensor 2 - ADC: 15548, Moisture: 29.68%, Digital: Dry, Weather Temp: 11.4, Humidity: 71, Sunlight: 0.0, Wind: 6.1
+2025-03-01 08:59:36,223 - INFO - Sensor 3 - ADC: 17266, Moisture: 18.23%, Digital: Dry, Weather Temp: 11.4, Humidity: 71, Sunlight: 0.0, Wind: 6.1
+2025-03-01 08:59:36,252 - INFO - Sensor 4 - ADC: 16486, Moisture: 23.43%, Digital: Dry, Weather Temp: 11.4, Humidity: 71, Sunlight: 0.0, Wind: 6.1
+2025-03-01 08:59:36,268 - INFO - Old data deleted up to 2025-02-22 08:59:36.266373.
+2025-03-01 09:14:37,336 - INFO - Sensor 1 - ADC: 15245, Moisture: 31.70%, Digital: Dry, Weather Temp: 12.0, Humidity: 78, Sunlight: 316.8, Wind: 6.1
+2025-03-01 09:14:37,364 - INFO - Sensor 2 - ADC: 15525, Moisture: 29.83%, Digital: Dry, Weather Temp: 12.0, Humidity: 78, Sunlight: 316.8, Wind: 6.1
+2025-03-01 09:14:37,393 - INFO - Sensor 3 - ADC: 17270, Moisture: 18.20%, Digital: Dry, Weather Temp: 12.0, Humidity: 78, Sunlight: 316.8, Wind: 6.1
+2025-03-01 09:14:37,419 - INFO - Sensor 4 - ADC: 16498, Moisture: 23.35%, Digital: Dry, Weather Temp: 12.0, Humidity: 78, Sunlight: 316.8, Wind: 6.1
+2025-03-01 09:14:37,436 - INFO - Old data deleted up to 2025-02-22 09:14:37.433559.
+2025-03-01 09:29:38,713 - INFO - Sensor 1 - ADC: 15229, Moisture: 31.81%, Digital: Dry, Weather Temp: 12.7, Humidity: 71, Sunlight: 0.0, Wind: 6.0
+2025-03-01 09:29:38,741 - INFO - Sensor 2 - ADC: 15457, Moisture: 30.29%, Digital: Dry, Weather Temp: 12.7, Humidity: 71, Sunlight: 0.0, Wind: 6.0
+2025-03-01 09:29:38,766 - INFO - Sensor 3 - ADC: 17235, Moisture: 18.43%, Digital: Dry, Weather Temp: 12.7, Humidity: 71, Sunlight: 0.0, Wind: 6.0
+2025-03-01 09:29:38,792 - INFO - Sensor 4 - ADC: 16482, Moisture: 23.45%, Digital: Dry, Weather Temp: 12.7, Humidity: 71, Sunlight: 0.0, Wind: 6.0
+2025-03-01 09:29:38,812 - INFO - Old data deleted up to 2025-02-22 09:29:38.810084.
+2025-03-01 09:44:39,854 - INFO - Sensor 1 - ADC: 15241, Moisture: 31.73%, Digital: Dry, Weather Temp: 13.4, Humidity: 71, Sunlight: 0.0, Wind: 7.2
+2025-03-01 09:44:39,876 - INFO - Sensor 2 - ADC: 15357, Moisture: 30.95%, Digital: Dry, Weather Temp: 13.4, Humidity: 71, Sunlight: 0.0, Wind: 7.2
+2025-03-01 09:44:39,903 - INFO - Sensor 3 - ADC: 17201, Moisture: 18.66%, Digital: Dry, Weather Temp: 13.4, Humidity: 71, Sunlight: 0.0, Wind: 7.2
+2025-03-01 09:44:39,929 - INFO - Sensor 4 - ADC: 16427, Moisture: 23.82%, Digital: Dry, Weather Temp: 13.4, Humidity: 71, Sunlight: 0.0, Wind: 7.2
+2025-03-01 09:44:39,946 - INFO - Old data deleted up to 2025-02-22 09:44:39.944324.
+2025-03-01 09:59:41,061 - INFO - Sensor 1 - ADC: 15177, Moisture: 32.15%, Digital: Dry, Weather Temp: 13.7, Humidity: 71, Sunlight: 0.0, Wind: 6.6
+2025-03-01 09:59:41,084 - INFO - Sensor 2 - ADC: 15280, Moisture: 31.47%, Digital: Dry, Weather Temp: 13.7, Humidity: 71, Sunlight: 0.0, Wind: 6.6
+2025-03-01 09:59:41,110 - INFO - Sensor 3 - ADC: 17168, Moisture: 18.88%, Digital: Dry, Weather Temp: 13.7, Humidity: 71, Sunlight: 0.0, Wind: 6.6
+2025-03-01 09:59:41,133 - INFO - Sensor 4 - ADC: 16403, Moisture: 23.98%, Digital: Dry, Weather Temp: 13.7, Humidity: 71, Sunlight: 0.0, Wind: 6.6
+2025-03-01 09:59:41,149 - INFO - Old data deleted up to 2025-02-22 09:59:41.147121.
+2025-03-01 10:14:42,292 - INFO - Sensor 1 - ADC: 15172, Moisture: 32.19%, Digital: Dry, Weather Temp: 14.3, Humidity: 74, Sunlight: 504.8, Wind: 7.9
+2025-03-01 10:14:42,315 - INFO - Sensor 2 - ADC: 15243, Moisture: 31.71%, Digital: Dry, Weather Temp: 14.3, Humidity: 74, Sunlight: 504.8, Wind: 7.9
+2025-03-01 10:14:42,338 - INFO - Sensor 3 - ADC: 17136, Moisture: 19.09%, Digital: Dry, Weather Temp: 14.3, Humidity: 74, Sunlight: 504.8, Wind: 7.9
+2025-03-01 10:14:42,366 - INFO - Sensor 4 - ADC: 16389, Moisture: 24.07%, Digital: Dry, Weather Temp: 14.3, Humidity: 74, Sunlight: 504.8, Wind: 7.9
+2025-03-01 10:14:42,382 - INFO - Old data deleted up to 2025-02-22 10:14:42.379914.
+2025-03-01 10:29:43,473 - INFO - Sensor 1 - ADC: 15208, Moisture: 31.95%, Digital: Dry, Weather Temp: 14.7, Humidity: 71, Sunlight: 0.0, Wind: 9.2
+2025-03-01 10:29:43,508 - INFO - Sensor 2 - ADC: 15194, Moisture: 32.04%, Digital: Dry, Weather Temp: 14.7, Humidity: 71, Sunlight: 0.0, Wind: 9.2
+2025-03-01 10:29:43,531 - INFO - Sensor 3 - ADC: 17118, Moisture: 19.21%, Digital: Dry, Weather Temp: 14.7, Humidity: 71, Sunlight: 0.0, Wind: 9.2
+2025-03-01 10:29:43,556 - INFO - Sensor 4 - ADC: 16374, Moisture: 24.17%, Digital: Dry, Weather Temp: 14.7, Humidity: 71, Sunlight: 0.0, Wind: 9.2
+2025-03-01 10:29:43,571 - INFO - Old data deleted up to 2025-02-22 10:29:43.569547.
+2025-03-01 10:44:44,684 - INFO - Sensor 1 - ADC: 15157, Moisture: 32.29%, Digital: Dry, Weather Temp: 15.2, Humidity: 71, Sunlight: 0.0, Wind: 7.9
+2025-03-01 10:44:44,707 - INFO - Sensor 2 - ADC: 15183, Moisture: 32.11%, Digital: Dry, Weather Temp: 15.2, Humidity: 71, Sunlight: 0.0, Wind: 7.9
+2025-03-01 10:44:44,731 - INFO - Sensor 3 - ADC: 17117, Moisture: 19.22%, Digital: Dry, Weather Temp: 15.2, Humidity: 71, Sunlight: 0.0, Wind: 7.9
+2025-03-01 10:44:44,754 - INFO - Sensor 4 - ADC: 16371, Moisture: 24.19%, Digital: Dry, Weather Temp: 15.2, Humidity: 71, Sunlight: 0.0, Wind: 7.9
+2025-03-01 10:44:44,769 - INFO - Old data deleted up to 2025-02-22 10:44:44.767538.
+2025-03-01 10:59:45,776 - INFO - Sensor 1 - ADC: 15160, Moisture: 32.27%, Digital: Dry, Weather Temp: 15.7, Humidity: 71, Sunlight: 0.0, Wind: 6.5
+2025-03-01 10:59:45,800 - INFO - Sensor 2 - ADC: 15198, Moisture: 32.01%, Digital: Dry, Weather Temp: 15.7, Humidity: 71, Sunlight: 0.0, Wind: 6.5
+2025-03-01 10:59:45,825 - INFO - Sensor 3 - ADC: 17114, Moisture: 19.24%, Digital: Dry, Weather Temp: 15.7, Humidity: 71, Sunlight: 0.0, Wind: 6.5
+2025-03-01 10:59:45,847 - INFO - Sensor 4 - ADC: 16368, Moisture: 24.21%, Digital: Dry, Weather Temp: 15.7, Humidity: 71, Sunlight: 0.0, Wind: 6.5
+2025-03-01 10:59:45,864 - INFO - Old data deleted up to 2025-02-22 10:59:45.862398.
+2025-03-01 11:14:47,082 - INFO - Sensor 1 - ADC: 15179, Moisture: 32.14%, Digital: Dry, Weather Temp: 16.3, Humidity: 67, Sunlight: 645.0, Wind: 4.8
+2025-03-01 11:14:47,107 - INFO - Sensor 2 - ADC: 15218, Moisture: 31.88%, Digital: Dry, Weather Temp: 16.3, Humidity: 67, Sunlight: 645.0, Wind: 4.8
+2025-03-01 11:14:47,130 - INFO - Sensor 3 - ADC: 17138, Moisture: 19.08%, Digital: Dry, Weather Temp: 16.3, Humidity: 67, Sunlight: 645.0, Wind: 4.8
+2025-03-01 11:14:47,153 - INFO - Sensor 4 - ADC: 16369, Moisture: 24.21%, Digital: Dry, Weather Temp: 16.3, Humidity: 67, Sunlight: 645.0, Wind: 4.8
+2025-03-01 11:14:47,170 - INFO - Old data deleted up to 2025-02-22 11:14:47.167695.
+2025-03-01 11:29:48,416 - INFO - Sensor 1 - ADC: 15180, Moisture: 32.13%, Digital: Dry, Weather Temp: 16.7, Humidity: 71, Sunlight: 0.0, Wind: 5.7
+2025-03-01 11:29:48,445 - INFO - Sensor 2 - ADC: 15227, Moisture: 31.82%, Digital: Dry, Weather Temp: 16.7, Humidity: 71, Sunlight: 0.0, Wind: 5.7
+2025-03-01 11:29:48,473 - INFO - Sensor 3 - ADC: 17122, Moisture: 19.19%, Digital: Dry, Weather Temp: 16.7, Humidity: 71, Sunlight: 0.0, Wind: 5.7
+2025-03-01 11:29:48,498 - INFO - Sensor 4 - ADC: 16364, Moisture: 24.24%, Digital: Dry, Weather Temp: 16.7, Humidity: 71, Sunlight: 0.0, Wind: 5.7
+2025-03-01 11:29:48,514 - INFO - Old data deleted up to 2025-02-22 11:29:48.512285.
+2025-03-01 11:44:49,710 - INFO - Sensor 1 - ADC: 15160, Moisture: 32.27%, Digital: Dry, Weather Temp: 17.2, Humidity: 71, Sunlight: 0.0, Wind: 8.2
+2025-03-01 11:44:49,738 - INFO - Sensor 2 - ADC: 15276, Moisture: 31.49%, Digital: Dry, Weather Temp: 17.2, Humidity: 71, Sunlight: 0.0, Wind: 8.2
+2025-03-01 11:44:49,761 - INFO - Sensor 3 - ADC: 17131, Moisture: 19.13%, Digital: Dry, Weather Temp: 17.2, Humidity: 71, Sunlight: 0.0, Wind: 8.2
+2025-03-01 11:44:49,786 - INFO - Sensor 4 - ADC: 16384, Moisture: 24.11%, Digital: Dry, Weather Temp: 17.2, Humidity: 71, Sunlight: 0.0, Wind: 8.2
+2025-03-01 11:44:49,802 - INFO - Old data deleted up to 2025-02-22 11:44:49.800056.
+2025-03-01 11:59:51,015 - INFO - Sensor 1 - ADC: 15191, Moisture: 32.06%, Digital: Dry, Weather Temp: 17.3, Humidity: 71, Sunlight: 0.0, Wind: 8.9
+2025-03-01 11:59:51,038 - INFO - Sensor 2 - ADC: 15318, Moisture: 31.21%, Digital: Dry, Weather Temp: 17.3, Humidity: 71, Sunlight: 0.0, Wind: 8.9
+2025-03-01 11:59:51,061 - INFO - Sensor 3 - ADC: 17138, Moisture: 19.08%, Digital: Dry, Weather Temp: 17.3, Humidity: 71, Sunlight: 0.0, Wind: 8.9
+2025-03-01 11:59:51,087 - INFO - Sensor 4 - ADC: 16401, Moisture: 23.99%, Digital: Dry, Weather Temp: 17.3, Humidity: 71, Sunlight: 0.0, Wind: 8.9
+2025-03-01 11:59:51,102 - INFO - Old data deleted up to 2025-02-22 11:59:51.100303.
+2025-03-01 12:14:52,157 - INFO - Sensor 1 - ADC: 15154, Moisture: 32.31%, Digital: Dry, Weather Temp: 18.0, Humidity: 52, Sunlight: 731.8, Wind: 14.8
+2025-03-01 12:14:52,185 - INFO - Sensor 2 - ADC: 15333, Moisture: 31.11%, Digital: Dry, Weather Temp: 18.0, Humidity: 52, Sunlight: 731.8, Wind: 14.8
+2025-03-01 12:14:52,208 - INFO - Sensor 3 - ADC: 17141, Moisture: 19.06%, Digital: Dry, Weather Temp: 18.0, Humidity: 52, Sunlight: 731.8, Wind: 14.8
+2025-03-01 12:14:52,231 - INFO - Sensor 4 - ADC: 16389, Moisture: 24.07%, Digital: Dry, Weather Temp: 18.0, Humidity: 52, Sunlight: 731.8, Wind: 14.8
+2025-03-01 12:14:52,248 - INFO - Old data deleted up to 2025-02-22 12:14:52.245892.
+2025-03-01 12:29:53,418 - INFO - Sensor 1 - ADC: 15163, Moisture: 32.25%, Digital: Dry, Weather Temp: 17.9, Humidity: 71, Sunlight: 0.0, Wind: 15.2
+2025-03-01 12:29:53,441 - INFO - Sensor 2 - ADC: 15372, Moisture: 30.85%, Digital: Dry, Weather Temp: 17.9, Humidity: 71, Sunlight: 0.0, Wind: 15.2
+2025-03-01 12:29:53,464 - INFO - Sensor 3 - ADC: 17144, Moisture: 19.04%, Digital: Dry, Weather Temp: 17.9, Humidity: 71, Sunlight: 0.0, Wind: 15.2
+2025-03-01 12:29:53,489 - INFO - Sensor 4 - ADC: 16386, Moisture: 24.09%, Digital: Dry, Weather Temp: 17.9, Humidity: 71, Sunlight: 0.0, Wind: 15.2
+2025-03-01 12:29:53,505 - INFO - Old data deleted up to 2025-02-22 12:29:53.503254.
+2025-03-01 12:44:54,655 - INFO - Sensor 1 - ADC: 15162, Moisture: 32.25%, Digital: Dry, Weather Temp: 17.6, Humidity: 71, Sunlight: 0.0, Wind: 15.2
+2025-03-01 12:44:54,679 - INFO - Sensor 2 - ADC: 15412, Moisture: 30.59%, Digital: Dry, Weather Temp: 17.6, Humidity: 71, Sunlight: 0.0, Wind: 15.2
+2025-03-01 12:44:54,702 - INFO - Sensor 3 - ADC: 17133, Moisture: 19.11%, Digital: Dry, Weather Temp: 17.6, Humidity: 71, Sunlight: 0.0, Wind: 15.2
+2025-03-01 12:44:54,728 - INFO - Sensor 4 - ADC: 16392, Moisture: 24.05%, Digital: Dry, Weather Temp: 17.6, Humidity: 71, Sunlight: 0.0, Wind: 15.2
+2025-03-01 12:44:54,744 - INFO - Old data deleted up to 2025-02-22 12:44:54.741834.
+2025-03-01 12:59:55,715 - INFO - Sensor 1 - ADC: 15143, Moisture: 32.38%, Digital: Dry, Weather Temp: 18.0, Humidity: 71, Sunlight: 0.0, Wind: 20.2
+2025-03-01 12:59:55,739 - INFO - Sensor 2 - ADC: 15418, Moisture: 30.55%, Digital: Dry, Weather Temp: 18.0, Humidity: 71, Sunlight: 0.0, Wind: 20.2
+2025-03-01 12:59:55,768 - INFO - Sensor 3 - ADC: 17133, Moisture: 19.11%, Digital: Dry, Weather Temp: 18.0, Humidity: 71, Sunlight: 0.0, Wind: 20.2
+2025-03-01 12:59:55,799 - INFO - Sensor 4 - ADC: 16385, Moisture: 24.10%, Digital: Dry, Weather Temp: 18.0, Humidity: 71, Sunlight: 0.0, Wind: 20.2
+2025-03-01 12:59:55,814 - INFO - Old data deleted up to 2025-02-22 12:59:55.812175.
+2025-03-01 13:14:57,083 - INFO - Sensor 1 - ADC: 15151, Moisture: 32.33%, Digital: Dry, Weather Temp: 18.4, Humidity: 51, Sunlight: 638.2, Wind: 13.8
+2025-03-01 13:14:57,106 - INFO - Sensor 2 - ADC: 15443, Moisture: 30.38%, Digital: Dry, Weather Temp: 18.4, Humidity: 51, Sunlight: 638.2, Wind: 13.8
+2025-03-01 13:14:57,129 - INFO - Sensor 3 - ADC: 17127, Moisture: 19.15%, Digital: Dry, Weather Temp: 18.4, Humidity: 51, Sunlight: 638.2, Wind: 13.8
+2025-03-01 13:14:57,154 - INFO - Sensor 4 - ADC: 16391, Moisture: 24.06%, Digital: Dry, Weather Temp: 18.4, Humidity: 51, Sunlight: 638.2, Wind: 13.8
+2025-03-01 13:14:57,170 - INFO - Old data deleted up to 2025-02-22 13:14:57.168113.
+2025-03-01 13:29:58,216 - INFO - Sensor 1 - ADC: 15152, Moisture: 32.32%, Digital: Dry, Weather Temp: 18.9, Humidity: 71, Sunlight: 0.0, Wind: 13.5
+2025-03-01 13:29:58,243 - INFO - Sensor 2 - ADC: 15462, Moisture: 30.25%, Digital: Dry, Weather Temp: 18.9, Humidity: 71, Sunlight: 0.0, Wind: 13.5
+2025-03-01 13:29:58,267 - INFO - Sensor 3 - ADC: 17131, Moisture: 19.13%, Digital: Dry, Weather Temp: 18.9, Humidity: 71, Sunlight: 0.0, Wind: 13.5
+2025-03-01 13:29:58,294 - INFO - Sensor 4 - ADC: 16401, Moisture: 23.99%, Digital: Dry, Weather Temp: 18.9, Humidity: 71, Sunlight: 0.0, Wind: 13.5
+2025-03-01 13:29:58,309 - INFO - Old data deleted up to 2025-02-22 13:29:58.307503.
+2025-03-01 13:44:59,503 - INFO - Sensor 1 - ADC: 15146, Moisture: 32.36%, Digital: Dry, Weather Temp: 19.2, Humidity: 71, Sunlight: 0.0, Wind: 14.8
+2025-03-01 13:44:59,527 - INFO - Sensor 2 - ADC: 15471, Moisture: 30.19%, Digital: Dry, Weather Temp: 19.2, Humidity: 71, Sunlight: 0.0, Wind: 14.8
+2025-03-01 13:44:59,551 - INFO - Sensor 3 - ADC: 17152, Moisture: 18.99%, Digital: Dry, Weather Temp: 19.2, Humidity: 71, Sunlight: 0.0, Wind: 14.8
+2025-03-01 13:44:59,576 - INFO - Sensor 4 - ADC: 16401, Moisture: 23.99%, Digital: Dry, Weather Temp: 19.2, Humidity: 71, Sunlight: 0.0, Wind: 14.8
+2025-03-01 13:44:59,598 - INFO - Old data deleted up to 2025-02-22 13:44:59.596459.
+2025-03-01 14:00:00,767 - INFO - Sensor 1 - ADC: 15153, Moisture: 32.31%, Digital: Dry, Weather Temp: 18.9, Humidity: 54, Sunlight: 697.5, Wind: 15.8
+2025-03-01 14:00:00,796 - INFO - Sensor 2 - ADC: 15486, Moisture: 30.09%, Digital: Dry, Weather Temp: 18.9, Humidity: 54, Sunlight: 697.5, Wind: 15.8
+2025-03-01 14:00:00,821 - INFO - Sensor 3 - ADC: 17143, Moisture: 19.05%, Digital: Dry, Weather Temp: 18.9, Humidity: 54, Sunlight: 697.5, Wind: 15.8
+2025-03-01 14:00:00,848 - INFO - Sensor 4 - ADC: 16396, Moisture: 24.03%, Digital: Dry, Weather Temp: 18.9, Humidity: 54, Sunlight: 697.5, Wind: 15.8
+2025-03-01 14:00:00,864 - INFO - Old data deleted up to 2025-02-22 14:00:00.861737.
+2025-03-01 14:15:01,900 - INFO - Sensor 1 - ADC: 15154, Moisture: 32.31%, Digital: Dry, Weather Temp: 19.2, Humidity: 71, Sunlight: 0.0, Wind: 15.8
+2025-03-01 14:15:01,927 - INFO - Sensor 2 - ADC: 15491, Moisture: 30.06%, Digital: Dry, Weather Temp: 19.2, Humidity: 71, Sunlight: 0.0, Wind: 15.8
+2025-03-01 14:15:01,951 - INFO - Sensor 3 - ADC: 17141, Moisture: 19.06%, Digital: Dry, Weather Temp: 19.2, Humidity: 71, Sunlight: 0.0, Wind: 15.8
+2025-03-01 14:15:01,975 - INFO - Sensor 4 - ADC: 16410, Moisture: 23.93%, Digital: Dry, Weather Temp: 19.2, Humidity: 71, Sunlight: 0.0, Wind: 15.8
+2025-03-01 14:15:01,991 - INFO - Old data deleted up to 2025-02-22 14:15:01.989070.
+2025-03-01 14:30:03,080 - INFO - Sensor 1 - ADC: 15156, Moisture: 32.29%, Digital: Dry, Weather Temp: 19.1, Humidity: 71, Sunlight: 0.0, Wind: 15.2
+2025-03-01 14:30:03,109 - INFO - Sensor 2 - ADC: 15485, Moisture: 30.10%, Digital: Dry, Weather Temp: 19.1, Humidity: 71, Sunlight: 0.0, Wind: 15.2
+2025-03-01 14:30:03,132 - INFO - Sensor 3 - ADC: 17152, Moisture: 18.99%, Digital: Dry, Weather Temp: 19.1, Humidity: 71, Sunlight: 0.0, Wind: 15.2
+2025-03-01 14:30:03,156 - INFO - Sensor 4 - ADC: 16395, Moisture: 24.03%, Digital: Dry, Weather Temp: 19.1, Humidity: 71, Sunlight: 0.0, Wind: 15.2
+2025-03-01 14:30:03,172 - INFO - Old data deleted up to 2025-02-22 14:30:03.169868.
+2025-03-01 14:45:04,149 - INFO - Sensor 1 - ADC: 15162, Moisture: 32.25%, Digital: Dry, Weather Temp: 19.1, Humidity: 71, Sunlight: 0.0, Wind: 14.3
+2025-03-01 14:45:04,176 - INFO - Sensor 2 - ADC: 15490, Moisture: 30.07%, Digital: Dry, Weather Temp: 19.1, Humidity: 71, Sunlight: 0.0, Wind: 14.3
+2025-03-01 14:45:04,201 - INFO - Sensor 3 - ADC: 17151, Moisture: 18.99%, Digital: Dry, Weather Temp: 19.1, Humidity: 71, Sunlight: 0.0, Wind: 14.3
+2025-03-01 14:45:04,225 - INFO - Sensor 4 - ADC: 16393, Moisture: 24.05%, Digital: Dry, Weather Temp: 19.1, Humidity: 71, Sunlight: 0.0, Wind: 14.3
+2025-03-01 14:45:04,240 - INFO - Old data deleted up to 2025-02-22 14:45:04.237951.
+2025-03-01 15:00:05,314 - INFO - Sensor 1 - ADC: 15181, Moisture: 32.13%, Digital: Dry, Weather Temp: 19.0, Humidity: 47, Sunlight: 595.0, Wind: 15.6
+2025-03-01 15:00:05,339 - INFO - Sensor 2 - ADC: 15519, Moisture: 29.87%, Digital: Dry, Weather Temp: 19.0, Humidity: 47, Sunlight: 595.0, Wind: 15.6
+2025-03-01 15:00:05,365 - INFO - Sensor 3 - ADC: 17137, Moisture: 19.09%, Digital: Dry, Weather Temp: 19.0, Humidity: 47, Sunlight: 595.0, Wind: 15.6
+2025-03-01 15:00:05,391 - INFO - Sensor 4 - ADC: 16409, Moisture: 23.94%, Digital: Dry, Weather Temp: 19.0, Humidity: 47, Sunlight: 595.0, Wind: 15.6
+2025-03-01 15:00:05,407 - INFO - Old data deleted up to 2025-02-22 15:00:05.404664.
+2025-03-01 15:15:06,569 - INFO - Sensor 1 - ADC: 15178, Moisture: 32.15%, Digital: Dry, Weather Temp: 18.7, Humidity: 71, Sunlight: 0.0, Wind: 16.3
+2025-03-01 15:15:06,595 - INFO - Sensor 2 - ADC: 15508, Moisture: 29.95%, Digital: Dry, Weather Temp: 18.7, Humidity: 71, Sunlight: 0.0, Wind: 16.3
+2025-03-01 15:15:06,628 - INFO - Sensor 3 - ADC: 17153, Moisture: 18.98%, Digital: Dry, Weather Temp: 18.7, Humidity: 71, Sunlight: 0.0, Wind: 16.3
+2025-03-01 15:15:06,660 - INFO - Sensor 4 - ADC: 16416, Moisture: 23.89%, Digital: Dry, Weather Temp: 18.7, Humidity: 71, Sunlight: 0.0, Wind: 16.3
+2025-03-01 15:15:06,681 - INFO - Old data deleted up to 2025-02-22 15:15:06.675379.
+2025-03-01 15:30:07,816 - INFO - Sensor 1 - ADC: 15177, Moisture: 32.15%, Digital: Dry, Weather Temp: 18.4, Humidity: 71, Sunlight: 0.0, Wind: 16.8
+2025-03-01 15:30:07,839 - INFO - Sensor 2 - ADC: 15528, Moisture: 29.81%, Digital: Dry, Weather Temp: 18.4, Humidity: 71, Sunlight: 0.0, Wind: 16.8
+2025-03-01 15:30:07,863 - INFO - Sensor 3 - ADC: 17149, Moisture: 19.01%, Digital: Dry, Weather Temp: 18.4, Humidity: 71, Sunlight: 0.0, Wind: 16.8
+2025-03-01 15:30:07,889 - INFO - Sensor 4 - ADC: 16415, Moisture: 23.90%, Digital: Dry, Weather Temp: 18.4, Humidity: 71, Sunlight: 0.0, Wind: 16.8
+2025-03-01 15:30:07,905 - INFO - Old data deleted up to 2025-02-22 15:30:07.903486.
+2025-03-01 15:45:08,942 - INFO - Sensor 1 - ADC: 15192, Moisture: 32.05%, Digital: Dry, Weather Temp: 18.1, Humidity: 71, Sunlight: 0.0, Wind: 18.1
+2025-03-01 15:45:08,967 - INFO - Sensor 2 - ADC: 15526, Moisture: 29.83%, Digital: Dry, Weather Temp: 18.1, Humidity: 71, Sunlight: 0.0, Wind: 18.1
+2025-03-01 15:45:08,990 - INFO - Sensor 3 - ADC: 17171, Moisture: 18.86%, Digital: Dry, Weather Temp: 18.1, Humidity: 71, Sunlight: 0.0, Wind: 18.1
+2025-03-01 15:45:09,015 - INFO - Sensor 4 - ADC: 16435, Moisture: 23.77%, Digital: Dry, Weather Temp: 18.1, Humidity: 71, Sunlight: 0.0, Wind: 18.1
+2025-03-01 15:45:09,030 - INFO - Old data deleted up to 2025-02-22 15:45:09.028433.
+2025-03-01 16:00:10,144 - INFO - Sensor 1 - ADC: 15287, Moisture: 31.42%, Digital: Dry, Weather Temp: 17.7, Humidity: 53, Sunlight: 438.0, Wind: 19.0
+2025-03-01 16:00:10,167 - INFO - Sensor 2 - ADC: 15546, Moisture: 29.69%, Digital: Dry, Weather Temp: 17.7, Humidity: 53, Sunlight: 438.0, Wind: 19.0
+2025-03-01 16:00:10,190 - INFO - Sensor 3 - ADC: 17158, Moisture: 18.95%, Digital: Dry, Weather Temp: 17.7, Humidity: 53, Sunlight: 438.0, Wind: 19.0
+2025-03-01 16:00:10,215 - INFO - Sensor 4 - ADC: 16415, Moisture: 23.90%, Digital: Dry, Weather Temp: 17.7, Humidity: 53, Sunlight: 438.0, Wind: 19.0
+2025-03-01 16:00:10,231 - INFO - Old data deleted up to 2025-02-22 16:00:10.229242.
+2025-03-01 16:15:11,290 - INFO - Sensor 1 - ADC: 15206, Moisture: 31.96%, Digital: Dry, Weather Temp: 17.3, Humidity: 71, Sunlight: 0.0, Wind: 18.4
+2025-03-01 16:15:11,318 - INFO - Sensor 2 - ADC: 15610, Moisture: 29.27%, Digital: Dry, Weather Temp: 17.3, Humidity: 71, Sunlight: 0.0, Wind: 18.4
+2025-03-01 16:15:11,341 - INFO - Sensor 3 - ADC: 17161, Moisture: 18.93%, Digital: Dry, Weather Temp: 17.3, Humidity: 71, Sunlight: 0.0, Wind: 18.4
+2025-03-01 16:15:11,368 - INFO - Sensor 4 - ADC: 16434, Moisture: 23.77%, Digital: Dry, Weather Temp: 17.3, Humidity: 71, Sunlight: 0.0, Wind: 18.4
+2025-03-01 16:15:11,384 - INFO - Old data deleted up to 2025-02-22 16:15:11.382001.
+2025-03-01 16:23:37,212 - INFO - Location from ipinfo.io: 37.9577, -121.2908, Stockton, California, US
+2025-03-01 16:23:37,239 - INFO - Final device location set to: Stockton, California, US
+2025-03-01 16:23:38,355 - WARNING - Retry 1 for sensor 0 due to error: name 'ads' is not defined
+2025-03-01 16:23:39,356 - WARNING - Retry 2 for sensor 0 due to error: name 'ads' is not defined
+2025-03-01 16:23:40,357 - WARNING - Retry 3 for sensor 0 due to error: name 'ads' is not defined
+2025-03-01 16:23:41,357 - ERROR - Failed to read sensor 0 after 3 attempts.
+2025-03-01 16:23:41,358 - INFO - Sensor 1 - ADC: 0, Moisture: 0.00%, Digital: Error, Weather Temp: 17.3, Humidity: 71, Sunlight: 0.0, Wind: 18.4
+2025-03-01 16:23:41,384 - WARNING - Retry 1 for sensor 1 due to error: name 'ads' is not defined
+2025-03-01 16:23:42,384 - WARNING - Retry 2 for sensor 1 due to error: name 'ads' is not defined
+2025-03-01 16:23:43,385 - WARNING - Retry 3 for sensor 1 due to error: name 'ads' is not defined
+2025-03-01 16:23:44,386 - ERROR - Failed to read sensor 1 after 3 attempts.
+2025-03-01 16:23:44,387 - INFO - Sensor 2 - ADC: 0, Moisture: 0.00%, Digital: Error, Weather Temp: 17.3, Humidity: 71, Sunlight: 0.0, Wind: 18.4
+2025-03-01 16:23:44,403 - WARNING - Retry 1 for sensor 2 due to error: name 'ads' is not defined
+2025-03-01 16:23:45,404 - WARNING - Retry 2 for sensor 2 due to error: name 'ads' is not defined
+2025-03-01 16:23:46,405 - WARNING - Retry 3 for sensor 2 due to error: name 'ads' is not defined
+2025-03-01 16:23:47,406 - ERROR - Failed to read sensor 2 after 3 attempts.
+2025-03-01 16:23:47,407 - INFO - Sensor 3 - ADC: 0, Moisture: 0.00%, Digital: Error, Weather Temp: 17.3, Humidity: 71, Sunlight: 0.0, Wind: 18.4
+2025-03-01 16:23:47,435 - WARNING - Retry 1 for sensor 3 due to error: name 'ads' is not defined
+2025-03-01 16:23:48,436 - WARNING - Retry 2 for sensor 3 due to error: name 'ads' is not defined
+2025-03-01 16:23:49,437 - WARNING - Retry 3 for sensor 3 due to error: name 'ads' is not defined
+2025-03-01 16:23:50,437 - ERROR - Failed to read sensor 3 after 3 attempts.
+2025-03-01 16:23:50,438 - INFO - Sensor 4 - ADC: 0, Moisture: 0.00%, Digital: Error, Weather Temp: 17.3, Humidity: 71, Sunlight: 0.0, Wind: 18.4
+2025-03-01 16:24:11,699 - INFO - GPIO Cleanup Done.
+2025-03-01 16:24:11,700 - INFO - GPIO Cleanup Done.
+2025-03-01 16:24:27,430 - INFO - GPIO Cleanup Done.
+2025-03-01 16:24:27,765 - INFO - GPIO Cleanup Done.
+2025-03-01 16:24:33,388 - INFO - Location from ipinfo.io: 37.9577, -121.2908, Stockton, California, US
+2025-03-01 16:24:33,389 - INFO - Final device location set to: Stockton, California, US
+2025-03-01 16:24:39,521 - WARNING - Retry 1 for sensor 0 due to error: name 'ads' is not defined
+2025-03-01 16:24:40,522 - WARNING - Retry 2 for sensor 0 due to error: name 'ads' is not defined
+2025-03-01 16:24:41,523 - WARNING - Retry 3 for sensor 0 due to error: name 'ads' is not defined
+2025-03-01 16:24:42,524 - ERROR - Failed to read sensor 0 after 3 attempts.
+2025-03-01 16:24:42,524 - INFO - Sensor 1 - ADC: 0, Moisture: 0.00%, Digital: Error, Weather Temp: 17.3, Humidity: 71, Sunlight: 0.0, Wind: 18.4
+2025-03-01 16:24:42,540 - WARNING - Retry 1 for sensor 1 due to error: name 'ads' is not defined
+2025-03-01 16:24:43,540 - WARNING - Retry 2 for sensor 1 due to error: name 'ads' is not defined
+2025-03-01 16:24:44,541 - WARNING - Retry 3 for sensor 1 due to error: name 'ads' is not defined
+2025-03-01 16:24:45,542 - ERROR - Failed to read sensor 1 after 3 attempts.
+2025-03-01 16:24:45,542 - INFO - Sensor 2 - ADC: 0, Moisture: 0.00%, Digital: Error, Weather Temp: 17.3, Humidity: 71, Sunlight: 0.0, Wind: 18.4
+2025-03-01 16:24:45,556 - WARNING - Retry 1 for sensor 2 due to error: name 'ads' is not defined
+2025-03-01 16:24:46,557 - WARNING - Retry 2 for sensor 2 due to error: name 'ads' is not defined
+2025-03-01 16:24:47,557 - WARNING - Retry 3 for sensor 2 due to error: name 'ads' is not defined
+2025-03-01 16:24:48,558 - ERROR - Failed to read sensor 2 after 3 attempts.
+2025-03-01 16:24:48,558 - INFO - Sensor 3 - ADC: 0, Moisture: 0.00%, Digital: Error, Weather Temp: 17.3, Humidity: 71, Sunlight: 0.0, Wind: 18.4
+2025-03-01 16:24:48,573 - WARNING - Retry 1 for sensor 3 due to error: name 'ads' is not defined
+2025-03-01 16:24:49,574 - WARNING - Retry 2 for sensor 3 due to error: name 'ads' is not defined
+2025-03-01 16:24:50,575 - WARNING - Retry 3 for sensor 3 due to error: name 'ads' is not defined
+2025-03-01 16:24:51,576 - ERROR - Failed to read sensor 3 after 3 attempts.
+2025-03-01 16:24:51,576 - INFO - Sensor 4 - ADC: 0, Moisture: 0.00%, Digital: Error, Weather Temp: 17.3, Humidity: 71, Sunlight: 0.0, Wind: 18.4
+2025-03-01 16:27:53,024 - INFO - GPIO Cleanup Done.
+2025-03-01 16:27:53,027 - INFO - GPIO Cleanup Done.
+2025-03-01 16:27:58,267 - INFO - Location from ipinfo.io: 37.9577, -121.2908, Stockton, California, US
+2025-03-01 16:27:58,267 - INFO - Final device location set to: Stockton, California, US
+2025-03-01 16:27:59,429 - WARNING - Retry 1 for sensor 0 due to error: name 'ads' is not defined
+2025-03-01 16:28:00,430 - WARNING - Retry 2 for sensor 0 due to error: name 'ads' is not defined
+2025-03-01 16:28:01,431 - WARNING - Retry 3 for sensor 0 due to error: name 'ads' is not defined
+2025-03-01 16:28:02,432 - ERROR - Failed to read sensor 0 after 3 attempts.
+2025-03-01 16:28:02,432 - INFO - Sensor 1 - ADC: 0, Moisture: 0.00%, Digital: Error, Weather Temp: 17.3, Humidity: 71, Sunlight: 0.0, Wind: 18.4
+2025-03-01 16:28:02,462 - WARNING - Retry 1 for sensor 1 due to error: name 'ads' is not defined
+2025-03-01 16:28:03,463 - WARNING - Retry 2 for sensor 1 due to error: name 'ads' is not defined
+2025-03-01 16:28:04,463 - WARNING - Retry 3 for sensor 1 due to error: name 'ads' is not defined
+2025-03-01 16:28:05,109 - INFO - GPIO Cleanup Done.
+2025-03-01 16:28:05,111 - INFO - GPIO Cleanup Done.
+2025-03-01 16:30:04,249 - INFO - Location from ipinfo.io: 37.9577, -121.2908, Stockton, California, US
+2025-03-01 16:30:04,438 - INFO - Final device location set to: Stockton, California, US
+2025-03-01 16:30:06,243 - WARNING - Retry 1 for sensor 0 due to error: name 'ads' is not defined
+2025-03-01 16:30:07,244 - WARNING - Retry 2 for sensor 0 due to error: name 'ads' is not defined
+2025-03-01 16:30:08,245 - WARNING - Retry 3 for sensor 0 due to error: name 'ads' is not defined
+2025-03-01 16:30:09,246 - ERROR - Failed to read sensor 0 after 3 attempts.
+2025-03-01 16:30:09,247 - INFO - Sensor 1 - ADC: 0, Moisture: 0.00%, Digital: Error, Weather Temp: 16.8, Humidity: 71, Sunlight: 0.0, Wind: 18.0
+2025-03-01 16:30:09,405 - WARNING - Retry 1 for sensor 1 due to error: name 'ads' is not defined
+2025-03-01 16:30:25,459 - WARNING - Retry 2 for sensor 1 due to error: name 'ads' is not defined
+2025-03-01 16:30:26,460 - WARNING - Retry 3 for sensor 1 due to error: name 'ads' is not defined
+2025-03-01 16:30:27,461 - ERROR - Failed to read sensor 1 after 3 attempts.
+2025-03-01 16:30:27,462 - INFO - Sensor 2 - ADC: 0, Moisture: 0.00%, Digital: Error, Weather Temp: 16.8, Humidity: 71, Sunlight: 0.0, Wind: 18.0
+2025-03-01 16:30:29,439 - WARNING - Retry 1 for sensor 2 due to error: name 'ads' is not defined
+2025-03-01 16:30:30,439 - WARNING - Retry 2 for sensor 2 due to error: name 'ads' is not defined
+2025-03-01 16:30:31,441 - WARNING - Retry 3 for sensor 2 due to error: name 'ads' is not defined
+2025-03-01 16:30:32,442 - ERROR - Failed to read sensor 2 after 3 attempts.
+2025-03-01 16:30:32,443 - INFO - Sensor 3 - ADC: 0, Moisture: 0.00%, Digital: Error, Weather Temp: 16.8, Humidity: 71, Sunlight: 0.0, Wind: 18.0
+2025-03-01 16:30:32,463 - WARNING - Retry 1 for sensor 3 due to error: name 'ads' is not defined
+2025-03-01 16:30:33,466 - WARNING - Retry 2 for sensor 3 due to error: name 'ads' is not defined
+2025-03-01 16:30:34,467 - WARNING - Retry 3 for sensor 3 due to error: name 'ads' is not defined
+2025-03-01 16:30:35,468 - ERROR - Failed to read sensor 3 after 3 attempts.
+2025-03-01 16:30:35,468 - INFO - Sensor 4 - ADC: 0, Moisture: 0.00%, Digital: Error, Weather Temp: 16.8, Humidity: 71, Sunlight: 0.0, Wind: 18.0
+2025-03-01 16:30:45,124 - INFO - GPIO Cleanup Done.
+2025-03-01 16:30:45,569 - INFO - GPIO Cleanup Done.
+2025-03-01 16:30:57,200 - INFO - Location from ipinfo.io: 37.9577, -121.2908, Stockton, California, US
+2025-03-01 16:30:57,201 - INFO - Final device location set to: Stockton, California, US
+2025-03-01 16:30:58,320 - WARNING - Retry 1 for sensor 0 due to error: name 'ads' is not defined
+2025-03-01 16:30:59,320 - WARNING - Retry 2 for sensor 0 due to error: name 'ads' is not defined
+2025-03-01 16:31:00,321 - WARNING - Retry 3 for sensor 0 due to error: name 'ads' is not defined
+2025-03-01 16:31:01,322 - ERROR - Failed to read sensor 0 after 3 attempts.
+2025-03-01 16:31:01,323 - INFO - Sensor 1 - ADC: 0, Moisture: 0.00%, Digital: Error, Weather Temp: 16.8, Humidity: 71, Sunlight: 0.0, Wind: 18.0
+2025-03-01 16:31:01,351 - WARNING - Retry 1 for sensor 1 due to error: name 'ads' is not defined
+2025-03-01 16:31:02,352 - WARNING - Retry 2 for sensor 1 due to error: name 'ads' is not defined
+2025-03-01 16:31:03,352 - WARNING - Retry 3 for sensor 1 due to error: name 'ads' is not defined
+2025-03-01 16:31:04,357 - ERROR - Failed to read sensor 1 after 3 attempts.
+2025-03-01 16:31:04,357 - INFO - Sensor 2 - ADC: 0, Moisture: 0.00%, Digital: Error, Weather Temp: 16.8, Humidity: 71, Sunlight: 0.0, Wind: 18.0
+2025-03-01 16:31:04,374 - WARNING - Retry 1 for sensor 2 due to error: name 'ads' is not defined
+2025-03-01 16:31:05,377 - WARNING - Retry 2 for sensor 2 due to error: name 'ads' is not defined
+2025-03-01 16:31:06,378 - WARNING - Retry 3 for sensor 2 due to error: name 'ads' is not defined
+2025-03-01 16:31:07,378 - ERROR - Failed to read sensor 2 after 3 attempts.
+2025-03-01 16:31:07,379 - INFO - Sensor 3 - ADC: 0, Moisture: 0.00%, Digital: Error, Weather Temp: 16.8, Humidity: 71, Sunlight: 0.0, Wind: 18.0
+2025-03-01 16:31:07,392 - WARNING - Retry 1 for sensor 3 due to error: name 'ads' is not defined
+2025-03-01 16:31:08,393 - WARNING - Retry 2 for sensor 3 due to error: name 'ads' is not defined
+2025-03-01 16:31:09,394 - WARNING - Retry 3 for sensor 3 due to error: name 'ads' is not defined
+2025-03-01 16:31:10,394 - ERROR - Failed to read sensor 3 after 3 attempts.
+2025-03-01 16:31:10,395 - INFO - Sensor 4 - ADC: 0, Moisture: 0.00%, Digital: Error, Weather Temp: 16.8, Humidity: 71, Sunlight: 0.0, Wind: 18.0
+2025-03-01 16:31:11,585 - INFO - GPIO Cleanup Done.
+2025-03-01 16:31:11,587 - INFO - GPIO Cleanup Done.
+2025-03-01 16:42:18,410 - INFO - Location from ipinfo.io: 37.9577, -121.2908, Stockton, California, US
+2025-03-01 16:42:18,442 - INFO - Final device location set to: Stockton, California, US
+2025-03-01 16:42:19,636 - INFO - Sensor 1 - ADC: 15220, Moisture: 31.87%, Digital: Dry, Weather Temp: 16.8, Humidity: 71, Sunlight: 0.0, Wind: 18.0
+2025-03-01 16:42:19,669 - INFO - Sensor 2 - ADC: 15660, Moisture: 28.93%, Digital: Dry, Weather Temp: 16.8, Humidity: 71, Sunlight: 0.0, Wind: 18.0
+2025-03-01 16:42:19,903 - INFO - Sensor 3 - ADC: 17193, Moisture: 18.71%, Digital: Dry, Weather Temp: 16.8, Humidity: 71, Sunlight: 0.0, Wind: 18.0
+2025-03-01 16:42:19,934 - INFO - Sensor 4 - ADC: 16454, Moisture: 23.64%, Digital: Dry, Weather Temp: 16.8, Humidity: 71, Sunlight: 0.0, Wind: 18.0
+2025-03-01 16:43:38,379 - INFO - GPIO Cleanup Done.
+2025-03-01 16:43:38,381 - INFO - GPIO Cleanup Done.
+2025-03-01 16:55:43,872 - INFO - Location from ipinfo.io: 37.9577, -121.2908, Stockton, California, US
+2025-03-01 16:55:43,873 - INFO - Final device location set to: Stockton, California, US
+2025-03-01 16:55:44,940 - INFO - Sensor 1 - ADC: 15244, Moisture: 31.71%, Digital: Dry, Weather Temp: 15.2, Humidity: 71, Sunlight: 0.0, Wind: 16.6
+2025-03-01 16:55:44,964 - INFO - Sensor 2 - ADC: 15671, Moisture: 28.86%, Digital: Dry, Weather Temp: 15.2, Humidity: 71, Sunlight: 0.0, Wind: 16.6
+2025-03-01 16:55:44,987 - INFO - Sensor 3 - ADC: 17208, Moisture: 18.61%, Digital: Dry, Weather Temp: 15.2, Humidity: 71, Sunlight: 0.0, Wind: 16.6
+2025-03-01 16:55:45,015 - INFO - Sensor 4 - ADC: 16462, Moisture: 23.59%, Digital: Dry, Weather Temp: 15.2, Humidity: 71, Sunlight: 0.0, Wind: 16.6
+2025-03-01 16:56:04,100 - INFO - GPIO Cleanup Done.
+2025-03-01 16:56:04,101 - INFO - GPIO Cleanup Done.
+2025-03-01 16:56:38,761 - INFO - Location from ipinfo.io: 37.9577, -121.2908, Stockton, California, US
+2025-03-01 16:56:38,761 - INFO - Final device location set to: Stockton, California, US
+2025-03-01 16:56:39,832 - INFO - Sensor 1 - ADC: 15244, Moisture: 31.71%, Digital: Dry, Weather Temp: 15.2, Humidity: 71, Sunlight: 0.0, Wind: 16.6
+2025-03-01 16:56:40,732 - INFO - Sensor 2 - ADC: 15689, Moisture: 28.74%, Digital: Dry, Weather Temp: 15.2, Humidity: 71, Sunlight: 0.0, Wind: 16.6
+2025-03-01 16:56:40,756 - INFO - Sensor 3 - ADC: 17185, Moisture: 18.77%, Digital: Dry, Weather Temp: 15.2, Humidity: 71, Sunlight: 0.0, Wind: 16.6
+2025-03-01 16:56:40,779 - INFO - Sensor 4 - ADC: 16460, Moisture: 23.60%, Digital: Dry, Weather Temp: 15.2, Humidity: 71, Sunlight: 0.0, Wind: 16.6
+2025-03-01 17:11:41,861 - INFO - Sensor 1 - ADC: 15236, Moisture: 31.76%, Digital: Dry, Weather Temp: 14.9, Humidity: 65, Sunlight: 244.5, Wind: 15.6
+2025-03-01 17:11:41,887 - INFO - Sensor 2 - ADC: 15689, Moisture: 28.74%, Digital: Dry, Weather Temp: 14.9, Humidity: 65, Sunlight: 244.5, Wind: 15.6
+2025-03-01 17:11:41,910 - INFO - Sensor 3 - ADC: 17207, Moisture: 18.62%, Digital: Dry, Weather Temp: 14.9, Humidity: 65, Sunlight: 244.5, Wind: 15.6
+2025-03-01 17:11:41,933 - INFO - Sensor 4 - ADC: 16482, Moisture: 23.45%, Digital: Dry, Weather Temp: 14.9, Humidity: 65, Sunlight: 244.5, Wind: 15.6
+2025-03-01 17:26:42,999 - INFO - Sensor 1 - ADC: 15244, Moisture: 31.71%, Digital: Dry, Weather Temp: 14.2, Humidity: 71, Sunlight: 0.0, Wind: 12.7
+2025-03-01 17:26:43,022 - INFO - Sensor 2 - ADC: 15704, Moisture: 28.64%, Digital: Dry, Weather Temp: 14.2, Humidity: 71, Sunlight: 0.0, Wind: 12.7
+2025-03-01 17:26:43,050 - INFO - Sensor 3 - ADC: 17232, Moisture: 18.45%, Digital: Dry, Weather Temp: 14.2, Humidity: 71, Sunlight: 0.0, Wind: 12.7
+2025-03-01 17:26:43,077 - INFO - Sensor 4 - ADC: 16489, Moisture: 23.41%, Digital: Dry, Weather Temp: 14.2, Humidity: 71, Sunlight: 0.0, Wind: 12.7
+2025-03-01 17:41:44,145 - INFO - Sensor 1 - ADC: 15249, Moisture: 31.67%, Digital: Dry, Weather Temp: 13.7, Humidity: 71, Sunlight: 0.0, Wind: 11.8
+2025-03-01 17:41:44,173 - INFO - Sensor 2 - ADC: 15722, Moisture: 28.52%, Digital: Dry, Weather Temp: 13.7, Humidity: 71, Sunlight: 0.0, Wind: 11.8
+2025-03-01 17:41:44,199 - INFO - Sensor 3 - ADC: 17226, Moisture: 18.49%, Digital: Dry, Weather Temp: 13.7, Humidity: 71, Sunlight: 0.0, Wind: 11.8
+2025-03-01 17:41:44,226 - INFO - Sensor 4 - ADC: 16510, Moisture: 23.27%, Digital: Dry, Weather Temp: 13.7, Humidity: 71, Sunlight: 0.0, Wind: 11.8
+2025-03-01 17:46:03,342 - INFO - GPIO Cleanup Done.
+2025-03-01 17:46:03,343 - INFO - GPIO Cleanup Done.
+2025-03-01 17:46:09,190 - INFO - Location from ipinfo.io: 37.9577, -121.2908, Stockton, California, US
+2025-03-01 17:46:09,191 - INFO - Final device location set to: Stockton, California, US
+2025-03-01 17:46:10,290 - INFO - Sensor 1 - ADC: 15258, Moisture: 31.61%, Digital: Dry, Weather Temp: 13.1, Humidity: 71, Sunlight: 0.0, Wind: 12.8
+2025-03-01 17:46:10,314 - INFO - Sensor 2 - ADC: 15719, Moisture: 28.54%, Digital: Dry, Weather Temp: 13.1, Humidity: 71, Sunlight: 0.0, Wind: 12.8
+2025-03-01 17:46:10,338 - INFO - Sensor 3 - ADC: 17226, Moisture: 18.49%, Digital: Dry, Weather Temp: 13.1, Humidity: 71, Sunlight: 0.0, Wind: 12.8
+2025-03-01 17:46:10,364 - INFO - Sensor 4 - ADC: 16502, Moisture: 23.32%, Digital: Dry, Weather Temp: 13.1, Humidity: 71, Sunlight: 0.0, Wind: 12.8
+2025-03-01 17:46:18,779 - INFO - GPIO Cleanup Done.
+2025-03-01 17:46:18,781 - INFO - GPIO Cleanup Done.
+2025-03-01 17:46:29,597 - INFO - Location from ipinfo.io: 37.9577, -121.2908, Stockton, California, US
+2025-03-01 17:46:29,598 - INFO - Final device location set to: Stockton, California, US
+2025-03-01 17:46:30,804 - INFO - Sensor 1 - ADC: 15272, Moisture: 31.52%, Digital: Dry, Weather Temp: 13.1, Humidity: 71, Sunlight: 0.0, Wind: 12.8
+2025-03-01 17:46:30,827 - INFO - Sensor 2 - ADC: 15715, Moisture: 28.57%, Digital: Dry, Weather Temp: 13.1, Humidity: 71, Sunlight: 0.0, Wind: 12.8
+2025-03-01 17:46:30,851 - INFO - Sensor 3 - ADC: 17239, Moisture: 18.41%, Digital: Dry, Weather Temp: 13.1, Humidity: 71, Sunlight: 0.0, Wind: 12.8
+2025-03-01 17:46:30,878 - INFO - Sensor 4 - ADC: 16502, Moisture: 23.32%, Digital: Dry, Weather Temp: 13.1, Humidity: 71, Sunlight: 0.0, Wind: 12.8

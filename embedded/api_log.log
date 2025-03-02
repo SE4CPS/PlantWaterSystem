@@ -138,3 +138,78 @@
  * Running on http://127.0.0.1:5001
  * Running on http://10.0.0.180:5001
 2025-02-28 17:57:03,905 - INFO - [33mPress CTRL+C to quit[0m
+2025-02-28 22:43:35,633 - INFO - Scheduled jobs registered successfully.
+2025-02-28 22:43:35,671 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-02-28 22:43:35,671 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-01 00:00:11,506 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Read timed out. (read timeout=10)
+2025-03-01 00:00:11,508 - WARNING - Retrying after 2 seconds...
+2025-03-01 00:00:14,479 - ERROR - Failed to send data (405): 
+2025-03-01 00:00:14,482 - WARNING - Retrying after 4 seconds...
+2025-03-01 00:00:29,107 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Read timed out. (read timeout=10)
+2025-03-01 00:00:29,107 - WARNING - Retrying after 8 seconds...
+2025-03-01 00:00:37,108 - ERROR - All retry attempts failed.
+2025-03-01 12:00:04,280 - ERROR - Failed to send data (405): 
+2025-03-01 12:00:04,311 - WARNING - Retrying after 2 seconds...
+2025-03-01 12:00:07,201 - ERROR - Failed to send data (405): 
+2025-03-01 12:00:07,203 - WARNING - Retrying after 4 seconds...
+2025-03-01 12:00:12,227 - ERROR - Failed to send data (405): 
+2025-03-01 12:00:12,230 - WARNING - Retrying after 8 seconds...
+2025-03-01 12:00:20,230 - ERROR - All retry attempts failed.
+2025-03-01 16:23:38,680 - INFO - Scheduled jobs registered successfully.
+2025-03-01 16:24:34,240 - INFO - Scheduled jobs registered successfully.
+2025-03-01 16:24:34,255 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-01 16:24:34,256 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-01 16:27:59,296 - INFO - Scheduled jobs registered successfully.
+2025-03-01 16:27:59,310 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-01 16:27:59,310 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-01 16:30:08,432 - INFO - Scheduled jobs registered successfully.
+2025-03-01 16:30:08,650 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-01 16:30:08,650 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-01 16:30:58,520 - INFO - Scheduled jobs registered successfully.
+2025-03-01 16:30:58,537 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-01 16:30:58,538 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-01 16:42:19,848 - INFO - Scheduled jobs registered successfully.
+2025-03-01 16:42:19,908 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-01 16:42:19,912 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-01 16:55:44,694 - INFO - Scheduled jobs registered successfully.
+2025-03-01 16:55:44,707 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-01 16:55:44,708 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-01 16:56:39,586 - INFO - Scheduled jobs registered successfully.
+2025-03-01 16:56:39,600 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-01 16:56:39,601 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-01 17:46:10,240 - INFO - Scheduled jobs registered successfully.
+2025-03-01 17:46:10,254 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-01 17:46:10,255 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-01 17:46:30,415 - INFO - Scheduled jobs registered successfully.
+2025-03-01 17:46:30,428 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-01 17:46:30,429 - INFO - [33mPress CTRL+C to quit[0m
