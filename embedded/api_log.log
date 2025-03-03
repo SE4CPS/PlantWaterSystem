@@ -235,3 +235,22 @@
 2025-03-02 00:00:09,945 - ERROR - Failed to send data (405): 
 2025-03-02 00:00:09,948 - WARNING - Retrying after 8 seconds...
 2025-03-02 00:00:17,949 - ERROR - All retry attempts failed.
+2025-03-02 09:51:50,946 - INFO - Scheduled jobs registered successfully.
+2025-03-02 09:51:50,963 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-02 09:51:50,964 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-02 12:00:01,906 - ERROR - Failed to send data (405): 
+2025-03-02 12:00:01,911 - WARNING - Retrying after 2 seconds...
+2025-03-02 12:00:04,886 - ERROR - Failed to send data (405): 
+2025-03-02 12:00:04,889 - WARNING - Retrying after 4 seconds...
+2025-03-02 12:00:10,574 - ERROR - Failed to send data (405): 
+2025-03-02 12:00:10,577 - WARNING - Retrying after 8 seconds...
+2025-03-02 12:00:18,577 - ERROR - All retry attempts failed.
+2025-03-03 11:42:07,173 - INFO - Scheduled jobs registered successfully.
+2025-03-03 11:42:07,287 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-03 11:42:07,288 - INFO - [33mPress CTRL+C to quit[0m
