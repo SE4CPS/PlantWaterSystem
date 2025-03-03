@@ -1,0 +1,256 @@
+2025-02-24 20:30:23,402 - INFO - Scheduled jobs registered successfully.
+2025-02-24 20:30:23,421 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-02-24 20:30:23,421 - INFO - [33mPress CTRL+C to quit[0m
+2025-02-24 20:36:00,558 - INFO - Scheduled jobs registered successfully.
+2025-02-24 20:36:00,572 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-02-24 20:36:00,573 - INFO - [33mPress CTRL+C to quit[0m
+2025-02-24 20:52:42,340 - INFO - Scheduled jobs registered successfully.
+2025-02-24 20:52:42,358 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-02-24 20:52:42,358 - INFO - [33mPress CTRL+C to quit[0m
+2025-02-24 20:54:31,068 - INFO - Scheduled jobs registered successfully.
+2025-02-24 20:54:31,082 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-02-24 20:54:31,082 - INFO - [33mPress CTRL+C to quit[0m
+2025-02-24 21:12:40,130 - INFO - Scheduled jobs registered successfully.
+2025-02-24 21:12:40,145 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-02-24 21:12:40,146 - INFO - [33mPress CTRL+C to quit[0m
+2025-02-24 21:14:24,387 - INFO - Scheduled jobs registered successfully.
+2025-02-24 21:14:24,401 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-02-24 21:14:24,401 - INFO - [33mPress CTRL+C to quit[0m
+2025-02-24 21:18:22,255 - INFO - Scheduled jobs registered successfully.
+2025-02-24 21:18:22,270 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-02-24 21:18:22,270 - INFO - [33mPress CTRL+C to quit[0m
+2025-02-24 21:58:33,844 - INFO - Scheduled jobs registered successfully.
+2025-02-24 21:58:33,863 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-02-24 21:58:33,864 - INFO - [33mPress CTRL+C to quit[0m
+2025-02-24 22:01:51,737 - INFO - Scheduled jobs registered successfully.
+2025-02-24 22:01:51,756 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-02-24 22:01:51,757 - INFO - [33mPress CTRL+C to quit[0m
+2025-02-24 22:03:29,822 - INFO - Scheduled jobs registered successfully.
+2025-02-24 22:03:29,836 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-02-24 22:03:29,836 - INFO - [33mPress CTRL+C to quit[0m
+2025-02-24 22:13:30,686 - INFO - Scheduled jobs registered successfully.
+2025-02-24 22:13:30,702 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-02-24 22:13:30,703 - INFO - [33mPress CTRL+C to quit[0m
+2025-02-25 00:00:01,089 - ERROR - Error sending data: HTTPSConnectionPool(host='backend.example.com', port=443): Max retries exceeded with url: /receive-data (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f8f8ebc10>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+2025-02-25 00:00:01,096 - WARNING - Retrying after 2 seconds...
+2025-02-25 00:00:03,164 - ERROR - Error sending data: HTTPSConnectionPool(host='backend.example.com', port=443): Max retries exceeded with url: /receive-data (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f8eeb4890>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+2025-02-25 00:00:03,165 - WARNING - Retrying after 4 seconds...
+2025-02-25 00:00:07,220 - ERROR - Error sending data: HTTPSConnectionPool(host='backend.example.com', port=443): Max retries exceeded with url: /receive-data (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f8eeb4e10>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+2025-02-25 00:00:07,223 - WARNING - Retrying after 8 seconds...
+2025-02-25 00:00:15,224 - ERROR - All retry attempts failed.
+2025-02-25 12:00:01,938 - ERROR - Error sending data: HTTPSConnectionPool(host='backend.example.com', port=443): Max retries exceeded with url: /receive-data (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f8eee2f90>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+2025-02-25 12:00:01,986 - WARNING - Retrying after 2 seconds...
+2025-02-25 12:00:04,073 - ERROR - Error sending data: HTTPSConnectionPool(host='backend.example.com', port=443): Max retries exceeded with url: /receive-data (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f8eee3450>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+2025-02-25 12:00:04,074 - WARNING - Retrying after 4 seconds...
+2025-02-25 12:00:08,170 - ERROR - Error sending data: HTTPSConnectionPool(host='backend.example.com', port=443): Max retries exceeded with url: /receive-data (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f8eee2d10>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+2025-02-25 12:00:08,171 - WARNING - Retrying after 8 seconds...
+2025-02-25 12:00:16,171 - ERROR - All retry attempts failed.
+2025-02-26 00:00:03,299 - ERROR - Error sending data: HTTPSConnectionPool(host='backend.example.com', port=443): Max retries exceeded with url: /receive-data (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f8ef18e10>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+2025-02-26 00:00:03,418 - WARNING - Retrying after 2 seconds...
+2025-02-26 00:00:05,505 - ERROR - Error sending data: HTTPSConnectionPool(host='backend.example.com', port=443): Max retries exceeded with url: /receive-data (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f8ef19390>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+2025-02-26 00:00:05,506 - WARNING - Retrying after 4 seconds...
+2025-02-26 00:00:09,579 - ERROR - Error sending data: HTTPSConnectionPool(host='backend.example.com', port=443): Max retries exceeded with url: /receive-data (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f8ef18a90>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+2025-02-26 00:00:09,579 - WARNING - Retrying after 8 seconds...
+2025-02-26 00:00:17,580 - ERROR - All retry attempts failed.
+2025-02-26 12:00:01,218 - ERROR - Error sending data: HTTPSConnectionPool(host='backend.example.com', port=443): Max retries exceeded with url: /receive-data (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f8ef4ae50>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+2025-02-26 12:00:01,253 - WARNING - Retrying after 2 seconds...
+2025-02-26 12:00:03,341 - ERROR - Error sending data: HTTPSConnectionPool(host='backend.example.com', port=443): Max retries exceeded with url: /receive-data (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f8ef4b310>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+2025-02-26 12:00:03,342 - WARNING - Retrying after 4 seconds...
+2025-02-26 12:00:07,442 - ERROR - Error sending data: HTTPSConnectionPool(host='backend.example.com', port=443): Max retries exceeded with url: /receive-data (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f8ef4ab50>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+2025-02-26 12:00:07,443 - WARNING - Retrying after 8 seconds...
+2025-02-26 12:00:15,443 - ERROR - All retry attempts failed.
+2025-02-27 00:00:04,580 - ERROR - Error sending data: HTTPSConnectionPool(host='backend.example.com', port=443): Max retries exceeded with url: /receive-data (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f8ef84f10>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+2025-02-27 00:00:04,667 - WARNING - Retrying after 2 seconds...
+2025-02-27 00:00:06,782 - ERROR - Error sending data: HTTPSConnectionPool(host='backend.example.com', port=443): Max retries exceeded with url: /receive-data (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f8ef85490>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+2025-02-27 00:00:06,782 - WARNING - Retrying after 4 seconds...
+2025-02-27 00:00:10,880 - ERROR - Error sending data: HTTPSConnectionPool(host='backend.example.com', port=443): Max retries exceeded with url: /receive-data (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f8ef85350>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+2025-02-27 00:00:10,880 - WARNING - Retrying after 8 seconds...
+2025-02-27 00:00:18,881 - ERROR - All retry attempts failed.
+2025-02-27 12:00:01,538 - ERROR - Error sending data: HTTPSConnectionPool(host='backend.example.com', port=443): Max retries exceeded with url: /receive-data (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f8ec86f90>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+2025-02-27 12:00:01,577 - WARNING - Retrying after 2 seconds...
+2025-02-27 12:00:03,697 - ERROR - Error sending data: HTTPSConnectionPool(host='backend.example.com', port=443): Max retries exceeded with url: /receive-data (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f8ec87450>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+2025-02-27 12:00:03,697 - WARNING - Retrying after 4 seconds...
+2025-02-27 12:00:07,841 - ERROR - Error sending data: HTTPSConnectionPool(host='backend.example.com', port=443): Max retries exceeded with url: /receive-data (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f8ec86b90>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+2025-02-27 12:00:07,841 - WARNING - Retrying after 8 seconds...
+2025-02-27 12:00:15,842 - ERROR - All retry attempts failed.
+2025-02-27 22:09:54,461 - INFO - Scheduled jobs registered successfully.
+2025-02-27 22:09:54,479 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-02-27 22:09:54,480 - INFO - [33mPress CTRL+C to quit[0m
+2025-02-28 00:00:02,023 - ERROR - Error sending data: HTTPSConnectionPool(host='backend.example.com', port=443): Max retries exceeded with url: /receive-data (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7fa95ebf10>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+2025-02-28 00:00:02,087 - WARNING - Retrying after 2 seconds...
+2025-02-28 00:00:04,199 - ERROR - Error sending data: HTTPSConnectionPool(host='backend.example.com', port=443): Max retries exceeded with url: /receive-data (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7fa95f4b90>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+2025-02-28 00:00:04,199 - WARNING - Retrying after 4 seconds...
+2025-02-28 00:00:08,374 - ERROR - Error sending data: HTTPSConnectionPool(host='backend.example.com', port=443): Max retries exceeded with url: /receive-data (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7fa95f5110>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+2025-02-28 00:00:08,375 - WARNING - Retrying after 8 seconds...
+2025-02-28 00:00:16,375 - ERROR - All retry attempts failed.
+2025-02-28 11:03:42,789 - INFO - Scheduled jobs registered successfully.
+2025-02-28 11:03:43,239 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-02-28 11:03:43,240 - INFO - [33mPress CTRL+C to quit[0m
+2025-02-28 12:00:01,447 - ERROR - Error sending data: HTTPSConnectionPool(host='backend.example.com', port=443): Max retries exceeded with url: /receive-data (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f89512850>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+2025-02-28 12:00:01,457 - WARNING - Retrying after 2 seconds...
+2025-02-28 12:00:03,556 - ERROR - Error sending data: HTTPSConnectionPool(host='backend.example.com', port=443): Max retries exceeded with url: /receive-data (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f89512f90>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+2025-02-28 12:00:03,556 - WARNING - Retrying after 4 seconds...
+2025-02-28 12:00:07,697 - ERROR - Error sending data: HTTPSConnectionPool(host='backend.example.com', port=443): Max retries exceeded with url: /receive-data (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f89513510>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+2025-02-28 12:00:07,697 - WARNING - Retrying after 8 seconds...
+2025-02-28 12:00:15,698 - ERROR - All retry attempts failed.
+2025-02-28 17:57:03,888 - INFO - Scheduled jobs registered successfully.
+2025-02-28 17:57:03,904 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-02-28 17:57:03,905 - INFO - [33mPress CTRL+C to quit[0m
+2025-02-28 22:43:35,633 - INFO - Scheduled jobs registered successfully.
+2025-02-28 22:43:35,671 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-02-28 22:43:35,671 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-01 00:00:11,506 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Read timed out. (read timeout=10)
+2025-03-01 00:00:11,508 - WARNING - Retrying after 2 seconds...
+2025-03-01 00:00:14,479 - ERROR - Failed to send data (405): 
+2025-03-01 00:00:14,482 - WARNING - Retrying after 4 seconds...
+2025-03-01 00:00:29,107 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Read timed out. (read timeout=10)
+2025-03-01 00:00:29,107 - WARNING - Retrying after 8 seconds...
+2025-03-01 00:00:37,108 - ERROR - All retry attempts failed.
+2025-03-01 12:00:04,280 - ERROR - Failed to send data (405): 
+2025-03-01 12:00:04,311 - WARNING - Retrying after 2 seconds...
+2025-03-01 12:00:07,201 - ERROR - Failed to send data (405): 
+2025-03-01 12:00:07,203 - WARNING - Retrying after 4 seconds...
+2025-03-01 12:00:12,227 - ERROR - Failed to send data (405): 
+2025-03-01 12:00:12,230 - WARNING - Retrying after 8 seconds...
+2025-03-01 12:00:20,230 - ERROR - All retry attempts failed.
+2025-03-01 16:23:38,680 - INFO - Scheduled jobs registered successfully.
+2025-03-01 16:24:34,240 - INFO - Scheduled jobs registered successfully.
+2025-03-01 16:24:34,255 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-01 16:24:34,256 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-01 16:27:59,296 - INFO - Scheduled jobs registered successfully.
+2025-03-01 16:27:59,310 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-01 16:27:59,310 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-01 16:30:08,432 - INFO - Scheduled jobs registered successfully.
+2025-03-01 16:30:08,650 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-01 16:30:08,650 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-01 16:30:58,520 - INFO - Scheduled jobs registered successfully.
+2025-03-01 16:30:58,537 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-01 16:30:58,538 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-01 16:42:19,848 - INFO - Scheduled jobs registered successfully.
+2025-03-01 16:42:19,908 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-01 16:42:19,912 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-01 16:55:44,694 - INFO - Scheduled jobs registered successfully.
+2025-03-01 16:55:44,707 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-01 16:55:44,708 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-01 16:56:39,586 - INFO - Scheduled jobs registered successfully.
+2025-03-01 16:56:39,600 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-01 16:56:39,601 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-01 17:46:10,240 - INFO - Scheduled jobs registered successfully.
+2025-03-01 17:46:10,254 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-01 17:46:10,255 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-01 17:46:30,415 - INFO - Scheduled jobs registered successfully.
+2025-03-01 17:46:30,428 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-01 17:46:30,429 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-01 18:09:40,850 - INFO - Scheduled jobs registered successfully.
+2025-03-01 18:14:06,700 - INFO - Scheduled jobs registered successfully.
+2025-03-01 18:16:22,139 - INFO - Scheduled jobs registered successfully.
+2025-03-01 18:16:49,734 - INFO - Scheduled jobs registered successfully.
+2025-03-01 18:16:49,748 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-01 18:16:49,748 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-01 18:35:30,866 - INFO - Scheduled jobs registered successfully.
+2025-03-01 18:35:30,880 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-01 18:35:30,880 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-02 00:00:01,770 - ERROR - Failed to send data (405): 
+2025-03-02 00:00:01,774 - WARNING - Retrying after 2 seconds...
+2025-03-02 00:00:04,965 - ERROR - Failed to send data (405): 
+2025-03-02 00:00:04,967 - WARNING - Retrying after 4 seconds...
+2025-03-02 00:00:09,945 - ERROR - Failed to send data (405): 
+2025-03-02 00:00:09,948 - WARNING - Retrying after 8 seconds...
+2025-03-02 00:00:17,949 - ERROR - All retry attempts failed.
+2025-03-02 09:51:50,946 - INFO - Scheduled jobs registered successfully.
+2025-03-02 09:51:50,963 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-02 09:51:50,964 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-02 12:00:01,906 - ERROR - Failed to send data (405): 
+2025-03-02 12:00:01,911 - WARNING - Retrying after 2 seconds...
+2025-03-02 12:00:04,886 - ERROR - Failed to send data (405): 
+2025-03-02 12:00:04,889 - WARNING - Retrying after 4 seconds...
+2025-03-02 12:00:10,574 - ERROR - Failed to send data (405): 
+2025-03-02 12:00:10,577 - WARNING - Retrying after 8 seconds...
+2025-03-02 12:00:18,577 - ERROR - All retry attempts failed.
+2025-03-03 11:42:07,173 - INFO - Scheduled jobs registered successfully.
+2025-03-03 11:42:07,287 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-03 11:42:07,288 - INFO - [33mPress CTRL+C to quit[0m
