@@ -30,30 +30,31 @@ stages:
               echo "$(SSL_PRIVATE_KEY)" > ./nginx/certs/privkey.pem
 
               build_and_push() {
-                IMAGE_NAME=$1
-                CONTEXT_PATH=$2
+                REPO_NAME=$1
+                IMAGE_NAME=$2
+                CONTEXT_PATH=$3
 
                 echo "Building Image: $IMAGE_NAME"
-                docker build -t $IMAGE_NAME-$COMMIT_ID:latest $CONTEXT_PATH
+                docker build -t $REPO_NAME:$IMAGE_NAME-latest-$COMMIT_ID $CONTEXT_PATH
 
-                echo "Pushing Image: $IMAGE_NAME-$COMMIT_ID:latest"
-                docker push $IMAGE_NAME-$COMMIT_ID:latest
+                echo "Pushing Image: $REPO_NAME:$IMAGE_NAME-latest-$COMMIT_ID"
+                docker push $REPO_NAME:$IMAGE_NAME-latest-$COMMIT_ID
                 if [ $? -eq 0 ]; then
-                  echo "✅ Successfully pushed $IMAGE_NAME-$COMMIT_ID:latest"
+                  echo "✅ Successfully pushed $REPO_NAME:$IMAGE_NAME-latest-$COMMIT_ID"
                 else
-                  echo "❌ Failed to push $IMAGE_NAME-$COMMIT_ID:latest"
+                  echo "❌ Failed to push $REPO_NAME:$IMAGE_NAME-latest-$COMMIT_ID"
                   exit 1  # Fail the pipeline if push fails
                 fi
               }
 
               # Build & Push Backend
-              build_and_push "bhandarenakul/sproutly-test-backend" "./backend"
+              build_and_push "bhandarenakul/sproutly-test" "backend" "./backend"
 
               # Build & Push Frontend
-              build_and_push "bhandarenakul/sproutly-test-frontend" "./frontend"
+              build_and_push "bhandarenakul/sproutly-test" "frontend" "./frontend"
 
               # Build & Push Nginx
-              build_and_push "bhandarenakul/sproutly-test-nginx" "./nginx"
+              build_and_push "bhandarenakul/sproutly-test" "nginx" "./nginx"
 
               echo "✅ All images built and pushed successfully!"
             displayName: "Build & Push Docker Images"
@@ -88,7 +89,7 @@ stages:
                     # Update image references in docker-compose.yml
                     sed -i "s|bhandarenakul/sproutly-test:backend-latest-.*|bhandarenakul/sproutly-test:backend-latest-${COMMIT_ID}|g" docker-compose.yml
                     sed -i "s|bhandarenakul/sproutly-test:frontend-latest-.*|bhandarenakul/sproutly-test:frontend-latest-${COMMIT_ID}|g" docker-compose.yml
-                    sed -i "s|bhandarenakul/nginx:latest-.*|bhandarenakul/nginx:latest-${COMMIT_ID}|g" docker-compose.yml
+                    sed -i "s|bhandarenakul/sproutly-test:nginx-latest-.*|bhandarenakul/sproutly-test:nginx-latest-${COMMIT_ID}|g" docker-compose.yml
                    
                     # Run Docker Compose
                     sudo docker-compose -f docker-compose.yml up -d
