@@ -20,14 +20,30 @@ stages:
         steps:
           - checkout: self
 
+          - task: DownloadSecureFile@1
+            name: fullchainPem
+            inputs:
+              secureFile: 'fullchain.pem'
+
+          - task: DownloadSecureFile@1
+            name: privkeyPem
+            inputs:
+              secureFile: 'privkey.pem'
+
           - script: |
               export COMMIT_ID=$(Build.SourceVersion)
               docker login -u bhandarenakul -p $(DOCKER_PASSWORD)
-              
+
               # Copy SSL certificates to Nginx folder
               mkdir -p ./nginx/certs
-              echo "$(SSL_CERTIFICATE)" > ./nginx/certs/fullchain.pem
-              echo "$(SSL_PRIVATE_KEY)" > ./nginx/certs/privkey.pem
+              cp $(fullchainPem.secureFilePath) ./nginx/certs/fullchain.pem
+              cp $(privkeyPem.secureFilePath) ./nginx/certs/privkey.pem
+
+              # Validate certificate content
+              if ! openssl x509 -in ./nginx/certs/fullchain.pem -text -noout; then
+                echo "❌ Invalid SSL certificate"
+                exit 1
+              fi
 
               build_and_push() {
                 REPO_NAME=$1
@@ -43,7 +59,7 @@ stages:
                   echo "✅ Successfully pushed $REPO_NAME:$IMAGE_NAME-latest-$COMMIT_ID"
                 else
                   echo "❌ Failed to push $REPO_NAME:$IMAGE_NAME-latest-$COMMIT_ID"
-                  exit 1  # Fail the pipeline if push fails
+                  exit 1
                 fi
               }
 
@@ -78,19 +94,28 @@ stages:
                     export COMMIT_ID=$(Build.SourceVersion)
                     sudo docker login -u bhandarenakul -p $(DOCKER_PASSWORD)
 
-                    # Install docker-compose if not available
+                    # Install docker-compose
                     sudo apt-get update
-                    sudo apt-get install -y docker-compose
+                    sudo apt-get install -y python3-pip
+                    sudo pip3 install docker-compose
 
                     # Stop and remove running containers if they exist
-                    sudo docker stop sproutly-api sproutly-frontend nginx || true
-                    sudo docker rm sproutly-api sproutly-frontend nginx || true
+                    CONTAINERS=("sproutly-api" "sproutly-frontend" "nginx")
+                    for CONTAINER in "${CONTAINERS[@]}"; do
+                      if sudo docker ps -a --filter "name=$CONTAINER" | grep -q "$CONTAINER"; then
+                        sudo docker stop $CONTAINER || true
+                        sudo docker rm $CONTAINER || true
+                      fi
+                    done
 
                     # Update image references in docker-compose.yml
                     sed -i "s|bhandarenakul/sproutly-test:backend-latest-.*|bhandarenakul/sproutly-test:backend-latest-${COMMIT_ID}|g" docker-compose.yml
                     sed -i "s|bhandarenakul/sproutly-test:frontend-latest-.*|bhandarenakul/sproutly-test:frontend-latest-${COMMIT_ID}|g" docker-compose.yml
                     sed -i "s|bhandarenakul/sproutly-test:nginx-latest-.*|bhandarenakul/sproutly-test:nginx-latest-${COMMIT_ID}|g" docker-compose.yml
-                   
+
+                    # Debugging: Print updated docker-compose.yml
+                    cat docker-compose.yml
+
                     # Run Docker Compose
                     sudo docker-compose -f docker-compose.yml up -d
                   displayName: "Deploy Application"
