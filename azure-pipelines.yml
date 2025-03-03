@@ -34,10 +34,13 @@ stages:
               export COMMIT_ID=$(Build.SourceVersion)
               docker login -u bhandarenakul -p $(DOCKER_PASSWORD)
 
-              # Copy SSL certificates to Nginx folder
+              # Copy SSL certificates to Nginx folder with proper permissions
               mkdir -p ./nginx/certs
               cp $(fullchainPem.secureFilePath) ./nginx/certs/fullchain.pem
               cp $(privkeyPem.secureFilePath) ./nginx/certs/privkey.pem
+              chmod 644 ./nginx/certs/fullchain.pem
+              chmod 600 ./nginx/certs/privkey.pem
+              chown azureuser:azureuser ./nginx/certs/*
 
               # Validate certificate content
               if ! openssl x509 -in ./nginx/certs/fullchain.pem -text -noout; then
@@ -90,6 +93,8 @@ stages:
             deploy:
               steps:
                 - checkout: self
+                  clean: false  # Disable automatic cleanup
+
                 - script: |
                     export COMMIT_ID=$(Build.SourceVersion)
                     sudo docker login -u bhandarenakul -p $(DOCKER_PASSWORD)
