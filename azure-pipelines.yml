@@ -34,48 +34,21 @@ stages:
               export COMMIT_ID=$(Build.SourceVersion)
               docker login -u bhandarenakul -p $(DOCKER_PASSWORD)
 
-              # Copy SSL certificates to Nginx folder with proper permissions
+              # Copy SSL certificates to Nginx folder
               mkdir -p ./nginx/certs
               cp $(fullchainPem.secureFilePath) ./nginx/certs/fullchain.pem
               cp $(privkeyPem.secureFilePath) ./nginx/certs/privkey.pem
               chmod 644 ./nginx/certs/fullchain.pem
               chmod 600 ./nginx/certs/privkey.pem
-              chown azureuser:azureuser ./nginx/certs/*
 
-              # Validate certificate content
-              if ! openssl x509 -in ./nginx/certs/fullchain.pem -text -noout; then
-                echo "❌ Invalid SSL certificate"
-                exit 1
-              fi
+              # Build & Push Images
+              docker build -t bhandarenakul/sproutly-test:backend-latest-$COMMIT_ID ./backend
+              docker build -t bhandarenakul/sproutly-test:frontend-latest-$COMMIT_ID ./frontend
+              docker build -t bhandarenakul/sproutly-test:nginx-latest-$COMMIT_ID ./nginx
 
-              build_and_push() {
-                REPO_NAME=$1
-                IMAGE_NAME=$2
-                CONTEXT_PATH=$3
-
-                echo "Building Image: $IMAGE_NAME"
-                docker build -t $REPO_NAME:$IMAGE_NAME-latest-$COMMIT_ID $CONTEXT_PATH
-
-                echo "Pushing Image: $REPO_NAME:$IMAGE_NAME-latest-$COMMIT_ID"
-                docker push $REPO_NAME:$IMAGE_NAME-latest-$COMMIT_ID
-                if [ $? -eq 0 ]; then
-                  echo "✅ Successfully pushed $REPO_NAME:$IMAGE_NAME-latest-$COMMIT_ID"
-                else
-                  echo "❌ Failed to push $REPO_NAME:$IMAGE_NAME-latest-$COMMIT_ID"
-                  exit 1
-                fi
-              }
-
-              # Build & Push Backend
-              build_and_push "bhandarenakul/sproutly-test" "backend" "./backend"
-
-              # Build & Push Frontend
-              build_and_push "bhandarenakul/sproutly-test" "frontend" "./frontend"
-
-              # Build & Push Nginx
-              build_and_push "bhandarenakul/sproutly-test" "nginx" "./nginx"
-
-              echo "✅ All images built and pushed successfully!"
+              docker push bhandarenakul/sproutly-test:backend-latest-$COMMIT_ID
+              docker push bhandarenakul/sproutly-test:frontend-latest-$COMMIT_ID
+              docker push bhandarenakul/sproutly-test:nginx-latest-$COMMIT_ID
             displayName: "Build & Push Docker Images"
 
   - stage: Deploy
@@ -93,34 +66,40 @@ stages:
             deploy:
               steps:
                 - checkout: self
-                  clean: false  # Disable automatic cleanup
+                  clean: false  # Keep repo files
+
+                - task: DownloadSecureFile@1
+                  name: fullchainPem
+                  inputs:
+                    secureFile: 'fullchain.pem'
+
+                - task: DownloadSecureFile@1
+                  name: privkeyPem
+                  inputs:
+                    secureFile: 'privkey.pem'
 
                 - script: |
                     export COMMIT_ID=$(Build.SourceVersion)
-                    sudo docker login -u bhandarenakul -p $(DOCKER_PASSWORD)
 
-                    # Install docker-compose
-                    sudo apt-get update
-                    sudo apt-get install -y python3-pip
-                    sudo pip3 install docker-compose
+                    sudo mkdir -p /etc/ssl/sproutly
+                    sudo chown azureuser:azureuser /etc/ssl/sproutly
+                    sudo chmod 755 /etc/ssl/sproutly
 
-                    # Stop and remove running containers if they exist
-                    CONTAINERS=("sproutly-api" "sproutly-frontend" "nginx")
-                    for CONTAINER in "${CONTAINERS[@]}"; do
-                      if sudo docker ps -a --filter "name=$CONTAINER" | grep -q "$CONTAINER"; then
-                        sudo docker stop $CONTAINER || true
-                        sudo docker rm $CONTAINER || true
-                      fi
-                    done
+                    # Move SSL files to /etc/ssl/sproutly
+                    sudo cp $(fullchainPem.secureFilePath) /etc/ssl/sproutly/fullchain.pem
+                    sudo cp $(privkeyPem.secureFilePath) /etc/ssl/sproutly/privkey.pem
+                    sudo chmod 644 /etc/ssl/sproutly/fullchain.pem
+                    sudo chmod 600 /etc/ssl/sproutly/privkey.pem
 
-                    # Update image references in docker-compose.yml
+                    # Debug SSL Files
+                    sudo ls -lah /etc/ssl/sproutly
+
+                    # Update image tags in docker-compose
                     sed -i "s|bhandarenakul/sproutly-test:backend-latest-.*|bhandarenakul/sproutly-test:backend-latest-${COMMIT_ID}|g" docker-compose.yml
                     sed -i "s|bhandarenakul/sproutly-test:frontend-latest-.*|bhandarenakul/sproutly-test:frontend-latest-${COMMIT_ID}|g" docker-compose.yml
                     sed -i "s|bhandarenakul/sproutly-test:nginx-latest-.*|bhandarenakul/sproutly-test:nginx-latest-${COMMIT_ID}|g" docker-compose.yml
 
-                    # Debugging: Print updated docker-compose.yml
-                    cat docker-compose.yml
-
-                    # Run Docker Compose
-                    sudo docker-compose -f docker-compose.yml up -d
+                    # Restart Containers
+                    sudo docker-compose down || true
+                    sudo docker-compose up -d --force-recreate
                   displayName: "Deploy Application"
