@@ -29,13 +29,33 @@ stages:
               echo "$(SSL_CERTIFICATE)" > ./nginx/certs/fullchain.pem
               echo "$(SSL_PRIVATE_KEY)" > ./nginx/certs/privkey.pem
 
-              docker build -t bhandarenakul/sproutly-test:backend-latest-${COMMIT_ID} ./backend
-              docker build -t bhandarenakul/sproutly-test:frontend-latest-${COMMIT_ID} ./frontend
-              docker build -t bhandarenakul/nginx:latest-${COMMIT_ID} ./nginx
-              
-              docker push bhandarenakul/sproutly-test:backend-latest-${COMMIT_ID}
-              docker push bhandarenakul/sproutly-test:frontend-latest-${COMMIT_ID}
-              docker push bhandarenakul/nginx:latest-${COMMIT_ID}
+              build_and_push() {
+                IMAGE_NAME=$1
+                CONTEXT_PATH=$2
+
+                echo "Building Image: $IMAGE_NAME"
+                docker build -t $IMAGE_NAME-$COMMIT_ID:latest $CONTEXT_PATH
+
+                echo "Pushing Image: $IMAGE_NAME-$COMMIT_ID:latest"
+                docker push $IMAGE_NAME-$COMMIT_ID:latest
+                if [ $? -eq 0 ]; then
+                  echo "✅ Successfully pushed $IMAGE_NAME-$COMMIT_ID:latest"
+                else
+                  echo "❌ Failed to push $IMAGE_NAME-$COMMIT_ID:latest"
+                  exit 1  # Fail the pipeline if push fails
+                fi
+              }
+
+              # Build & Push Backend
+              build_and_push "bhandarenakul/sproutly-test-backend" "./backend"
+
+              # Build & Push Frontend
+              build_and_push "bhandarenakul/sproutly-test-frontend" "./frontend"
+
+              # Build & Push Nginx
+              build_and_push "bhandarenakul/sproutly-test-nginx" "./nginx"
+
+              echo "✅ All images built and pushed successfully!"
             displayName: "Build & Push Docker Images"
 
   - stage: Deploy

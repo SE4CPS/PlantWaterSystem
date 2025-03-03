@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # Backend Service
   api:
-    image: bhandarenakul/sproutly-test:backend-latest-${Build.SourceVersion}  # Pull image from Docker Hub
+    image: bhandarenakul/sproutly-test-backend-${Build.SourceVersion}:latest # Pull image from Docker Hub
     container_name: sproutly-api
     networks:
       - sproutly-network
@@ -15,7 +15,7 @@ services:
 
   # Frontend Service
   frontend:
-    image: bhandarenakul/sproutly-test:frontend-latest-${Build.SourceVersion}  # Pull image from Docker Hub
+    image: bhandarenakul/sproutly-test-frontend-${Build.SourceVersion}:latest  # Pull image from Docker Hub
     container_name: sproutly-frontend
     ports:
       - "3000:3000"
@@ -28,7 +28,7 @@ services:
 
   # Nginx Reverse Proxy
   nginx:
-    image: bhandarenakul/nginx:latest-${Build.SourceVersion}  # Pull image from Docker Hub
+    image: bhandarenakul/sproutly-test-nginx-${Build.SourceVersion}:latest # Pull image from Docker Hub
     container_name: nginx
     ports:
       - "80:80"
