@@ -24,7 +24,7 @@ services:
     depends_on:
       - api
     environment:
-      - REACT_APP_API_URL=http://sproutly-api:8000  # Backend URL for frontend
+      - BACKEND_API_URL=http://sproutly-api:8000  # Backend URL for frontend
 
   # Nginx Reverse Proxy
   nginx:
