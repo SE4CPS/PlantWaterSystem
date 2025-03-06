@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-## **Bug Description:**
+## **Bug Descriptions:**
 [Describe the bug in detail, including what is happening and what is expected.]
 
 ---
