@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
 from schemas.plant_schema import PlantSchema
-from schemas.user_schema import UserSchema
 from services.plant_service import get_service, PlantService
 from fastapi import  Depends
 from fastapi.responses import JSONResponse
