@@ -2,55 +2,39 @@ from config.database import get_connection, release_connection
 from schemas.sensor_schema import MoistureDataSchema
 import psycopg2 
 from psycopg2 import  DatabaseError, IntegrityError
+from typing import List
+
 
 class SensorDAL:
     def __init__(self):
         self.conn = get_connection()
         self.cursor = self.conn.cursor()
 
-    def receive_moisture_data(self, sensor: MoistureDataSchema):
+    def receive_moisture_data(self, sensors: List[MoistureDataSchema]):
         try:
-            # Validate input data
-            if not sensor.sensor_id or not sensor.timestamp:
-                raise ValueError("Invalid input data: Missing sensor_id or timestamp")
-
-            if not isinstance(sensor.moisture_level, (int, float)) or not (0 <= sensor.moisture_level <= 100):
-                raise ValueError("Invalid input data: Moisture level must be a number between 0 and 100")
-
-            if sensor.digital_status not in ["Wet", "Dry"]:
-                raise ValueError("Invalid input data: Digital status must be 'Wet' or 'Dry'")
-
-            # Execute the query to insert the plant data
-            self.cursor.execute("""
-                INSERT INTO sensor (sensor_id, id, timestamp, moisture_level, digital_status)
-                VALUES (%s, %s, %s, %s, %s) RETURNING sensor_id, id;
-            """, (sensor.sensor_id, sensor.id, sensor.timestamp, sensor.moisture_level, sensor.digital_status))
-
-            # Commit the transaction
+            # Bulk insert query
+            insert_query = """
+                INSERT INTO sensors (
+                    id, timestamp, device_id, sensor_id, adc_value, moisture_level, digital_status,
+                    weather_temp, weather_humidity, weather_sunlight, weather_wind_speed, location, weather_fetched
+                ) VALUES %s RETURNING id;
+            """
+            # Convert list of objects to list of tuples
+            values = [
+                (
+                    sensor.id, sensor.timestamp, sensor.device_id, sensor.sensor_id, sensor.adc_value,
+                    sensor.moisture_level, sensor.digital_status, sensor.weather_temp, sensor.weather_humidity,
+                    sensor.weather_sunlight, sensor.weather_wind_speed, sensor.location, sensor.weather_fetched
+                )
+                for sensor in sensors
+            ]
+            # Execute bulk insert
+            psycopg2.extras.execute_values(self.cursor, insert_query, values)
             self.conn.commit()
 
             # Get the returned sensor_id
-            returned_sensor_id, returned_id = self.cursor.fetchone()
-
-            # Return the response in JSON format
-            return {
-                "status": "success",
-                "SensorID": sensor.sensor_id,
-                "RowID": sensor.id,
-                "TimeStamp": sensor.timestamp,
-                "Moisture": sensor.moisture_level,
-                "PlantStatus": sensor.digital_status
-            }
-
-        # except IntegrityError as e:
-        #     # Handle duplicate key error (unique constraint violation)
-        #     self.conn.rollback()  # Rollback transaction on error
-        #     error_message = f"Duplicate entry for PlantID: {plant.PlantID}. A plant with this ID already exists."
-        #     print(f"IntegrityError: {e}")
-        #     return {
-        #         "status": "error",
-        #         "error": error_message
-        #     }
+            inserted_ids = [row[0] for row in self.cursor.fetchall()]
+            return {"status": "success", "inserted_ids": inserted_ids}
 
         except (psycopg2.Error, DatabaseError) as db_error:
             # Handle other database errors
@@ -58,7 +42,7 @@ class SensorDAL:
             error_message = f"Database error: {db_error}"
             print(f"Database error: {db_error}")
             return {
-                "status": "error",
+                "status": "Database error",
                 "error": error_message
             }
 
@@ -67,7 +51,7 @@ class SensorDAL:
             error_message = f"Invalid input: {val_error}"
             print(f"Input error: {val_error}")
             return {
-                "status": "error",
+                "status": "Value error",
                 "error": error_message
             }
 
