@@ -3,3 +3,7 @@ uvicorn
 sqlalchemy
 pydantic
 psycopg2-binary
+pyjwt
+passlib
+python-jose[cryptography]
+python-multipart

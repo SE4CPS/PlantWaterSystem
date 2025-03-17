@@ -8,18 +8,24 @@ class UserDAL:
         self.conn = get_connection()
         self.cursor = self.conn.cursor()
 
-    def verify_user(self, user: UserSchema):
+    def get_user(self, username: str):
         try:
-            if not user.username or not user.password:
-                raise ValueError("Username and password must not be empty.")
+            if not username:
+                raise ValueError("Username must not be empty.")
 
             self.cursor.execute("""
-                SELECT EXISTS (
-                    SELECT 1 FROM users WHERE username = %s AND password = %s
-                );
-            """, (user.username, user.password))
+                SELECT username, password FROM users WHERE username = %s
+            """, (username,))
 
-            return self.cursor.fetchone()[0]  # Returns True or False
+            user = self.cursor.fetchone()
+
+            if user is None:
+                return None
+
+            return {
+                "username": user[0],
+                "password": user[1],
+            }
 
         except (psycopg2.Error, DatabaseError) as db_error:
             self.conn.rollback()
