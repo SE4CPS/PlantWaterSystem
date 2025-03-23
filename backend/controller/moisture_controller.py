@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from schemas.sensor_schema import MoistureDataListSchema
 from schemas.user_schema import UserSchema
 from services.sensor_service import get_service, SensorService
@@ -45,4 +45,21 @@ def add_moisture_entry(sensors: MoistureDataListSchema, service: SensorService =
 
     except Exception as e:
         # If an unexpected error occurs during processing, return a 500 status code
+        return JSONResponse(status_code=500, content={"status": "error", "message": f"Unexpected error: {str(e)}"})
+
+
+@add_moisture_data.get("/api/send-current", response_model=dict)
+def get_current_moisture_data(device_id: str, service: SensorService = Depends(get_service)):
+    try:
+        # Fetch the most current moisture data for the given device_id
+        response = service.get_current_moisture_data(device_id)
+
+        # Check if the response contains an error
+        if "error" in response:
+            return JSONResponse(status_code=500, content={"status": "error", "error": response["error"]})
+
+        # Return the successful response
+        return JSONResponse(status_code=200, content=response)
+
+    except Exception as e:
         return JSONResponse(status_code=500, content={"status": "error", "message": f"Unexpected error: {str(e)}"})

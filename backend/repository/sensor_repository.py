@@ -8,3 +8,6 @@ class SensorRepository:
 
     def add_moisture_data(self, sensors: List[MoistureDataSchema]):
         return self.dal.receive_moisture_data(sensors)
+
+    def get_current_moisture_data(self, device_id: str):
+        return self.dal.fetch_current_moisture_data(device_id)
