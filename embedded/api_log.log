@@ -254,3 +254,461 @@
  * Running on http://127.0.0.1:5001
  * Running on http://10.0.0.180:5001
 2025-03-03 11:42:07,288 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-03 11:50:59,712 - INFO - Scheduled jobs registered successfully.
+2025-03-03 11:50:59,743 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-03 11:50:59,744 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-03 12:00:02,316 - ERROR - Failed to send data (405): 
+2025-03-03 12:00:02,321 - WARNING - Retrying after 2 seconds...
+2025-03-03 12:00:05,312 - ERROR - Failed to send data (405): 
+2025-03-03 12:00:05,315 - WARNING - Retrying after 4 seconds...
+2025-03-03 12:00:10,445 - ERROR - Failed to send data (405): 
+2025-03-03 12:00:10,448 - WARNING - Retrying after 8 seconds...
+2025-03-03 12:00:18,448 - ERROR - All retry attempts failed.
+2025-03-04 00:00:05,167 - ERROR - Failed to send data (405): 
+2025-03-04 00:00:05,202 - WARNING - Retrying after 2 seconds...
+2025-03-04 00:00:08,132 - ERROR - Failed to send data (405): 
+2025-03-04 00:00:08,136 - WARNING - Retrying after 4 seconds...
+2025-03-04 00:00:13,168 - ERROR - Failed to send data (405): 
+2025-03-04 00:00:13,169 - WARNING - Retrying after 8 seconds...
+2025-03-04 00:00:21,170 - ERROR - All retry attempts failed.
+2025-03-04 12:00:03,459 - ERROR - Failed to send data (405): 
+2025-03-04 12:00:03,491 - WARNING - Retrying after 2 seconds...
+2025-03-04 12:00:06,419 - ERROR - Failed to send data (405): 
+2025-03-04 12:00:06,420 - WARNING - Retrying after 4 seconds...
+2025-03-04 12:00:11,613 - ERROR - Failed to send data (405): 
+2025-03-04 12:00:11,616 - WARNING - Retrying after 8 seconds...
+2025-03-04 12:00:19,616 - ERROR - All retry attempts failed.
+2025-03-05 00:00:04,568 - ERROR - Failed to send data (405): 
+2025-03-05 00:00:04,615 - WARNING - Retrying after 2 seconds...
+2025-03-05 00:00:07,683 - ERROR - Failed to send data (405): 
+2025-03-05 00:00:07,685 - WARNING - Retrying after 4 seconds...
+2025-03-05 00:00:13,456 - ERROR - Failed to send data (405): 
+2025-03-05 00:00:13,458 - WARNING - Retrying after 8 seconds...
+2025-03-05 00:00:21,458 - ERROR - All retry attempts failed.
+2025-03-05 12:00:03,808 - ERROR - Failed to send data (405): 
+2025-03-05 12:00:03,857 - WARNING - Retrying after 2 seconds...
+2025-03-05 12:00:06,970 - ERROR - Failed to send data (405): 
+2025-03-05 12:00:06,974 - WARNING - Retrying after 4 seconds...
+2025-03-05 12:00:11,983 - ERROR - Failed to send data (405): 
+2025-03-05 12:00:11,987 - WARNING - Retrying after 8 seconds...
+2025-03-05 12:00:19,988 - ERROR - All retry attempts failed.
+2025-03-06 00:00:05,697 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-06 00:00:05,750 - WARNING - Retrying after 2 seconds...
+2025-03-06 00:00:08,910 - ERROR - Failed to send data (405): 
+2025-03-06 00:00:08,914 - WARNING - Retrying after 4 seconds...
+2025-03-06 00:00:13,982 - ERROR - Failed to send data (405): 
+2025-03-06 00:00:13,985 - WARNING - Retrying after 8 seconds...
+2025-03-06 00:00:21,987 - ERROR - All retry attempts failed.
+2025-03-06 12:00:03,212 - ERROR - Failed to send data (405): 
+2025-03-06 12:00:03,242 - WARNING - Retrying after 2 seconds...
+2025-03-06 12:00:06,102 - ERROR - Failed to send data (405): 
+2025-03-06 12:00:06,103 - WARNING - Retrying after 4 seconds...
+2025-03-06 12:00:11,116 - ERROR - Failed to send data (405): 
+2025-03-06 12:00:11,120 - WARNING - Retrying after 8 seconds...
+2025-03-06 12:00:19,121 - ERROR - All retry attempts failed.
+2025-03-07 00:00:02,048 - ERROR - Failed to send data (405): 
+2025-03-07 00:00:02,056 - WARNING - Retrying after 2 seconds...
+2025-03-07 00:00:05,088 - ERROR - Failed to send data (405): 
+2025-03-07 00:00:05,091 - WARNING - Retrying after 4 seconds...
+2025-03-07 00:00:15,068 - ERROR - Failed to send data (405): 
+2025-03-07 00:00:15,071 - WARNING - Retrying after 8 seconds...
+2025-03-07 00:00:23,072 - ERROR - All retry attempts failed.
+2025-03-07 07:54:17,316 - INFO - Scheduled jobs registered successfully.
+2025-03-07 07:54:17,331 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-07 07:54:17,331 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-07 12:00:02,032 - ERROR - Failed to send data (405): 
+2025-03-07 12:00:02,042 - WARNING - Retrying after 2 seconds...
+2025-03-07 12:00:04,962 - ERROR - Failed to send data (405): 
+2025-03-07 12:00:04,966 - WARNING - Retrying after 4 seconds...
+2025-03-07 12:00:10,294 - ERROR - Failed to send data (405): 
+2025-03-07 12:00:10,297 - WARNING - Retrying after 8 seconds...
+2025-03-07 12:00:18,297 - ERROR - All retry attempts failed.
+2025-03-08 00:00:04,346 - ERROR - Failed to send data (405): 
+2025-03-08 00:00:04,441 - WARNING - Retrying after 2 seconds...
+2025-03-08 00:00:08,381 - ERROR - Failed to send data (405): 
+2025-03-08 00:00:08,382 - WARNING - Retrying after 4 seconds...
+2025-03-08 00:00:13,592 - ERROR - Failed to send data (405): 
+2025-03-08 00:00:13,594 - WARNING - Retrying after 8 seconds...
+2025-03-08 00:00:21,594 - ERROR - All retry attempts failed.
+2025-03-08 12:00:02,978 - ERROR - Failed to send data (405): 
+2025-03-08 12:00:03,014 - WARNING - Retrying after 2 seconds...
+2025-03-08 12:00:06,254 - ERROR - Failed to send data (405): 
+2025-03-08 12:00:06,257 - WARNING - Retrying after 4 seconds...
+2025-03-08 12:00:11,290 - ERROR - Failed to send data (405): 
+2025-03-08 12:00:11,291 - WARNING - Retrying after 8 seconds...
+2025-03-08 12:00:19,293 - ERROR - All retry attempts failed.
+2025-03-09 00:00:04,596 - ERROR - Failed to send data (405): 
+2025-03-09 00:00:04,740 - WARNING - Retrying after 2 seconds...
+2025-03-09 00:00:07,791 - ERROR - Failed to send data (405): 
+2025-03-09 00:00:07,794 - WARNING - Retrying after 4 seconds...
+2025-03-09 00:00:13,129 - ERROR - Failed to send data (405): 
+2025-03-09 00:00:13,130 - WARNING - Retrying after 8 seconds...
+2025-03-09 00:00:21,130 - ERROR - All retry attempts failed.
+2025-03-09 12:00:04,022 - ERROR - Failed to send data (405): 
+2025-03-09 12:00:04,055 - WARNING - Retrying after 2 seconds...
+2025-03-09 12:00:07,149 - ERROR - Failed to send data (405): 
+2025-03-09 12:00:07,153 - WARNING - Retrying after 4 seconds...
+2025-03-09 12:00:12,169 - ERROR - Failed to send data (405): 
+2025-03-09 12:00:12,172 - WARNING - Retrying after 8 seconds...
+2025-03-09 12:00:20,172 - ERROR - All retry attempts failed.
+2025-03-10 00:00:05,890 - ERROR - Failed to send data (405): 
+2025-03-10 00:00:05,938 - WARNING - Retrying after 2 seconds...
+2025-03-10 00:00:09,118 - ERROR - Failed to send data (405): 
+2025-03-10 00:00:09,121 - WARNING - Retrying after 4 seconds...
+2025-03-10 00:00:22,881 - ERROR - Failed to send data (405): 
+2025-03-10 00:00:22,882 - WARNING - Retrying after 8 seconds...
+2025-03-10 00:00:30,882 - ERROR - All retry attempts failed.
+2025-03-10 12:00:03,300 - ERROR - Failed to send data (405): 
+2025-03-10 12:00:03,328 - WARNING - Retrying after 2 seconds...
+2025-03-10 12:00:07,173 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-10 12:00:07,181 - WARNING - Retrying after 4 seconds...
+2025-03-10 12:00:12,834 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-10 12:00:12,843 - WARNING - Retrying after 8 seconds...
+2025-03-10 12:00:20,843 - ERROR - All retry attempts failed.
+2025-03-11 00:00:08,173 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-11 00:00:08,197 - WARNING - Retrying after 2 seconds...
+2025-03-11 00:00:11,424 - ERROR - Failed to send data (405): 
+2025-03-11 00:00:11,430 - WARNING - Retrying after 4 seconds...
+2025-03-11 00:00:17,128 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-11 00:00:17,138 - WARNING - Retrying after 8 seconds...
+2025-03-11 00:00:25,139 - ERROR - All retry attempts failed.
+2025-03-11 12:00:03,287 - ERROR - Failed to send data (405): 
+2025-03-11 12:00:03,321 - WARNING - Retrying after 2 seconds...
+2025-03-11 12:00:06,448 - ERROR - Failed to send data (405): 
+2025-03-11 12:00:06,451 - WARNING - Retrying after 4 seconds...
+2025-03-11 12:00:11,950 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-11 12:00:11,959 - WARNING - Retrying after 8 seconds...
+2025-03-11 12:00:19,960 - ERROR - All retry attempts failed.
+2025-03-12 00:00:05,260 - ERROR - Failed to send data (405): 
+2025-03-12 00:00:05,303 - WARNING - Retrying after 2 seconds...
+2025-03-12 00:00:08,294 - ERROR - Failed to send data (405): 
+2025-03-12 00:00:08,303 - WARNING - Retrying after 4 seconds...
+2025-03-12 00:00:13,555 - ERROR - Failed to send data (405): 
+2025-03-12 00:00:13,559 - WARNING - Retrying after 8 seconds...
+2025-03-12 00:00:21,561 - ERROR - All retry attempts failed.
+2025-03-12 12:00:04,662 - ERROR - Failed to send data (405): 
+2025-03-12 12:00:04,708 - WARNING - Retrying after 2 seconds...
+2025-03-12 12:00:08,093 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-12 12:00:08,103 - WARNING - Retrying after 4 seconds...
+2025-03-12 12:00:13,417 - ERROR - Failed to send data (405): 
+2025-03-12 12:00:13,419 - WARNING - Retrying after 8 seconds...
+2025-03-12 12:00:21,420 - ERROR - All retry attempts failed.
+2025-03-13 00:00:04,006 - ERROR - Failed to send data (405): 
+2025-03-13 00:00:04,033 - WARNING - Retrying after 2 seconds...
+2025-03-13 00:00:07,193 - ERROR - Failed to send data (405): 
+2025-03-13 00:00:07,198 - WARNING - Retrying after 4 seconds...
+2025-03-13 00:00:13,078 - ERROR - Failed to send data (405): 
+2025-03-13 00:00:13,082 - WARNING - Retrying after 8 seconds...
+2025-03-13 00:00:21,083 - ERROR - All retry attempts failed.
+2025-03-13 12:00:04,133 - ERROR - Failed to send data (405): 
+2025-03-13 12:00:04,169 - WARNING - Retrying after 2 seconds...
+2025-03-13 12:00:08,862 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-13 12:00:08,871 - WARNING - Retrying after 4 seconds...
+2025-03-13 12:00:13,946 - ERROR - Failed to send data (405): 
+2025-03-13 12:00:13,949 - WARNING - Retrying after 8 seconds...
+2025-03-13 12:00:21,950 - ERROR - All retry attempts failed.
+2025-03-14 00:00:06,526 - ERROR - Failed to send data (405): 
+2025-03-14 00:00:06,562 - WARNING - Retrying after 2 seconds...
+2025-03-14 00:00:10,597 - ERROR - Failed to send data (405): 
+2025-03-14 00:00:10,599 - WARNING - Retrying after 4 seconds...
+2025-03-14 00:00:16,081 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-14 00:00:16,091 - WARNING - Retrying after 8 seconds...
+2025-03-14 00:00:24,091 - ERROR - All retry attempts failed.
+2025-03-14 12:00:04,492 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-14 12:00:04,554 - WARNING - Retrying after 2 seconds...
+2025-03-14 12:00:08,401 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-14 12:00:08,410 - WARNING - Retrying after 4 seconds...
+2025-03-14 12:00:15,360 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-14 12:00:15,369 - WARNING - Retrying after 8 seconds...
+2025-03-14 12:00:23,370 - ERROR - All retry attempts failed.
+2025-03-15 00:00:06,024 - ERROR - Failed to send data (405): 
+2025-03-15 00:00:06,072 - WARNING - Retrying after 2 seconds...
+2025-03-15 00:00:10,082 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-15 00:00:10,092 - WARNING - Retrying after 4 seconds...
+2025-03-15 00:00:15,722 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-15 00:00:15,732 - WARNING - Retrying after 8 seconds...
+2025-03-15 00:00:23,733 - ERROR - All retry attempts failed.
+2025-03-15 12:00:04,136 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-15 12:00:04,180 - WARNING - Retrying after 2 seconds...
+2025-03-15 12:00:08,685 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-15 12:00:08,696 - WARNING - Retrying after 4 seconds...
+2025-03-15 12:00:14,063 - ERROR - Failed to send data (405): 
+2025-03-15 12:00:14,068 - WARNING - Retrying after 8 seconds...
+2025-03-15 12:00:22,069 - ERROR - All retry attempts failed.
+2025-03-15 13:05:17,569 - INFO - Scheduled jobs registered successfully.
+2025-03-15 13:05:17,636 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-15 13:05:17,636 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-16 00:00:06,087 - ERROR - Failed to send data (405): 
+2025-03-16 00:00:06,125 - WARNING - Retrying after 2 seconds...
+2025-03-16 00:00:09,529 - ERROR - Failed to send data (405): 
+2025-03-16 00:00:09,532 - WARNING - Retrying after 4 seconds...
+2025-03-16 00:00:15,467 - ERROR - Failed to send data (405): 
+2025-03-16 00:00:15,713 - WARNING - Retrying after 8 seconds...
+2025-03-16 00:00:23,713 - ERROR - All retry attempts failed.
+2025-03-16 12:00:03,713 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-16 12:00:03,756 - WARNING - Retrying after 2 seconds...
+2025-03-16 12:00:07,547 - ERROR - Failed to send data (405): 
+2025-03-16 12:00:07,551 - WARNING - Retrying after 4 seconds...
+2025-03-16 12:00:13,152 - ERROR - Failed to send data (405): 
+2025-03-16 12:00:13,154 - WARNING - Retrying after 8 seconds...
+2025-03-16 12:00:21,155 - ERROR - All retry attempts failed.
+2025-03-17 00:00:05,314 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-17 00:00:05,346 - WARNING - Retrying after 2 seconds...
+2025-03-17 00:00:09,677 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-17 00:00:09,687 - WARNING - Retrying after 4 seconds...
+2025-03-17 00:00:15,344 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-17 00:00:15,355 - WARNING - Retrying after 8 seconds...
+2025-03-17 00:00:23,356 - ERROR - All retry attempts failed.
+2025-03-17 12:00:04,780 - ERROR - Failed to send data (405): 
+2025-03-17 12:00:04,823 - WARNING - Retrying after 2 seconds...
+2025-03-17 12:00:08,657 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-17 12:00:08,668 - WARNING - Retrying after 4 seconds...
+2025-03-17 12:00:14,378 - ERROR - Failed to send data (405): 
+2025-03-17 12:00:14,382 - WARNING - Retrying after 8 seconds...
+2025-03-17 12:00:22,383 - ERROR - All retry attempts failed.
+2025-03-18 00:00:05,357 - ERROR - Failed to send data (405): 
+2025-03-18 00:00:05,447 - WARNING - Retrying after 2 seconds...
+2025-03-18 00:00:08,781 - ERROR - Failed to send data (405): 
+2025-03-18 00:00:08,785 - WARNING - Retrying after 4 seconds...
+2025-03-18 00:00:14,073 - ERROR - Failed to send data (405): 
+2025-03-18 00:00:14,078 - WARNING - Retrying after 8 seconds...
+2025-03-18 00:00:22,078 - ERROR - All retry attempts failed.
+2025-03-18 12:00:04,480 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-18 12:00:04,529 - WARNING - Retrying after 2 seconds...
+2025-03-18 12:00:08,056 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-18 12:00:08,067 - WARNING - Retrying after 4 seconds...
+2025-03-18 12:00:14,067 - ERROR - Failed to send data (405): 
+2025-03-18 12:00:14,069 - WARNING - Retrying after 8 seconds...
+2025-03-18 12:00:22,070 - ERROR - All retry attempts failed.
+2025-03-19 00:00:05,149 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-19 00:00:05,278 - WARNING - Retrying after 2 seconds...
+2025-03-19 00:00:08,586 - ERROR - Failed to send data (405): 
+2025-03-19 00:00:08,591 - WARNING - Retrying after 4 seconds...
+2025-03-19 00:00:14,122 - ERROR - Failed to send data (405): 
+2025-03-19 00:00:14,127 - WARNING - Retrying after 8 seconds...
+2025-03-19 00:00:22,128 - ERROR - All retry attempts failed.
+2025-03-19 12:00:04,279 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-19 12:00:04,323 - WARNING - Retrying after 2 seconds...
+2025-03-19 12:00:07,841 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-19 12:00:07,853 - WARNING - Retrying after 4 seconds...
+2025-03-19 12:00:13,334 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-19 12:00:13,346 - WARNING - Retrying after 8 seconds...
+2025-03-19 12:00:21,347 - ERROR - All retry attempts failed.
+2025-03-20 00:00:06,128 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-20 00:00:06,186 - WARNING - Retrying after 2 seconds...
+2025-03-20 00:00:09,870 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-20 00:00:09,882 - WARNING - Retrying after 4 seconds...
+2025-03-20 00:00:15,527 - ERROR - Failed to send data (405): 
+2025-03-20 00:00:15,532 - WARNING - Retrying after 8 seconds...
+2025-03-20 00:00:23,533 - ERROR - All retry attempts failed.
+2025-03-20 12:00:04,385 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-20 12:00:04,435 - WARNING - Retrying after 2 seconds...
+2025-03-20 12:00:08,045 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-20 12:00:08,056 - WARNING - Retrying after 4 seconds...
+2025-03-20 12:00:13,749 - ERROR - Error sending data: HTTPSConnectionPool(host='sprout-ly.com', port=443): Max retries exceeded with url: /api/sensor/data (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')))
+2025-03-20 12:00:13,761 - WARNING - Retrying after 8 seconds...
+2025-03-20 12:00:21,761 - ERROR - All retry attempts failed.
+2025-03-20 19:52:48,813 - INFO - Scheduled jobs registered successfully.
+2025-03-20 19:52:48,834 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-03-20 19:52:48,835 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-21 00:00:04,451 - ERROR - Failed to send data (413): <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx/1.27.4</center>
+</body>
+</html>
+
+2025-03-21 00:00:04,486 - WARNING - Retrying after 2 seconds...
+2025-03-21 00:00:13,946 - ERROR - Failed to send data (413): <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx/1.27.4</center>
+</body>
+</html>
+
+2025-03-21 00:00:13,949 - WARNING - Retrying after 4 seconds...
+2025-03-21 00:00:21,236 - ERROR - Failed to send data (413): <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx/1.27.4</center>
+</body>
+</html>
+
+2025-03-21 00:00:21,240 - WARNING - Retrying after 8 seconds...
+2025-03-21 00:00:29,241 - ERROR - All retry attempts failed.
+2025-03-21 12:00:13,994 - ERROR - Failed to send data (413): <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx/1.27.4</center>
+</body>
+</html>
+
+2025-03-21 12:00:14,033 - WARNING - Retrying after 2 seconds...
+2025-03-21 12:00:23,199 - ERROR - Failed to send data (413): <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx/1.27.4</center>
+</body>
+</html>
+
+2025-03-21 12:00:23,205 - WARNING - Retrying after 4 seconds...
+2025-03-21 12:00:30,577 - ERROR - Failed to send data (413): <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx/1.27.4</center>
+</body>
+</html>
+
+2025-03-21 12:00:30,583 - WARNING - Retrying after 8 seconds...
+2025-03-21 12:00:38,583 - ERROR - All retry attempts failed.
+2025-03-22 00:00:12,349 - ERROR - Failed to send data (413): <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx/1.27.4</center>
+</body>
+</html>
+
+2025-03-22 00:00:12,365 - WARNING - Retrying after 2 seconds...
+2025-03-22 00:00:17,619 - ERROR - Failed to send data (413): <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx/1.27.4</center>
+</body>
+</html>
+
+2025-03-22 00:00:17,623 - WARNING - Retrying after 4 seconds...
+2025-03-22 00:00:25,849 - ERROR - Failed to send data (413): <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx/1.27.4</center>
+</body>
+</html>
+
+2025-03-22 00:00:25,854 - WARNING - Retrying after 8 seconds...
+2025-03-22 00:00:33,855 - ERROR - All retry attempts failed.
+2025-03-22 12:00:05,837 - ERROR - Failed to send data (413): <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx/1.27.4</center>
+</body>
+</html>
+
+2025-03-22 12:00:05,872 - WARNING - Retrying after 2 seconds...
+2025-03-22 12:00:15,868 - ERROR - Failed to send data (413): <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx/1.27.4</center>
+</body>
+</html>
+
+2025-03-22 12:00:15,873 - WARNING - Retrying after 4 seconds...
+2025-03-22 12:00:23,909 - ERROR - Failed to send data (413): <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx/1.27.4</center>
+</body>
+</html>
+
+2025-03-22 12:00:23,914 - WARNING - Retrying after 8 seconds...
+2025-03-22 12:00:31,915 - ERROR - All retry attempts failed.
+2025-03-23 00:00:16,046 - ERROR - Error sending data: ('Connection aborted.', TimeoutError('The write operation timed out'))
+2025-03-23 00:00:16,083 - WARNING - Retrying after 2 seconds...
+2025-03-23 00:00:29,604 - ERROR - Error sending data: ('Connection aborted.', TimeoutError('The write operation timed out'))
+2025-03-23 00:00:29,605 - WARNING - Retrying after 4 seconds...
+2025-03-23 00:00:44,955 - ERROR - Error sending data: ('Connection aborted.', TimeoutError('The write operation timed out'))
+2025-03-23 00:00:44,955 - WARNING - Retrying after 8 seconds...
+2025-03-23 00:00:52,956 - ERROR - All retry attempts failed.
+2025-03-23 12:00:14,329 - ERROR - Failed to send data (413): <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx/1.27.4</center>
+</body>
+</html>
+
+2025-03-23 12:00:14,362 - WARNING - Retrying after 2 seconds...
+2025-03-23 12:00:32,954 - ERROR - Error sending data: ('Connection aborted.', TimeoutError('The write operation timed out'))
+2025-03-23 12:00:32,955 - WARNING - Retrying after 4 seconds...
+2025-03-23 12:00:48,422 - ERROR - Error sending data: ('Connection aborted.', TimeoutError('The write operation timed out'))
+2025-03-23 12:00:48,423 - WARNING - Retrying after 8 seconds...
+2025-03-23 12:00:56,423 - ERROR - All retry attempts failed.
+2025-03-24 00:00:09,523 - ERROR - Failed to send data (413): <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx/1.27.4</center>
+</body>
+</html>
+
+2025-03-24 00:00:09,560 - WARNING - Retrying after 2 seconds...
+2025-03-24 00:00:19,950 - ERROR - Failed to send data (413): <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx/1.27.4</center>
+</body>
+</html>
+
+2025-03-24 00:00:19,953 - WARNING - Retrying after 4 seconds...
+2025-03-24 00:00:28,458 - ERROR - Failed to send data (413): <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx/1.27.4</center>
+</body>
+</html>
+
+2025-03-24 00:00:28,465 - WARNING - Retrying after 8 seconds...
+2025-03-24 00:00:36,465 - ERROR - All retry attempts failed.
+2025-03-24 12:00:07,310 - ERROR - Failed to send data (413): <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx/1.27.4</center>
+</body>
+</html>
+
+2025-03-24 12:00:07,350 - WARNING - Retrying after 2 seconds...
+2025-03-24 12:00:13,181 - ERROR - Failed to send data (413): <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx/1.27.4</center>
+</body>
+</html>
+
+2025-03-24 12:00:13,183 - WARNING - Retrying after 4 seconds...
+2025-03-24 12:00:20,540 - ERROR - Failed to send data (413): <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx/1.27.4</center>
+</body>
+</html>
+
+2025-03-24 12:00:20,543 - WARNING - Retrying after 8 seconds...
+2025-03-24 12:00:28,544 - ERROR - All retry attempts failed.

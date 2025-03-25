@@ -2,7 +2,7 @@
 
 # Time intervals (in seconds)
 SENSOR_READ_INTERVAL = 900         # 15 minutes between sensor readings
-DATA_RETENTION_DAYS = 7            # Days to retain data in the database
+DATA_RETENTION_DAYS = 365            # Days to retain data in the database
 WEATHER_FETCH_INTERVAL = 900       # 15 minutes between weather API calls
 
 # ADC conversion settings
@@ -17,7 +17,7 @@ CSV_FILENAME = "plant_data_temp.csv"
 DB_NAME = "plant_sensor_data.db"
 
 # Backend API settings
-BACKEND_API_URL = "https://sprout-ly.com/api/sensor/data"
+BACKEND_API_URL = "https://dev.sprout-ly.com/api/plant/data"
 RETRY_ATTEMPTS = 3
 BASE_DELAY = 2
 
