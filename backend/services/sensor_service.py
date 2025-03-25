@@ -12,6 +12,13 @@ class SensorService:
         print("Sensor Service called!!!")
         return self.repository.add_moisture_data(sensors)
     
+    def get_sensor_data(self):
+        print("Sensor Service called!!!")
+        return self.repository.get_sensor_data()
+
+    def delete_sensor_data(self, reading_data: str):
+        return self.repository.delete_sensor_data(reading_data)
+    
     # def process_moisture_data(db: Session, data: MoistureDataSchema):
     #     # Add any additional processing logic here (e.g., alerts if moisture < threshold)
     #     return create_moisture_data(db, data)
