@@ -7,7 +7,7 @@ import threading
 import logging
 import os
 from datetime import datetime, timedelta
-from config import DB_NAME, BACKEND_API_URL, RETRY_ATTEMPTS, BASE_DELAY
+from config import DB_NAME, BACKEND_API_SEND_DATA, BACKEND_API_SEND_CURRENT, RETRY_ATTEMPTS, BASE_DELAY
 
 logging.basicConfig(filename="api_log.log", level=logging.INFO,
                     format="%(asctime)s - %(levelname)s - %(message)s")
@@ -71,14 +71,14 @@ def retry_with_backoff(func, max_attempts=RETRY_ATTEMPTS, base_delay=BASE_DELAY)
     logging.error("All retry attempts failed.")
     return False
 
-def send_data_to_backend(after=None):
+def send_data_to_backend(url, after=None):
     data = fetch_recent_data(after)
     if not data:
         logging.info("No new data to send.")
         return False, None
     def send_request():
         try:
-            response = requests.post(BACKEND_API_URL, json={"sensor_data": data}, timeout=10)
+            response = requests.post(url, json={"sensor_data": data}, timeout=10)
             if response.status_code == 200:
                 logging.info("Data sent successfully.")
                 return True
@@ -94,7 +94,8 @@ def send_data_to_backend(after=None):
 @app.route("/send-current", methods=["GET", "POST"])
 def send_current_data():
     global LAST_SENT_TIMESTAMP
-    success, data = send_data_to_backend(after=LAST_SENT_TIMESTAMP)
+    # Use the on-demand endpoint URL for current data.
+    success, data = send_data_to_backend(BACKEND_API_SEND_CURRENT, after=LAST_SENT_TIMESTAMP)
     if success and data:
         try:
             max_ts = max(record["timestamp"] for record in data)
@@ -109,7 +110,8 @@ def send_current_data():
 
 @app.route("/send-data", methods=["POST"])
 def send_data():
-    success, _ = send_data_to_backend()
+    # Use the auto-send endpoint URL for scheduled data sending.
+    success, _ = send_data_to_backend(BACKEND_API_SEND_DATA)
     if success:
         return jsonify({"message": "Data sent successfully"}), 200
     else:
@@ -122,8 +124,9 @@ def safe_task_execution(task):
         logging.error(f"Scheduled task failed: {e}")
 
 def schedule_data_sending():
-    schedule.every().day.at("00:00").do(lambda: safe_task_execution(send_data_to_backend))
-    schedule.every().day.at("12:00").do(lambda: safe_task_execution(send_data_to_backend))
+    # Schedule auto-send at 00:00 and 12:00 daily using the auto-send URL.
+    schedule.every().day.at("00:00").do(lambda: safe_task_execution(lambda: send_data_to_backend(BACKEND_API_SEND_DATA)))
+    schedule.every().day.at("12:00").do(lambda: safe_task_execution(lambda: send_data_to_backend(BACKEND_API_SEND_DATA)))
     logging.info("Scheduled jobs registered successfully.")
     while True:
         schedule.run_pending()
