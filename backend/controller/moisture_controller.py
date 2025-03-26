@@ -6,9 +6,6 @@ from fastapi.responses import JSONResponse
 from typing import List
 from datetime import datetime
 from config.authentication import get_current_user
-# from fastapi.security import HTTPBasic, HTTPBasicCredentials
-# from services.user_service import get_user_service, UserService
-
 
 add_moisture_data = APIRouter()
 
@@ -16,8 +13,7 @@ add_moisture_data = APIRouter()
 @add_moisture_data.post("/api/send-data", response_model=dict)
 def add_moisture_entry(
     sensors: MoistureDataListSchema, 
-    service: SensorService = Depends(get_service),
-    current_user: str = Depends(get_current_user)
+    service: SensorService = Depends(get_service)
 ):
     try:
         # Call the service layer to add sensor moisture data
@@ -38,8 +34,7 @@ def add_moisture_entry(
 @add_moisture_data.post("/api/send-current", response_model=dict)
 async def send_current_data(
     request: Request, 
-    service: SensorService = Depends(get_service),
-    current_user: str = Depends(get_current_user)
+    service: SensorService = Depends(get_service)
 ):
     try:
         # Parse the incoming JSON data
@@ -63,8 +58,7 @@ async def send_current_data(
 
 @add_moisture_data.get("/api/send-current", response_model=dict)
 async def get_current_data(
-    service: SensorService = Depends(get_service),
-    current_user: str = Depends(get_current_user)
+    service: SensorService = Depends(get_service)
 ):
     try:
         return JSONResponse(status_code=200, content={"message": "GET request received. No data to process."})
