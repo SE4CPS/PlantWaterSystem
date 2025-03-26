@@ -68,10 +68,13 @@ def send_request_curl(url, data):
     Construct and run a curl command using a temporary file to POST the data.
     Backend expects the JSON key "data".
     """
+    # Prepare payload with key "data"
     payload = json.dumps({"data": data})
+    # Write payload to a temporary file.
     with tempfile.NamedTemporaryFile(mode="w", delete=False) as tmp:
         tmp.write(payload)
         tmp_filename = tmp.name
+    # Build the curl command with --data-binary to read from the temporary file.
     command = [
         "curl",
         "--location",
@@ -110,6 +113,7 @@ def send_data_to_backend(url, after=None):
 @app.route("/send-current", methods=["GET", "POST"])
 def send_current_data():
     global LAST_SENT_TIMESTAMP
+    # Use the on-demand endpoint URL.
     success, data = send_data_to_backend(BACKEND_API_SEND_CURRENT, after=LAST_SENT_TIMESTAMP)
     if success and data:
         try:
@@ -125,22 +129,12 @@ def send_current_data():
 
 @app.route("/send-data", methods=["POST"])
 def send_data():
+    # Use the auto-send endpoint URL.
     success, _ = send_data_to_backend(BACKEND_API_SEND_DATA)
     if success:
         return jsonify({"message": "Data sent successfully"}), 200
     else:
         return jsonify({"message": "Failed to send data"}), 500
-
-# Manual endpoint for testing purposes.
-@app.route("/manual-send", methods=["GET", "POST"])
-def manual_send():
-    # This route triggers a send using the on-demand URL
-    # but does NOT update LAST_SENT_TIMESTAMP.
-    success, _ = send_data_to_backend(BACKEND_API_SEND_CURRENT)
-    if success:
-        return jsonify({"message": "Manual data send successful"}), 200
-    else:
-        return jsonify({"message": "Manual data send failed"}), 500
 
 def safe_task_execution(task):
     try:
