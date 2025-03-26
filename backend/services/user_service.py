@@ -12,6 +12,7 @@ class UserService:
     def create_user(self, username: str, password: str):
         return self.repository.create_user(username, password)
 
+
 def get_user_service():
     dal = UserDAL()
     repository = UserRepository(dal)

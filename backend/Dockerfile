@@ -1,6 +1,9 @@
 # Base image
 FROM python:3.9-slim
 
+# Set environment variable
+ENV SECRET_KEY=sproutly
+
 # Set working directory inside the container
 WORKDIR /app
 

@@ -7,6 +7,7 @@ from services.user_service import get_user_service, UserService
 from schemas.user_schema import UserSchema
 from schemas.user_create_schema import UserCreateSchema
 
+
 auth_router = APIRouter(prefix="/api")
 
 # Generate JWT token
