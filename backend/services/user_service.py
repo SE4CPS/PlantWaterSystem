@@ -6,11 +6,18 @@ class UserService:
     def __init__(self, repository: UserRepository):
         self.repository = repository
 
-    def get_user(self, username: str):
-        return self.repository.get_user(username)
+    def get_user(self, email: str):
+        return self.repository.get_user(email)
     
-    def create_user(self, username: str, password: str):
-        return self.repository.create_user(username, password)
+    def create_user(self, sensorid: int, firstname: str, lastname: str, username: str, userpassword: str, email: str):
+        return self.repository.create_user(
+            sensorid=sensorid,
+            firstname=firstname,
+            lastname=lastname,
+            username=username,
+            userpassword=userpassword,
+            email=email
+        )
 
 
 def get_user_service():
