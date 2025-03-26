@@ -18,6 +18,10 @@ app = Flask(__name__)
 LAST_SENT_TIMESTAMP = None  # Tracks the last sent record's timestamp
 
 def fetch_recent_data(after=None):
+    """
+    Fetch records from the database with timestamp > after.
+    If after is None, it will fetch records from the last 12 hours.
+    """
     try:
         conn = sqlite3.connect(DB_NAME)
     except sqlite3.Error as e:
@@ -33,11 +37,14 @@ def fetch_recent_data(after=None):
                 WHERE timestamp > ?
             """, (after,))
         else:
+            # If no 'after' provided, default to the last 12 hours.
+            lower_bound = (datetime.now() - timedelta(hours=12)).strftime("%Y-%m-%d %H:%M:%S")
             cursor.execute("""
                 SELECT id, timestamp, sensor_id, adc_value, moisture_level, digital_status,
                        weather_temp, weather_humidity, weather_sunlight, weather_wind_speed, location, weather_fetched, device_id
                 FROM moisture_data
-            """)
+                WHERE timestamp > ?
+            """, (lower_bound,))
         data = cursor.fetchall()
     except sqlite3.Error as e:
         logging.error(f"Database query error: {e}")
@@ -65,16 +72,13 @@ def fetch_recent_data(after=None):
 
 def send_request_curl(url, data):
     """
-    Construct and run a curl command using a temporary file to POST the data.
-    Backend expects the JSON key "data".
+    Write the JSON payload to a temporary file and use curl --data-binary to POST the payload.
+    The payload key is "data", as required by the backend.
     """
-    # Prepare payload with key "data"
     payload = json.dumps({"data": data})
-    # Write payload to a temporary file.
     with tempfile.NamedTemporaryFile(mode="w", delete=False) as tmp:
         tmp.write(payload)
         tmp_filename = tmp.name
-    # Build the curl command with --data-binary to read from the temporary file.
     command = [
         "curl",
         "--location",
@@ -101,7 +105,27 @@ def retry_with_backoff(func, max_attempts=RETRY_ATTEMPTS, base_delay=BASE_DELAY)
     return False
 
 def send_data_to_backend(url, after=None):
-    data = fetch_recent_data(after)
+    """
+    Determine the effective lower bound for unsent data:
+    - If no 'after' timestamp is provided, use current time minus 12 hours.
+    - If provided, and the gap is more than 12 hours, log an error and use only the last 12 hours.
+    Then fetch the data and send it via a curl command.
+    """
+    now_dt = datetime.now()
+    if after is None:
+        effective_after_dt = now_dt - timedelta(hours=12)
+    else:
+        try:
+            last_dt = datetime.strptime(after, "%Y-%m-%d %H:%M:%S")
+        except Exception:
+            last_dt = now_dt - timedelta(hours=12)
+        if now_dt - last_dt > timedelta(hours=12):
+            effective_after_dt = now_dt - timedelta(hours=12)
+            logging.error("Unsent data gap greater than 12 hours. Only sending last 12 hours of data.")
+        else:
+            effective_after_dt = last_dt
+    effective_after = effective_after_dt.strftime("%Y-%m-%d %H:%M:%S")
+    data = fetch_recent_data(after=effective_after)
     if not data:
         logging.info("No new data to send.")
         return False, None
@@ -112,8 +136,11 @@ def send_data_to_backend(url, after=None):
 
 @app.route("/send-current", methods=["GET", "POST"])
 def send_current_data():
+    """
+    On-demand endpoint that sends data after the last confirmed send,
+    but only up to the last 12 hours.
+    """
     global LAST_SENT_TIMESTAMP
-    # Use the on-demand endpoint URL.
     success, data = send_data_to_backend(BACKEND_API_SEND_CURRENT, after=LAST_SENT_TIMESTAMP)
     if success and data:
         try:
@@ -127,9 +154,30 @@ def send_current_data():
     else:
         return jsonify({"message": "Failed to send current data"}), 500
 
+@app.route("/send-manual", methods=["GET", "POST"])
+def send_manual_data():
+    """
+    Manual endpoint that also sends data using the same logic as send-current.
+    """
+    global LAST_SENT_TIMESTAMP
+    success, data = send_data_to_backend(BACKEND_API_SEND_CURRENT, after=LAST_SENT_TIMESTAMP)
+    if success and data:
+        try:
+            max_ts = max(record["timestamp"] for record in data)
+            LAST_SENT_TIMESTAMP = max_ts
+        except Exception as e:
+            logging.error(f"Error updating LAST_SENT_TIMESTAMP: {e}")
+        return jsonify({"message": "Manual data sent successfully"}), 200
+    elif success:
+        return jsonify({"message": "No new data to send"}), 200
+    else:
+        return jsonify({"message": "Failed to send manual data"}), 500
+
 @app.route("/send-data", methods=["POST"])
 def send_data():
-    # Use the auto-send endpoint URL.
+    """
+    Endpoint for scheduled auto-send that sends all data (using our 12-hour rule).
+    """
     success, _ = send_data_to_backend(BACKEND_API_SEND_DATA)
     if success:
         return jsonify({"message": "Data sent successfully"}), 200
