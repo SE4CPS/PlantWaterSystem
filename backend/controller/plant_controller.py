@@ -9,6 +9,7 @@ from config.authentication import get_current_user
 
 create_plant = APIRouter()
 
+@create_plant.post("/api/plant/data", response_model=PlantSchema)
 def create_plant_entry(plant: PlantSchema, service: PlantService = Depends(get_service), user: dict = Depends(get_current_user)):
     print('inside get api')
     try:

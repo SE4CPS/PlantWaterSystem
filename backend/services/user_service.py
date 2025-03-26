@@ -8,6 +8,10 @@ class UserService:
 
     def get_user(self, username: str):
         return self.repository.get_user(username)
+    
+    def create_user(self, username: str, password: str):
+        return self.repository.create_user(username, password)
+
 
 def get_user_service():
     dal = UserDAL()

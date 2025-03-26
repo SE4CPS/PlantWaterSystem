@@ -16,7 +16,7 @@ class PlantDAL:
 
             # Execute the query to insert the plant data
             self.cursor.execute("""
-                INSERT INTO plant (PlantID, PlantName, ScientificName, Threshhold)
+                INSERT INTO plant (PlantID, PlantName, ScientificName, Threshold)
                 VALUES (%s, %s, %s, %s) RETURNING PlantID;
             """, (plant.PlantID, plant.PlantName, plant.ScientificName, plant.Threshhold))
 
@@ -81,7 +81,7 @@ class PlantDAL:
     def get_plants(self):
         try:
            
-            self.cursor.execute( "SELECT PlantID, PlantName, ScientificName, Threshhold FROM plant;")
+            self.cursor.execute( "SELECT PlantID, PlantName, ScientificName, Threshold FROM plant;")
 
             plants= self.cursor.fetchall()
 

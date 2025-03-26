@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
-from schemas.sensor_schema import MoistureDataListSchema
+from schemas.sensor_schema import MoistureDataListSchema, SensorDataResponse, SensorDataSchema
 from services.sensor_service import get_service, SensorService
 from fastapi import  Depends
 from fastapi.responses import JSONResponse
 from typing import List
+from datetime import datetime
 # from fastapi.security import HTTPBasic, HTTPBasicCredentials
 # from services.user_service import get_user_service, UserService
 
@@ -62,3 +63,39 @@ async def get_current_data(service: SensorService = Depends(get_service)):
     except Exception as e:
         # Handle any unexpected errors
         return JSONResponse(status_code=500, content={"status": "error", "message": f"Unexpected error: {str(e)}"})
+    
+def serialize_datetime(obj):
+    if isinstance(obj, datetime):
+        return obj.isoformat()
+    return obj
+# For Frontend
+@add_moisture_data.get("/api/sensor_data", response_model=SensorDataResponse)
+async def get_sensor_data(service: SensorService = Depends(get_service)):
+    try: 
+        response=service.get_sensor_data()
+
+        if "error" in response:
+             status_code = 400 if "Duplicate" in response["error"] else 500
+             return JSONResponse(status_code=status_code, content={"status": "error", "error": response["error"]})
+        # Ensure datetime fields are serialized properly
+        for item in response:
+            item["timestamp"] = serialize_datetime(item["timestamp"])
+        # Convert raw dicts into Pydantic models
+        sensor_data_objects = [SensorDataSchema(**item) for item in response]
+
+        return SensorDataResponse(status_code=200, data=sensor_data_objects)
+    except Exception as e:
+        JSONResponse(status_code=500, content={"status": "error", "error": f"Unexpected error: {str(e)}"})
+
+@add_moisture_data.delete("/api/sensor_data/{reading_id}")
+async def delete_sensor_data(reading_id: str, service: SensorService = Depends(get_service)):
+    try: 
+        response= service.delete_sensor_data(reading_id)
+
+        if "error" in response:
+             status_code = 400 if "Duplicate" in response["error"] else 500
+             return JSONResponse(status_code=status_code, content={"status": "error", "error": response["error"]})
+        
+        return JSONResponse(status_code=200, content=response)
+    except Exception as e:
+        JSONResponse(status_code=500, content={"status": "error", "error": f"Unexpected error: {str(e)}"})
