@@ -97,7 +97,6 @@ class SensorDAL:
                 for row in data
             ]
 
-
             return all_sensor_data
 
         except (psycopg2.Error, DatabaseError) as db_error:
@@ -122,6 +121,64 @@ class SensorDAL:
 
         finally:
             # Ensure that the connection is released
+            release_connection(self.conn)
+
+    def get_sensor_data_by_id(self, sensor_id: str):
+        try:
+            self.cursor.execute("""
+                SELECT readingid, timestamp, sensorid, adcvalue, moisturelevel, digitalstatus, 
+                       weathertemp, weatherhumidity, weathersunlight, weatherwindspeed, location, weatherfetched 
+                FROM sensorsdata 
+                WHERE sensorid = %s;
+            """, (sensor_id,))
+
+            data = self.cursor.fetchall()
+
+            if not data:
+                return {
+                    "status": "error",
+                    "error": f"No sensor data found with ID: {sensor_id}"
+                }
+
+            sensor_data = [
+                {
+                    "id": row[0],           # readingid
+                    "timestamp": row[1],     # timestamp
+                    "sensor_id": row[2],    
+                    "adc_value": row[3],     # adcvalue
+                    "moisture_level": row[4],# moisturelevel
+                    "digital_status": row[5],# digitalstatus
+                    "weather_temp": row[6],  # weathertemp
+                    "weather_humidity": row[7],  # weatherhumidity
+                    "weather_sunlight": row[8],  # weathersunlight
+                    "weather_wind_speed": row[9],  # weatherwindspeed
+                    "location": row[10],     # location
+                    "weather_fetched": row[11]  # weatherfetched
+                }
+                for row in data
+            ]
+
+            return sensor_data
+
+        except (psycopg2.Error, DatabaseError) as db_error:
+            self.conn.rollback()
+            error_message = f"Database error: {db_error}"
+            print(f"Database error: {db_error}")
+            return {
+                "status": "error",
+                "error": error_message
+            }
+
+        except Exception as e:
+            self.conn.rollback()
+            error_message = f"Unexpected error: {e}"
+            print(f"Unexpected error: {e}")
+            return {
+                "status": "error",
+                "error": error_message
+            }
+
+        finally:
             release_connection(self.conn)
 
     def delete_sensor_data(self, reading_id: str):
