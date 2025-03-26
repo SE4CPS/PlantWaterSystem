@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import JSONResponse
 from datetime import timedelta
-from config.authentication import create_access_token, verify_password, hash_password
+from config.authentication import create_access_token, verify_password, hash_password, get_current_user
 from services.user_service import get_user_service, UserService
 from schemas.user_schema import UserSchema
 from schemas.user_create_schema import UserCreateSchema
@@ -39,8 +39,19 @@ def create_user(user: UserCreateSchema, user_service: UserService = Depends(get_
         return JSONResponse(status_code=500, content={"status": "error", "error": f"Unexpected error: {str(e)}"})
     
 @auth_router.get("/users", response_model=UserSchema)
-def get_user(username: str, user_service: UserService = Depends(get_user_service)):
+def get_user(
+    username: str, 
+    user_service: UserService = Depends(get_user_service),
+    current_user: str = Depends(get_current_user)
+):
     try:
+        # Only allow users to access their own information
+        if current_user != username:
+            raise HTTPException(
+                status_code=403,
+                detail="Not authorized to access this user's information"
+            )
+
         user_details = user_service.get_user(username)
         # Check if the response contains an error (we assume error in the response means failure)
         if "error" in user_details:
@@ -51,6 +62,8 @@ def get_user(username: str, user_service: UserService = Depends(get_user_service
         # If the response is successful, return the response with a 201 status code
         return JSONResponse(status_code=201, content=user_details)
 
+    except HTTPException as he:
+        raise he
     except Exception as e:
         # If an unexpected error occurs during processing, return a 500 status code
         return JSONResponse(status_code=500, content={"status": "error", "error": f"Unexpected error: {str(e)}"})
