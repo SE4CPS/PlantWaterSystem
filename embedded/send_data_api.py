@@ -7,6 +7,7 @@ import logging
 import os
 import subprocess
 import json
+import tempfile
 from datetime import datetime, timedelta
 from config import DB_NAME, BACKEND_API_SEND_DATA, BACKEND_API_SEND_CURRENT, RETRY_ATTEMPTS, BASE_DELAY
 
@@ -63,16 +64,26 @@ def fetch_recent_data(after=None):
     ]
 
 def send_request_curl(url, data):
-    """Construct and run a curl command to POST the data to the provided URL."""
+    """
+    Construct and run a curl command using a temporary file to POST the data.
+    Backend expects the JSON key "data".
+    """
+    # Prepare payload with key "data"
     payload = json.dumps({"data": data})
+    # Write payload to a temporary file.
+    with tempfile.NamedTemporaryFile(mode="w", delete=False) as tmp:
+        tmp.write(payload)
+        tmp_filename = tmp.name
+    # Build the curl command with --data-binary to read from the temporary file.
     command = [
         "curl",
         "--location",
         url,
         "--header", "Content-Type: application/json",
-        "--data", payload
+        "--data-binary", f"@{tmp_filename}"
     ]
     result = subprocess.run(command, capture_output=True, text=True)
+    os.remove(tmp_filename)
     if result.returncode == 0:
         return True
     else:
