@@ -8,14 +8,16 @@ class UserDAL:
         self.conn = get_connection()
         self.cursor = self.conn.cursor()
 
-    def get_user(self, username: str):
+    def get_user(self, email: str):
         try:
-            if not username:
-                raise ValueError("Username must not be empty.")
+            if not email:
+                raise ValueError("email must not be empty.")
 
             self.cursor.execute("""
-                SELECT username, password FROM users WHERE username = %s
-            """, (username,))
+                SELECT sensorid, firstname, lastname, username, userpassword, email 
+                FROM userdata
+                WHERE email = %s
+            """, (email,))
 
             user = self.cursor.fetchone()
 
@@ -23,8 +25,12 @@ class UserDAL:
                 return None
 
             return {
-                "username": user[0],
-                "password": user[1],
+                "sensorid": user[0],
+                "firstname": user[1],
+                "lastname": user[2],
+                "username": user[3],
+                "userpassword": user[4],
+                "email": user[5]
             }
 
         except (psycopg2.Error, DatabaseError) as db_error:
@@ -41,16 +47,24 @@ class UserDAL:
             print(f"Unexpected error: {e}")
             return {"status": "error", "error": str(e)}
         
-    def create_user(self, username: str, password):
+    def create_user(self, sensorid: int, firstname: str, lastname: str, username: str, userpassword: str, email: str):
         try:
             if not username:
                 raise ValueError("Username must not be empty.")
-            if not password:
+            if not userpassword:
                 raise ValueError("Password must not be empty.")
+            if not firstname:
+                raise ValueError("First name must not be empty.")
+            if not lastname:
+                raise ValueError("Last name must not be empty.")
+            if not email:
+                raise ValueError("Email must not be empty.")
 
             self.cursor.execute("""
-                INSERT INTO users (username, password) VALUES (%s, %s) RETURNING id, username
-            """, (username, password))
+                INSERT INTO userdata (sensorid, firstname, lastname, username, userpassword, email) 
+                VALUES (%s, %s, %s, %s, %s, %s) 
+                RETURNING sensorid, firstname, lastname, username, userpassword, email
+            """, (sensorid, firstname, lastname, username, userpassword, email))
 
             user = self.cursor.fetchone()
 
@@ -60,8 +74,12 @@ class UserDAL:
             self.conn.commit()
 
             return {
-                "id": user[0],
-                "username": user[1]
+                "sensorid": user[0],
+                "firstname": user[1],
+                "lastname": user[2],
+                "username": user[3],
+                "userpassword": user[4],
+                "email": user[5]
             }
         
         except (psycopg2.Error, DatabaseError) as db_error:
