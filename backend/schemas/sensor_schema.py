@@ -13,6 +13,7 @@ class MoistureDataSchema(BaseModel):
     weather_temp: float
     weather_sunlight: float
     weather_wind_speed: float
+    weather_humidity: float
     location: str # city, state, country
     weather_fetched: datetime
 
