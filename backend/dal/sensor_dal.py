@@ -228,3 +228,81 @@ class SensorDAL:
 
         finally:
             release_connection(self.conn)  # Release the connection
+
+    def update_sensor_data(self, reading_id: str, update_data: dict):
+        try:
+            # Check if the reading_id exists
+            self.cursor.execute(
+                "SELECT readingid FROM sensorsdata WHERE readingid = %s;",
+                (reading_id,)
+            )
+            existing_record = self.cursor.fetchone()
+
+            if not existing_record:
+                return {
+                    "status": "error",
+                    "error": f"No sensor data found with ID: {reading_id}"
+                }
+
+            # Build the update query dynamically based on provided fields
+            update_fields = []
+            values = []
+            for key, value in update_data.items():
+                if key in ['timestamp', 'sensorid', 'adcvalue', 'moisturelevel', 'digitalstatus',
+                          'weathertemp', 'weatherhumidity', 'weathersunlight', 'weatherwindspeed',
+                          'location', 'weatherfetched']:
+                    update_fields.append(f"{key} = %s")
+                    values.append(value)
+
+            if not update_fields:
+                return {
+                    "status": "error",
+                    "error": "No valid fields to update"
+                }
+
+            # Add reading_id to values for the WHERE clause
+            values.append(reading_id)
+
+            # Construct and execute the update query
+            update_query = f"""
+                UPDATE sensorsdata 
+                SET {', '.join(update_fields)}
+                WHERE readingid = %s
+                RETURNING readingid;
+            """
+            
+            self.cursor.execute(update_query, values)
+            self.conn.commit()
+
+            updated_id = self.cursor.fetchone()
+            if updated_id:
+                return {
+                    "status": "success",
+                    "message": f"Successfully updated sensor data with ID: {reading_id}"
+                }
+            else:
+                return {
+                    "status": "error",
+                    "error": f"Failed to update sensor data with ID: {reading_id}"
+                }
+
+        except (psycopg2.Error, DatabaseError) as db_error:
+            self.conn.rollback()
+            error_message = f"Database error: {db_error}"
+            print(f"Database error: {db_error}")
+            return {
+                "status": "error",
+                "error": error_message
+            }
+
+        except Exception as e:
+            self.conn.rollback()
+            error_message = f"Unexpected error: {e}"
+            print(f"Unexpected error: {e}")
+            return {
+                "status": "error",
+                "error": error_message
+            }
+
+        finally:
+            release_connection(self.conn)

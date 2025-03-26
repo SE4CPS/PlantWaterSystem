@@ -148,3 +148,49 @@ async def get_sensor_data_by_id(
         raise he
     except Exception as e:
         return JSONResponse(status_code=500, content={"status": "error", "error": f"Unexpected error: {str(e)}"})
+
+@add_moisture_data.patch("/api/sensor_data/{reading_id}")
+async def update_sensor_data(
+    reading_id: str,
+    update_data: dict,
+    service: SensorService = Depends(get_service),
+    current_user: str = Depends(get_current_user)
+):
+    try: 
+        # Validate update_data
+        if not update_data:
+            return JSONResponse(
+                status_code=400,
+                content={"status": "error", "error": "No update data provided"}
+            )
+
+        # List of valid database column names
+        valid_columns = [
+            'sensorid', 'adcvalue', 'moisturelevel', 'digitalstatus',
+            'weathertemp', 'weatherhumidity', 'weathersunlight', 'weatherwindspeed',
+            'weatherfetched', 'timestamp', 'location'
+        ]
+
+        # Filter update data to only include valid columns
+        db_update_data = {
+            key: value for key, value in update_data.items()
+            if key in valid_columns
+        }
+
+        if not db_update_data:
+            return JSONResponse(
+                status_code=400,
+                content={"status": "error", "error": "No valid fields to update"}
+            )
+
+        response = service.update_sensor_data(reading_id, db_update_data)
+
+        if "error" in response:
+            status_code = 400 if "Duplicate" in response["error"] else 500
+            return JSONResponse(status_code=status_code, content={"status": "error", "error": response["error"]})
+        
+        return JSONResponse(status_code=200, content=response)
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"status": "error", "error": f"Unexpected error: {str(e)}"})

@@ -15,8 +15,11 @@ class SensorService:
     def get_sensor_data(self):
         return self.repository.get_sensor_data()
 
-    def get_sensor_data_by_id(self, sensor_id: str):
-        return self.repository.get_sensor_data_by_id(sensor_id)
+    def get_sensor_data_by_id(self, reading_id: str):
+        return self.repository.get_sensor_data_by_id(reading_id)
+
+    def update_sensor_data(self, reading_id: str, update_data: dict):
+        return self.repository.update_sensor_data(reading_id, update_data)
 
     def delete_sensor_data(self, reading_data: str):
         return self.repository.delete_sensor_data(reading_data)
