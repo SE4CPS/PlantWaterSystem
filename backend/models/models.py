@@ -7,6 +7,7 @@ class Plant(Base):
     PlantName = Column(String(50), nullable=False)
     ScientificName = Column(String(50), nullable=False)
     Threshhold = Column(Float, nullable=False)
+    ImageFilename = Column(String(255), nullable=True)  # New column for image filename
 
 class Sensor(Base):
     __tablename__ = "sensors"
