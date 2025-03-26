@@ -4,31 +4,13 @@ from schemas.user_schema import UserSchema
 from services.plant_service import get_service, PlantService
 from fastapi import  Depends
 from fastapi.responses import JSONResponse
-from fastapi.security import HTTPBasic, HTTPBasicCredentials
-from services.user_service import get_user_service, UserService
+from config.authentication import get_current_user
 
 
 create_plant = APIRouter()
 
-security = HTTPBasic()
-
-
-def verify_credentials(credentials: HTTPBasicCredentials = Depends(security), user_service: UserService = Depends(get_user_service)):
-    username = credentials.username
-    password = credentials.password
-    user_schema = UserSchema(username=username, password=password)
-    print(user_service.verify_user(user_schema))
-    if user_service.verify_user(user_schema) == 0:
-        raise HTTPException(
-            status_code= 401,
-            detail="Invalid credentials",
-            headers={"WWW-Authenticate": "Basic"},
-        )
-    return username
-
-
 @create_plant.post("/api/plant/data", response_model=PlantSchema)
-def create_plant_entry(plant: PlantSchema, service: PlantService = Depends(get_service)):
+def create_plant_entry(plant: PlantSchema, service: PlantService = Depends(get_service), user: dict = Depends(get_current_user)):
     print('inside get api')
     try:
         # Call the service layer to create the plant

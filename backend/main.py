@@ -3,6 +3,7 @@ from controller.plant_controller import create_plant
 from controller.moisture_controller import add_moisture_data
 from config.database import Base, engine
 from fastapi.middleware.cors import CORSMiddleware
+from controller.auth_controller import auth_router
 
 # Initialize database
 Base.metadata.create_all(bind=engine)
@@ -20,6 +21,7 @@ app.add_middleware(
 
 # Include Routes
 app.include_router(create_plant)
+app.include_router(auth_router)
 app.include_router(add_moisture_data)
 
 if __name__ == "__main__":

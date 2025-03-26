@@ -8,18 +8,24 @@ class UserDAL:
         self.conn = get_connection()
         self.cursor = self.conn.cursor()
 
-    def verify_user(self, user: UserSchema):
+    def get_user(self, username: str):
         try:
-            if not user.username or not user.password:
-                raise ValueError("Username and password must not be empty.")
+            if not username:
+                raise ValueError("Username must not be empty.")
 
             self.cursor.execute("""
-                SELECT EXISTS (
-                    SELECT 1 FROM users WHERE username = %s AND password = %s
-                );
-            """, (user.username, user.password))
+                SELECT username, password FROM users WHERE username = %s
+            """, (username,))
 
-            return self.cursor.fetchone()[0]  # Returns True or False
+            user = self.cursor.fetchone()
+
+            if user is None:
+                return None
+
+            return {
+                "username": user[0],
+                "password": user[1],
+            }
 
         except (psycopg2.Error, DatabaseError) as db_error:
             self.conn.rollback()
@@ -34,6 +40,42 @@ class UserDAL:
             self.conn.rollback()
             print(f"Unexpected error: {e}")
             return {"status": "error", "error": str(e)}
+        
+    def create_user(self, username: str, password):
+        try:
+            if not username:
+                raise ValueError("Username must not be empty.")
+            if not password:
+                raise ValueError("Password must not be empty.")
+
+            self.cursor.execute("""
+                INSERT INTO users (username, password) VALUES (%s, %s) RETURNING id, username
+            """, (username, password))
+
+            user = self.cursor.fetchone()
+
+            if user is None:
+                return None
+
+            return {
+                "id": user[0],
+                "username": user[1]
+            }
+        
+        except (psycopg2.Error, DatabaseError) as db_error:
+            self.conn.rollback()
+            print(f"Database error: {db_error}")
+            return {"status": "error", "error": str(db_error)}
+
+        except ValueError as val_error:
+            print(f"Input error: {val_error}")
+            return {"status": "error", "error": str(val_error)}
+
+        except Exception as e:
+            self.conn.rollback()
+            print(f"Unexpected error: {e}")
+            return {"status": "error", "error": str(e)}
+        
 
     def __del__(self):
         """ Ensure the connection is closed when the object is destroyed. """
