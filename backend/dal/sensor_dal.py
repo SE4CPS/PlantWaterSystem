@@ -15,8 +15,8 @@ class SensorDAL:
             # Bulk insert query
             insert_query = """
                 INSERT INTO sensorsdata (
-                    readingid, timestamp, deviceid, sensorid, adc_value, moisture_level, digital_status,
-                    weather_temp, weather_humidity, weather_sunlight, weather_wind_speed, location, weather_fetched
+                    readingid, timestamp, deviceid, sensorid, adcvalue, moisturelevel, digitalstatus,
+                    weathertemp, weatherhumidity, weathersunlight, weatherwindspeed, location, weatherfetched
                 ) VALUES %s RETURNING readingid;
             """
             # Convert list of objects to list of tuples
