@@ -12381,3 +12381,11 @@
 2025-03-26 14:44:46,526 - INFO - Sensor 2 - ADC: 13773, Moisture: 41.51%, Digital: Dry, Weather Temp: 22.4, Humidity: 82, Sunlight: 0.0, Wind: 18.2
 2025-03-26 14:44:46,551 - INFO - Sensor 3 - ADC: 16318, Moisture: 24.55%, Digital: Dry, Weather Temp: 22.4, Humidity: 82, Sunlight: 0.0, Wind: 18.2
 2025-03-26 14:44:46,575 - INFO - Sensor 4 - ADC: 15862, Moisture: 27.59%, Digital: Dry, Weather Temp: 22.4, Humidity: 82, Sunlight: 0.0, Wind: 18.2
+2025-03-26 14:50:15,705 - INFO - GPIO Cleanup Done.
+2025-03-26 14:50:15,743 - INFO - GPIO Cleanup Done.
+2025-03-26 14:50:18,379 - INFO - Location from ipinfo.io: 37.9577, -121.2908, Stockton, California, US
+2025-03-26 14:50:18,380 - INFO - Final device location set to: Stockton, California, US
+2025-03-26 14:50:19,507 - INFO - Sensor 1 - ADC: 13702, Moisture: 41.99%, Digital: Dry, Weather Temp: 22.2, Humidity: 82, Sunlight: 0.0, Wind: 18.9
+2025-03-26 14:50:19,534 - INFO - Sensor 2 - ADC: 13781, Moisture: 41.46%, Digital: Dry, Weather Temp: 22.2, Humidity: 82, Sunlight: 0.0, Wind: 18.9
+2025-03-26 14:50:19,559 - INFO - Sensor 3 - ADC: 16294, Moisture: 24.71%, Digital: Dry, Weather Temp: 22.2, Humidity: 82, Sunlight: 0.0, Wind: 18.9
+2025-03-26 14:50:19,584 - INFO - Sensor 4 - ADC: 15887, Moisture: 27.42%, Digital: Dry, Weather Temp: 22.2, Humidity: 82, Sunlight: 0.0, Wind: 18.9
