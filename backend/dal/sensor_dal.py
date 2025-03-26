@@ -68,3 +68,106 @@ class SensorDAL:
         finally:
             # Ensure that the connection is released
             release_connection(self.conn)
+
+    def get_sensor_data(self):
+        try:
+           
+            self.cursor.execute("SELECT readingid, timestamp, sensorid, adcvalue, moisturelevel, digitalstatus, weathertemp, weatherhumidity, weathersunlight, weatherwindspeed, location, weatherfetched FROM sensorsdata;")
+
+            data= self.cursor.fetchall()
+
+            if not data:
+                return []
+
+            all_sensor_data = [
+                {
+                    "id": row[0],           # readingid
+                    "timestamp": row[1],     # timestamp
+                    "sensor_id": row[2],    
+                    "adc_value": row[3],     # adcvalue
+                    "moisture_level": row[4],# moisturelevel
+                    "digital_status": row[5],# digitalstatus
+                    "weather_temp": row[6],  # weathertemp
+                    "weather_humidity": row[7],  # weatherhumidity
+                    "weather_sunlight": row[8],  # weathersunlight
+                    "weather_wind_speed": row[9],  # weatherwindspeed
+                    "location": row[10],     # location
+                    "weather_fetched": row[11]  # weatherfetched
+                }
+                for row in data
+            ]
+
+
+            return all_sensor_data
+
+        except (psycopg2.Error, DatabaseError) as db_error:
+            # Handle other database errors
+            self.conn.rollback()  # Rollback transaction on error
+            error_message = f"Database error: {db_error}"
+            print(f"Database error: {db_error}")
+            return {
+                "status": "error",
+                "error": error_message
+            }
+
+        except Exception as e:
+            # Catch any other unexpected errors
+            self.conn.rollback()  # Rollback transaction on error
+            error_message = f"Unexpected error: {e}"
+            print(f"Unexpected error: {e}")
+            return {
+                "status": "error",
+                "error": error_message
+            }
+
+        finally:
+            # Ensure that the connection is released
+            release_connection(self.conn)
+
+    def delete_sensor_data(self, reading_id: str):
+        try:
+            # Check if the reading_id exists
+            self.cursor.execute(
+                "SELECT readingid FROM sensorsdata WHERE readingid = %s;",
+                (reading_id,)
+            )
+            existing_record = self.cursor.fetchone()
+
+            if not existing_record:
+                return {
+                    "status": "error",
+                    "message": f"No sensor data found with ID: {reading_id}"
+                }
+
+            # Delete the record
+            self.cursor.execute(
+                "DELETE FROM sensorsdata WHERE readingid = %s;",
+                (reading_id,)
+            )
+            self.conn.commit()  # Commit the transaction
+
+            return {
+                "status": "success",
+                "message": f"Successfully deleted sensor data with ID: {reading_id}"
+            }
+
+        except (psycopg2.Error, DatabaseError) as db_error:
+            self.conn.rollback()  # Rollback on error
+            error_message = f"Database error: {db_error}"
+            print(f"Database error: {db_error}")
+            return {
+                "status": "error",
+                "error": error_message
+            }
+
+        except Exception as e:
+            self.conn.rollback()  # Rollback on error
+            error_message = f"Unexpected error: {e}"
+            print(f"Unexpected error: {e}")
+            return {
+                "status": "error",
+                "error": error_message
+            }
+
+        finally:
+            release_connection(self.conn)  # Release the connection
