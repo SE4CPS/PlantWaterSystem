@@ -5,17 +5,18 @@ from typing import List
 class MoistureDataSchema(BaseModel):
     id: int 
     timestamp: datetime
-    device_id: str
     sensor_id: int
     adc_value: int
     moisture_level: float
     digital_status: str
     weather_temp: float
+    weather_humidity: float
     weather_sunlight: float
     weather_wind_speed: float
-    weather_humidity: float
     location: str # city, state, country
     weather_fetched: datetime
+    device_id: str
+ 
 
 
 class MoistureDataListSchema(BaseModel):

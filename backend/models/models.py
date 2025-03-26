@@ -14,7 +14,6 @@ class Sensor(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     timestamp = Column(DateTime, nullable=False)
-    device_id = Column(String, nullable=False)
     sensor_id = Column(Integer, nullable=False)
     adc_value = Column(Integer, nullable=False)
     moisture_level = Column(Float, nullable=False)
@@ -25,3 +24,4 @@ class Sensor(Base):
     weather_wind_speed = Column(Float, nullable=False)
     location = Column(String, nullable=False)
     weather_fetched = Column(DateTime, nullable=False)
+    device_id = Column(String, nullable=False)
