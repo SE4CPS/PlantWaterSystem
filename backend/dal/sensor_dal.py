@@ -306,3 +306,87 @@ class SensorDAL:
 
         finally:
             release_connection(self.conn)
+
+    def add_sensor_data(self, sensor_data: dict):
+        try:
+            # Insert query with all required fields
+            insert_query = """
+                INSERT INTO sensorsdata (
+                    readingid, sensorid, adcvalue, moisturelevel, digitalstatus,
+                    weathertemp, weatherhumidity, weathersunlight, weatherwindspeed,
+                    weatherfetched, timestamp, location
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                RETURNING readingid, timestamp, sensorid, adcvalue, moisturelevel, digitalstatus,
+                         weathertemp, weatherhumidity, weathersunlight, weatherwindspeed,
+                         location, weatherfetched;
+            """
+            
+            # Prepare values for insertion
+            values = (
+                sensor_data['readingid'],
+                sensor_data['sensorid'],
+                sensor_data['adcvalue'],
+                sensor_data['moisturelevel'],
+                sensor_data['digitalstatus'],
+                sensor_data['weathertemp'],
+                sensor_data['weatherhumidity'],
+                sensor_data['weathersunlight'],
+                sensor_data['weatherwindspeed'],
+                sensor_data['weatherfetched'],
+                sensor_data['timestamp'],
+                sensor_data['location']
+            )
+            
+            # Execute the insert query
+            self.cursor.execute(insert_query, values)
+            self.conn.commit()
+            
+            # Get the inserted data
+            row = self.cursor.fetchone()
+            
+            # Convert datetime objects to strings
+            timestamp_str = str(row[1]) if row[1] else None
+            weather_fetched_str = str(row[11]) if row[11] else None
+            
+            # Format the response with all fields
+            inserted_data = {
+                "reading": row[0],           # readingid
+                "timestamp": timestamp_str,     # timestamp
+                "sensor_id": row[2],    
+                "adc_value": row[3],     # adcvalue
+                "moisture_level": row[4],# moisturelevel
+                "digital_status": row[5],# digitalstatus
+                "weather_temp": row[6],  # weathertemp
+                "weather_humidity": row[7],  # weatherhumidity
+                "weather_sunlight": row[8],  # weathersunlight
+                "weather_wind_speed": row[9],  # weatherwindspeed
+                "location": row[10],     # location
+                "weather_fetched": weather_fetched_str  # weatherfetched
+            }
+            
+            return {
+                "status": "success",
+                "message": "Sensor data added successfully",
+                "data": inserted_data
+            }
+
+        except (psycopg2.Error, DatabaseError) as db_error:
+            self.conn.rollback()
+            error_message = f"Database error: {db_error}"
+            print(f"Database error: {db_error}")
+            return {
+                "status": "error",
+                "error": error_message
+            }
+
+        except Exception as e:
+            self.conn.rollback()
+            error_message = f"Unexpected error: {e}"
+            print(f"Unexpected error: {e}")
+            return {
+                "status": "error",
+                "error": error_message
+            }
+
+        finally:
+            release_connection(self.conn)
