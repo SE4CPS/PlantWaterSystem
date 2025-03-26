@@ -11,14 +11,14 @@ class PlantDAL:
     def create_plant(self, plant: PlantSchema):
         try:
             # Validate input data (optional, based on your requirements)
-            if not plant.PlantName or not plant.ScientificName or not isinstance(plant.Threshhold, (int, float)):
+            if not plant.PlantName or not plant.ScientificName or not isinstance(plant.Threshold, (int, float)):
                 raise ValueError("Invalid input data")
 
             # Execute the query to insert the plant data
             self.cursor.execute("""
                 INSERT INTO plant (PlantID, PlantName, ScientificName, Threshold)
                 VALUES (%s, %s, %s, %s) RETURNING PlantID;
-            """, (plant.PlantID, plant.PlantName, plant.ScientificName, plant.Threshhold))
+            """, (plant.PlantID, plant.PlantName, plant.ScientificName, plant.Threshold))
 
             # Commit the transaction
             self.conn.commit()
