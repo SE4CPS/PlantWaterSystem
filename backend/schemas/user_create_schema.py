@@ -1,5 +1,9 @@
 from pydantic import BaseModel
 
 class UserCreateSchema(BaseModel):
+    sensorid: int
+    firstname: str
+    lastname: str
     username: str
-    password: str
+    userpassword: str
+    email: str
