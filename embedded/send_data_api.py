@@ -64,7 +64,7 @@ def fetch_recent_data(after=None):
 
 def send_request_curl(url, data):
     """Construct and run a curl command to POST the data to the provided URL."""
-    payload = json.dumps({"sensor_data": data})
+    payload = json.dumps({"data": data})
     command = [
         "curl",
         "--location",
