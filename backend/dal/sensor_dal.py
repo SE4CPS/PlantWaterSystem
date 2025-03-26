@@ -14,10 +14,10 @@ class SensorDAL:
         try:
             # Bulk insert query
             insert_query = """
-                INSERT INTO sensors (
-                    id, timestamp, device_id, sensor_id, adc_value, moisture_level, digital_status,
-                    weather_temp, weather_humidity, weather_sunlight, weather_wind_speed, location, weather_fetched
-                ) VALUES %s RETURNING id;
+                INSERT INTO sensorsdata (
+                    readingid, timestamp, deviceid, sensorid, adcvalue, moisturelevel, digitalstatus,
+                    weathertemp, weatherhumidity, weathersunlight, weatherwindspeed, location, weatherfetched
+                ) VALUES %s RETURNING readingid;
             """
             # Convert list of objects to list of tuples
             values = [
@@ -142,7 +142,7 @@ class SensorDAL:
 
             sensor_data = [
                 {
-                    "id": row[0],           # readingid
+                    "readingid": row[0],           # readingid
                     "timestamp": row[1],     # timestamp
                     "sensor_id": row[2],    
                     "adc_value": row[3],     # adcvalue
@@ -312,7 +312,7 @@ class SensorDAL:
             # Insert query with all required fields
             insert_query = """
                 INSERT INTO sensorsdata (
-                    readingid, sensorid, adcvalue, moisturelevel, digitalstatus,
+                    readingid, sensorid, deviceid, adcvalue, moisturelevel, digitalstatus,
                     weathertemp, weatherhumidity, weathersunlight, weatherwindspeed,
                     weatherfetched, timestamp, location
                 ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
@@ -325,6 +325,7 @@ class SensorDAL:
             values = (
                 sensor_data['readingid'],
                 sensor_data['sensorid'],
+                sensor_data['deviceid'],
                 sensor_data['adcvalue'],
                 sensor_data['moisturelevel'],
                 sensor_data['digitalstatus'],

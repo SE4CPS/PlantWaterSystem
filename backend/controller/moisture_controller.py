@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
-from schemas.sensor_schema import MoistureDataListSchema, SensorDataResponse, SensorDataSchema
+from schemas.sensor_schema import MoistureDataListSchema, MoistureDataSchema, SensorDataResponse, SensorDataSchema
 from services.sensor_service import get_service, SensorService
 from fastapi import  Depends
 from fastapi.responses import JSONResponse
@@ -36,14 +36,11 @@ def add_moisture_entry(
 
 @add_moisture_data.post("/api/send-current", response_model=dict)
 async def send_current_data(
-    request: Request, 
+    sensors: MoistureDataSchema, 
     service: SensorService = Depends(get_service)
 ):
     try:
-        # Parse the incoming JSON data
-        data = await request.json()
-        sensors = data.get("sensor_data", [])
-
+        sensors = [sensors]
         # Call the service layer to add sensor moisture data
         response = service.receive_moisture_data(sensors)
 
