@@ -1,11 +1,12 @@
 from flask import Flask, jsonify, request
 import sqlite3
-import requests
 import schedule
 import time
 import threading
 import logging
 import os
+import subprocess
+import json
 from datetime import datetime, timedelta
 from config import DB_NAME, BACKEND_API_SEND_DATA, BACKEND_API_SEND_CURRENT, RETRY_ATTEMPTS, BASE_DELAY
 
@@ -61,6 +62,23 @@ def fetch_recent_data(after=None):
         for row in data
     ]
 
+def send_request_curl(url, data):
+    """Construct and run a curl command to POST the data to the provided URL."""
+    payload = json.dumps({"sensor_data": data})
+    command = [
+        "curl",
+        "--location",
+        url,
+        "--header", "Content-Type: application/json",
+        "--data", payload
+    ]
+    result = subprocess.run(command, capture_output=True, text=True)
+    if result.returncode == 0:
+        return True
+    else:
+        logging.error(f"Curl command failed: {result.stderr}")
+        return False
+
 def retry_with_backoff(func, max_attempts=RETRY_ATTEMPTS, base_delay=BASE_DELAY):
     for attempt in range(max_attempts):
         if func():
@@ -77,24 +95,14 @@ def send_data_to_backend(url, after=None):
         logging.info("No new data to send.")
         return False, None
     def send_request():
-        try:
-            response = requests.post(url, json={"sensor_data": data}, timeout=10)
-            if response.status_code == 200:
-                logging.info("Data sent successfully.")
-                return True
-            else:
-                logging.error(f"Failed to send data ({response.status_code}): {response.text}")
-                return False
-        except requests.RequestException as e:
-            logging.error(f"Error sending data: {e}")
-            return False
+        return send_request_curl(url, data)
     success = retry_with_backoff(send_request)
     return success, data if success else None
 
 @app.route("/send-current", methods=["GET", "POST"])
 def send_current_data():
     global LAST_SENT_TIMESTAMP
-    # Use the on-demand endpoint URL for current data.
+    # Use the on-demand endpoint URL.
     success, data = send_data_to_backend(BACKEND_API_SEND_CURRENT, after=LAST_SENT_TIMESTAMP)
     if success and data:
         try:
@@ -110,7 +118,7 @@ def send_current_data():
 
 @app.route("/send-data", methods=["POST"])
 def send_data():
-    # Use the auto-send endpoint URL for scheduled data sending.
+    # Use the auto-send endpoint URL.
     success, _ = send_data_to_backend(BACKEND_API_SEND_DATA)
     if success:
         return jsonify({"message": "Data sent successfully"}), 200
