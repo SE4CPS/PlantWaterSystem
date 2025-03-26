@@ -57,6 +57,8 @@ class UserDAL:
             if user is None:
                 return None
 
+            self.conn.commit()
+
             return {
                 "id": user[0],
                 "username": user[1]

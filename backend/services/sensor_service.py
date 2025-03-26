@@ -13,8 +13,13 @@ class SensorService:
         return self.repository.add_moisture_data(sensors)
     
     def get_sensor_data(self):
-        print("Sensor Service called!!!")
         return self.repository.get_sensor_data()
+
+    def get_sensor_data_by_id(self, reading_id: str):
+        return self.repository.get_sensor_data_by_id(reading_id)
+
+    def update_sensor_data(self, reading_id: str, update_data: dict):
+        return self.repository.update_sensor_data(reading_id, update_data)
 
     def delete_sensor_data(self, reading_data: str):
         return self.repository.delete_sensor_data(reading_data)
