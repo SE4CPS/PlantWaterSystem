@@ -16,8 +16,7 @@ add_moisture_data = APIRouter()
 @add_moisture_data.post("/api/send-data", response_model=dict)
 def add_moisture_entry(
     sensors: MoistureDataListSchema, 
-    service: SensorService = Depends(get_service),
-    current_user: str = Depends(get_current_user)
+    service: SensorService = Depends(get_service)
 ):
     try:
         # Call the service layer to add sensor moisture data
@@ -38,8 +37,7 @@ def add_moisture_entry(
 @add_moisture_data.post("/api/send-current", response_model=dict)
 async def send_current_data(
     request: Request, 
-    service: SensorService = Depends(get_service),
-    current_user: str = Depends(get_current_user)
+    service: SensorService = Depends(get_service)
 ):
     try:
         # Parse the incoming JSON data
@@ -63,8 +61,7 @@ async def send_current_data(
 
 @add_moisture_data.get("/api/send-current", response_model=dict)
 async def get_current_data(
-    service: SensorService = Depends(get_service),
-    current_user: str = Depends(get_current_user)
+    service: SensorService = Depends(get_service)
 ):
     try:
         return JSONResponse(status_code=200, content={"message": "GET request received. No data to process."})
@@ -78,6 +75,7 @@ def serialize_datetime(obj):
     if isinstance(obj, datetime):
         return obj.isoformat()
     return obj
+
 # For Frontend
 @add_moisture_data.get("/api/sensor_data", response_model=SensorDataResponse)
 async def get_sensor_data(
@@ -190,6 +188,48 @@ async def update_sensor_data(
             return JSONResponse(status_code=status_code, content={"status": "error", "error": response["error"]})
         
         return JSONResponse(status_code=200, content=response)
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"status": "error", "error": f"Unexpected error: {str(e)}"})
+
+@add_moisture_data.post("/api/sensor_data", response_model=dict)
+async def add_sensor_data(
+    sensor_data: dict,
+    service: SensorService = Depends(get_service),
+    current_user: str = Depends(get_current_user)
+):
+    try:
+        # Validate sensor_data
+        if not sensor_data:
+            return JSONResponse(
+                status_code=400,
+                content={"status": "error", "error": "No sensor data provided"}
+            )
+
+        # List of required database column names
+        required_columns = [
+            'sensorid', 'adcvalue', 'moisturelevel', 'digitalstatus',
+            'weathertemp', 'weatherhumidity', 'weathersunlight', 'weatherwindspeed',
+            'weatherfetched', 'timestamp', 'location'
+        ]
+
+        # Check if all required fields are present
+        missing_fields = [field for field in required_columns if field not in sensor_data]
+        if missing_fields:
+            return JSONResponse(
+                status_code=400,
+                content={"status": "error", "error": f"Missing required fields: {', '.join(missing_fields)}"}
+            )
+
+        # Call the service layer to add sensor data
+        response = service.add_sensor_data(sensor_data)
+
+        if "error" in response:
+            status_code = 400 if "Duplicate" in response["error"] else 500
+            return JSONResponse(status_code=status_code, content={"status": "error", "error": response["error"]})
+        
+        return JSONResponse(status_code=201, content=response)
     except HTTPException as he:
         raise he
     except Exception as e:

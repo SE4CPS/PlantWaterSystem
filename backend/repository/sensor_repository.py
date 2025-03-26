@@ -20,3 +20,6 @@ class SensorRepository:
     
     def delete_sensor_data(self, reading_id: str):
         return self.dal.delete_sensor_data(reading_id)
+
+    def add_sensor_data(self, sensor_data: dict):
+        return self.dal.add_sensor_data(sensor_data)
