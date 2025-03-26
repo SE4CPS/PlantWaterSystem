@@ -65,24 +65,36 @@ def fetch_recent_data(after=None):
 
 def send_request_curl(url, data):
     """
-    Write the JSON payload to a temporary file and use curl --data-binary to POST the payload.
+    Write the JSON payload to a temporary file and use curl with --write-out to capture the HTTP status code.
     The payload key is "data", as required by the backend.
     """
     payload = json.dumps({"data": data})
     with tempfile.NamedTemporaryFile(mode="w", delete=False) as tmp:
         tmp.write(payload)
         tmp_filename = tmp.name
+    # The command writes out the HTTP status code at the end.
     command = [
         "curl",
         "--location",
-        url,
+        "--silent",
+        "--show-error",
         "--header", "Content-Type: application/json",
-        "--data-binary", f"@{tmp_filename}"
+        "--data-binary", f"@{tmp_filename}",
+        "--write-out", "%{http_code}",
+        url
     ]
     result = subprocess.run(command, capture_output=True, text=True)
     os.remove(tmp_filename)
     if result.returncode == 0:
-        return True
+        # The output will contain both the response body and the status code appended at the end.
+        # We assume the status code is the last 3 characters.
+        output = result.stdout.strip()
+        http_code = output[-3:]
+        if http_code == "200":
+            return True
+        else:
+            logging.error(f"Curl command returned HTTP code {http_code}: {output}")
+            return False
     else:
         logging.error(f"Curl command failed: {result.stderr}")
         return False
@@ -99,9 +111,8 @@ def retry_with_backoff(func, max_attempts=RETRY_ATTEMPTS, base_delay=BASE_DELAY)
 
 def send_data_to_backend(url, after=None):
     """
-    Determines the effective lower bound:
-      - If 'after' is not provided, uses current time minus 12 hours.
-      - If provided and the gap is more than 12 hours, logs an error and uses the last 12 hours.
+    Determines the effective lower bound for unsent data.
+    If 'after' is not provided or the gap is more than 12 hours, it uses current time minus 12 hours.
     Then fetches data and sends it via curl.
     """
     now_dt = datetime.now()
@@ -121,7 +132,7 @@ def send_data_to_backend(url, after=None):
     data = fetch_recent_data(after=effective_after)
     if not data:
         logging.info("No new data to send.")
-        return True, None  # Return success True with no data to send.
+        return True, None  # Return True, since no data is also a valid state.
     def send_request():
         return send_request_curl(url, data)
     success = retry_with_backoff(send_request)
@@ -130,7 +141,7 @@ def send_data_to_backend(url, after=None):
 @app.route("/send-current", methods=["GET", "POST"])
 def send_current_data():
     """
-    On-demand endpoint to send data after the last confirmed send.
+    On-demand endpoint that sends data after the last confirmed send.
     """
     global LAST_SENT_TIMESTAMP
     success, data = send_data_to_backend(BACKEND_API_SEND_CURRENT, after=LAST_SENT_TIMESTAMP)
@@ -149,7 +160,7 @@ def send_current_data():
 @app.route("/send-manual", methods=["GET", "POST"])
 def send_manual_data():
     """
-    Manual endpoint to send data (only last 12 hours or data after last confirmed send).
+    Manual endpoint to send data (only last 12 hours or data after the last confirmed send).
     """
     global LAST_SENT_TIMESTAMP
     success, data = send_data_to_backend(BACKEND_API_SEND_CURRENT, after=LAST_SENT_TIMESTAMP)
@@ -168,7 +179,7 @@ def send_manual_data():
 @app.route("/send-data", methods=["POST"])
 def send_data():
     """
-    Endpoint for scheduled auto-send that sends data from the last 12 hours.
+    Endpoint for scheduled auto-send that sends data (only last 12 hours).
     """
     success, _ = send_data_to_backend(BACKEND_API_SEND_DATA)
     if success:
