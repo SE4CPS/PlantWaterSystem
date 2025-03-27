@@ -8,17 +8,28 @@ class PlantDAL:
         self.conn = get_connection()
         self.cursor = self.conn.cursor()
 
-    def create_plant(self, plant: PlantSchema):
+    def create_plant(self, plant: PlantSchema, username: str):
         try:
             # Validate input data (optional, based on your requirements)
             if not plant.PlantName or not plant.ScientificName or not isinstance(plant.Threshold, (int, float)):
                 raise ValueError("Invalid input data")
-
-            # Execute the query to insert the plant data
+            
+            # First, get the user's ID from the username
             self.cursor.execute("""
-                INSERT INTO plant (PlantID, PlantName, ScientificName, Threshold)
+                SELECT userid FROM UserData WHERE UserName = %s
+            """, (username,))
+            
+            user_result = self.cursor.fetchone()
+            if not user_result:
+                raise ValueError(f"User with username {username} not found")
+            
+            user_id = user_result[0]
+                
+            # Execute the query to insert the plant data with UserId
+            self.cursor.execute("""
+                INSERT INTO plant (plantName, scientificname, threshold, userId)
                 VALUES (%s, %s, %s, %s) RETURNING PlantID;
-            """, (plant.PlantID, plant.PlantName, plant.ScientificName, plant.Threshold))
+            """, (plant.PlantName, plant.ScientificName, plant.Threshold, user_id))
 
             # Commit the transaction
             self.conn.commit()
@@ -32,7 +43,8 @@ class PlantDAL:
                 "PlantID": plant_id,
                 "PlantName": plant.PlantName,
                 "ScientificName": plant.ScientificName,
-                "Threshhold": plant.Threshhold
+                "Threshold": plant.Threshold,
+                "UserId": user_id
             }
 
         except IntegrityError as e:
