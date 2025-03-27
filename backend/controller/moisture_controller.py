@@ -13,14 +13,14 @@ from config.authentication import get_current_user
 add_moisture_data = APIRouter()
 
 
-@add_moisture_data.post("/api/send-data", response_model=dict)
+@add_moisture_data.post("/api/sensor/data", response_model=dict)
 def add_moisture_entry(
     sensors: MoistureDataListSchema, 
     service: SensorService = Depends(get_service)
 ):
     try:
         # Call the service layer to add sensor moisture data
-        response = service.receive_moisture_data(sensors.data)
+        response = service.receive_moisture_data(sensors.sensor_data)
 
         # Check if the response contains an error
         if "error" in response:
@@ -34,29 +34,7 @@ def add_moisture_entry(
     except Exception as e:
         return JSONResponse(status_code=500, content={"status": "error", "message": f"Unexpected error: {str(e)}"})
 
-@add_moisture_data.post("/api/send-current", response_model=dict)
-async def send_current_data(
-    sensors: MoistureDataSchema, 
-    service: SensorService = Depends(get_service)
-):
-    try:
-        sensors = [sensors]
-        # Call the service layer to add sensor moisture data
-        response = service.receive_moisture_data(sensors)
-
-        # Check if the response contains an error
-        if "error" in response:
-            status_code = 400 if "Invalid Request" in response["error"] else 500
-            return JSONResponse(status_code=status_code, content={"status": "error", "error": response["error"]})
-
-        return JSONResponse(status_code=200, content=response)
-
-    except HTTPException as he:
-        raise he
-    except Exception as e:
-        return JSONResponse(status_code=500, content={"status": "error", "message": f"Unexpected error: {str(e)}"})
-
-@add_moisture_data.get("/api/send-current", response_model=dict)
+@add_moisture_data.get("/api/sensor/data", response_model=dict)
 async def get_current_data(
     service: SensorService = Depends(get_service)
 ):

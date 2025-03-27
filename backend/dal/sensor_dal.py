@@ -12,27 +12,47 @@ class SensorDAL:
 
     def receive_moisture_data(self, sensors: List[MoistureDataSchema]):
         try:
+            # Ensure the table exists
+            self.cursor.execute("""
+                CREATE TABLE IF NOT EXISTS raw_sensors (
+                    id INTEGER NOT NULL,
+                    timestamp TIMESTAMP NOT NULL,
+                    sensor_id INTEGER NOT NULL,
+                    adc_value FLOAT NOT NULL,
+                    moisture_level FLOAT NOT NULL,
+                    digital_status VARCHAR(255) NOT NULL,
+                    weather_temp FLOAT,
+                    weather_humidity FLOAT,
+                    weather_sunlight FLOAT,
+                    weather_wind_speed FLOAT,
+                    location VARCHAR(255),
+                    weather_fetched TEXT,
+                    device_id VARCHAR(255) NOT NULL
+                );
+            """)
+            self.conn.commit()
+
             # Bulk insert query
             insert_query = """
-                INSERT INTO sensorsdata (
-                    readingid, timestamp, deviceid, sensorid, adcvalue, moisturelevel, digitalstatus,
-                    weathertemp, weatherhumidity, weathersunlight, weatherwindspeed, location, weatherfetched
-                ) VALUES %s RETURNING readingid;
+                INSERT INTO raw_sensors(
+                    id, timestamp, sensor_id, adc_value, moisture_level, digital_status,
+                    weather_temp, weather_humidity, weather_sunlight, weather_wind_speed, location, weather_fetched, device_id
+                ) VALUES %s RETURNING id;
             """
             # Convert list of objects to list of tuples
             values = [
                 (
-                    sensor.id, sensor.timestamp, sensor.device_id, sensor.sensor_id, sensor.adc_value,
+                    sensor.id, sensor.timestamp, sensor.sensor_id, sensor.adc_value,
                     sensor.moisture_level, sensor.digital_status, sensor.weather_temp, sensor.weather_humidity,
-                    sensor.weather_sunlight, sensor.weather_wind_speed, sensor.location, sensor.weather_fetched
+                    sensor.weather_sunlight, sensor.weather_wind_speed, sensor.location, sensor.weather_fetched, sensor.device_id
                 )
                 for sensor in sensors
             ]
-            # Execute bulk insert
+            # Execute bulk insert for sensors table
             psycopg2.extras.execute_values(self.cursor, insert_query, values)
             self.conn.commit()
 
-            # Get the returned sensor_id
+            # Get the returned id
             inserted_ids = [row[0] for row in self.cursor.fetchall()]
             return {"status": "success", "inserted_ids": inserted_ids}
 

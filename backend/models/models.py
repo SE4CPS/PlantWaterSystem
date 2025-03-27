@@ -7,20 +7,21 @@ class Plant(Base):
     PlantName = Column(String(50), nullable=False)
     ScientificName = Column(String(50), nullable=False)
     Threshhold = Column(Float, nullable=False)
+    ImageFilename = Column(String(255), nullable=True)  # New column for image filename
 
 class Sensor(Base):
     __tablename__ = "sensors"
     
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, nullable=False)
     timestamp = Column(DateTime, nullable=False)
-    device_id = Column(String, nullable=False)
     sensor_id = Column(Integer, nullable=False)
-    adc_value = Column(Integer, nullable=False)
+    adc_value = Column(Float, nullable=False)
     moisture_level = Column(Float, nullable=False)
     digital_status = Column(String, nullable=False)
     weather_temp = Column(Float, nullable=False)
-    weather_humidity = Column(Integer, nullable=False)
+    weather_humidity = Column(Float, nullable=False)
     weather_sunlight = Column(Float, nullable=False)
     weather_wind_speed = Column(Float, nullable=False)
     location = Column(String, nullable=False)
-    weather_fetched = Column(DateTime, nullable=False)
+    weather_fetched = Column(String, nullable=False)
+    device_id = Column(String, nullable=False)
