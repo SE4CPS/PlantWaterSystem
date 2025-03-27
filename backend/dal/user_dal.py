@@ -14,7 +14,7 @@ class UserDAL:
                 raise ValueError("username must not be empty.")
 
             self.cursor.execute("""
-                SELECT userid, firstname, lastname, username, userpassword, email, phonenumber
+                SELECT firstname, lastname, username, email, phonenumber
                 FROM userdata
                 WHERE username = %s
             """, (username,))
@@ -25,13 +25,11 @@ class UserDAL:
                 return None
 
             return {
-                "userid": user[0],
-                "firstname": user[1],
-                "lastname": user[2],
-                "username": user[3],
-                "userpassword": user[4],
-                "email": user[5],
-                "phonenumber": user[6]
+                "firstname": user[0],
+                "lastname": user[1],
+                "username": user[2],
+                "email": user[3],
+                "phonenumber": user[4]
             }
 
         except (psycopg2.Error, DatabaseError) as db_error:

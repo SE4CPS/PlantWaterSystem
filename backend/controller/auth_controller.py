@@ -58,19 +58,19 @@ def create_user(user: UserCreateSchema, user_service: UserService = Depends(get_
     
 @auth_router.get("/users", response_model=UserSchema)
 def get_user(
-    email: str, 
+    username: str, 
     user_service: UserService = Depends(get_user_service),
     current_user: str = Depends(get_current_user)
 ):
     try:
         # Only allow users to access their own information
-        if current_user != email:
+        if current_user != username:
             raise HTTPException(
                 status_code=403,
                 detail="Not authorized to access this user's information"
             )
 
-        user_details = user_service.get_user(email)
+        user_details = user_service.get_user(username)
         # Check if the response contains an error (we assume error in the response means failure)
         if "error" in user_details:
             # If error is present, return the error response with an appropriate status code (400 or 500)
