@@ -9,6 +9,7 @@ import ErrorPage from "../Pages/ErrorPage";
 import NavBar from "./NavBar";
 import SignUpPage from "../Pages/SignUpPage";
 import DisplayPage from "../Pages/DisplayPage";
+import SettingsPage from "../Pages/SettingsPage";
 
 const router = createBrowserRouter([
     {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
                 path: '/display',
                 element: <DisplayPage />
             },
+            {
+                path: '/settings',
+                element: <SettingsPage />
+            }
         ]
     },
 ]);
