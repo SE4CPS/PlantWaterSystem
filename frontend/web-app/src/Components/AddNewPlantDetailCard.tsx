@@ -1,38 +1,56 @@
-import React from 'react'
+import React, { useState } from 'react'
 import closeBtn from '../Images/plant-card-close-btn-icon.svg'
 import dummyImage from '../Images/rose.png'
+import { useNavigate } from 'react-router-dom'
+import { AddPlantObject } from '../Interfaces/plantInterface';
 
-function PlantDetailCard({status}: {status: string}) {
+function AddNewPlantDetailCard() {
+
+  const navigate = useNavigate();
+
+  const [addPlantObject, setAddPlantObject] = useState<AddPlantObject>({
+    name: '',
+    sensorId: '',
+    note: '',
+  })
+
+  const onPlantDetailChange =(key: string, value: string)=>{
+    const newObject: AddPlantObject = {
+      ...addPlantObject,
+      [key]: value
+    };
+
+    setAddPlantObject(newObject);
+  }
+
   return (
-    <div className={`plant-detail-card font-poppins ${status}`}>
+    <div className={`plant-detail-card font-poppins good`}>
         <div className='plant-detail-card-information'>
             <div className='detail-and-image-container'>
                 <img className='plant-detail-card-image' src={dummyImage} alt='error img'/>
                 <div className='plant-detail-card-details'>
                     <div>
-                        Name: <b>Red Rose</b>
+                        Name: <input type='text' value={addPlantObject.name} onChange={(e)=>{onPlantDetailChange('name', e.target.value)}} />
                     </div>
                     <div>
-                        Status: <b>Good</b>
+                        Status: 
                     </div>
                     <div>
-                        Last Watered: <b>3:15pm</b> on <b>2/6/2025</b>
+                        Last Watered: 
                     </div>
                     <div>
-                        Sensor ID: <b>1111</b>
+                        Sensor ID: <input type='text' value={addPlantObject.sensorId} onChange={(e)=>{onPlantDetailChange('sensorId', e.target.value)}} /> 
                     </div>
                     <div>
                         Device ID: <b>1234</b>
                     </div>
                     <div>
-                        Note: <b>Place this plant near the window</b>
+                        Note: <input type='text' value={addPlantObject.note} onChange={(e)=>{onPlantDetailChange('note', e.target.value)}} />
                     </div>
                 </div>
             </div>
-            <div className='plant-detail-card-button-container'>
+            <div className='plant-detail-card-button-container' onClick={()=>{navigate('/')}}>
                 <img className='plant-detail-card-close-button' src={closeBtn} alt='error img'/>
-                <button className='plant-detail-card-edit-button'>Edit</button>
-                <button className='plant-detail-card-delete-button'>Delete</button>
             </div>
         </div>
         <div className='plant-detail-card-history'>
@@ -90,8 +108,11 @@ function PlantDetailCard({status}: {status: string}) {
                 </div>
             </div>
         </div>
+        <div className='add-plant-save-button-container'>
+            <button className='add-plant-save-button'>Save</button>
+        </div>
     </div>
   )
 }
 
-export default PlantDetailCard
+export default AddNewPlantDetailCard

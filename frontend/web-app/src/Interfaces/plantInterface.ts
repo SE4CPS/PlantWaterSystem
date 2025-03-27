@@ -5,3 +5,8 @@ export interface GetPlantData{
     Threshhold: number;
 }
 
+export interface AddPlantObject{
+    name: string;
+    sensorId: string;
+    note: string;
+}
