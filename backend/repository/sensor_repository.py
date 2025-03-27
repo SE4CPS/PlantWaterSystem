@@ -18,6 +18,9 @@ class SensorRepository:
     def get_sensor_data_by_username(self, username: str):
         return self.dal.get_sensor_data_by_username(username)
     
+    def get_sensor_data_details_by_username(self):
+        return self.dal.get_sensor_data_details_by_username()
+    
     def update_sensor_data(self, reading_id: str, update_data: dict):
         return self.dal.update_sensor_data(reading_id, update_data)
     

@@ -441,3 +441,43 @@ class SensorDAL:
             self.conn.rollback()
             print(f"Unexpected error: {e}")
             return {"status": "error", "error": str(e)}
+
+    def get_sensor_data_details_by_username(self):
+        try:
+           
+            self.cursor.execute("""
+                SELECT readingid, adcvalue, moisturelevel AS "Water Level", digitalstatus, timestamp AS "Date_Time"
+                FROM sensorsdata
+                WHERE sensorid = 1 AND deviceid = '00000000e23f5b4d'
+            """)
+
+            results = self.cursor.fetchall()
+
+            if not results:
+                return []
+
+            return [
+                {
+                    "id": row[0],  # readingid
+                    "adcvalue": row[1],
+                    "waterlevel": row[2],
+                    "digitalsatus": row[3],
+                    "moisture_level": row[2],  # Using moisturelevel as moisture_level
+                    "date": row[4].date() if row[4] else None,  # Extract date from timestamp
+                    "time": row[4].time() if row[4] else None   # Extract time from timestamp
+                }
+                for row in results
+            ]
+        except (psycopg2.Error, DatabaseError) as db_error:
+            self.conn.rollback()
+            print(f"Database error: {db_error}")
+            return {"status": "error", "error": str(db_error)}
+
+        except ValueError as val_error:
+            print(f"Input error: {val_error}")
+            return {"status": "error", "error": str(val_error)}
+
+        except Exception as e:
+            self.conn.rollback()
+            print(f"Unexpected error: {e}")
+            return {"status": "error", "error": str(e)}
