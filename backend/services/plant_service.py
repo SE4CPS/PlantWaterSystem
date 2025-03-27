@@ -14,7 +14,6 @@ class PlantService:
         return self.repository.get_plants()
 
     def update_plant_image(self, plant_id: int, new_image_filename: str, file_content: bytes):
-        # Pass the file content to the repository
         return self.repository.update_plant_image(plant_id, new_image_filename, file_content)
 
 def get_service():

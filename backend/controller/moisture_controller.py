@@ -20,7 +20,7 @@ def add_moisture_entry(
 ):
     try:
         # Call the service layer to add sensor moisture data
-        response = service.receive_moisture_data(sensors.data)
+        response = service.receive_moisture_data(sensors.sensor_data)
 
         # Check if the response contains an error
         if "error" in response:
