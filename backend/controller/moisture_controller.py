@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
-from schemas.sensor_schema import MoistureDataListSchema, MoistureDataSchema, SensorDataResponse, SensorDataSchema, UserPlantSensorSchema
+from schemas.sensor_schema import MoistureDataListSchema, MoistureDataSchema, SensorDataDetailsResponse, SensorDataResponse, SensorDataSchema, UserPlantSensorSchema, SensorDataDetailsResponseList
 from services.sensor_service import get_service, SensorService
 from fastapi import  Depends
 from fastapi.responses import JSONResponse
@@ -229,6 +229,27 @@ async def add_sensor_data(
             return JSONResponse(status_code=status_code, content={"status": "error", "error": response["error"]})
         
         return JSONResponse(status_code=201, content=response)
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"status": "error", "error": f"Unexpected error: {str(e)}"})
+    
+@add_moisture_data.get("/api/sensor_data_details", response_model=SensorDataDetailsResponseList)
+async def get_sensor_data_details_by_username(
+    service: SensorService = Depends(get_service),
+    current_user: str = Depends(get_current_user)
+):
+    try: 
+        response = service.get_sensor_data_details_by_username()
+
+        if "error" in response:
+            status_code = 400 if "Duplicate" in response["error"] else 500
+            return JSONResponse(status_code=status_code, content={"status": "error", "error": response["error"]})
+        
+        # Convert raw dicts into Pydantic models
+        sensor_data_objects = [SensorDataDetailsResponse(**item) for item in response]
+
+        return SensorDataDetailsResponseList(status_code=200, data=sensor_data_objects)
     except HTTPException as he:
         raise he
     except Exception as e:
