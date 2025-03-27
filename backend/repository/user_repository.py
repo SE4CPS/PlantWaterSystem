@@ -5,16 +5,16 @@ class UserRepository:
     def __init__(self, dal: UserDAL):
         self.dal = dal
 
-    def get_user(self, email: str):
-        return self.dal.get_user(email)
+    def get_user(self, username: str):
+        return self.dal.get_user(username)
       
-    def create_user(self, sensorid: int, firstname: str, lastname: str, username: str, userpassword: str, email: str):
+    def create_user(self, firstname: str, lastname: str, username: str, userpassword: str, email: str, phonenumber: str):
         return self.dal.create_user(
-            sensorid=sensorid,
             firstname=firstname,
             lastname=lastname,
             username=username,
             userpassword=userpassword,
-            email=email
+            email=email,
+            phonenumber=phonenumber 
         )
 

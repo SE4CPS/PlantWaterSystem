@@ -16,18 +16,13 @@ def create_plant_entry(
     current_user: str = Depends(get_current_user)
 ):
     try:
-        # Call the service layer to create the plant
-        response = service.create_plant(plant)
-
-        # Check if the response contains an error
+        # Pass the current_user (username) to the service
+        response = service.create_plant(plant, current_user)
+        
         if "error" in response:
-            status_code = 400 if "Duplicate" in response["error"] else 500
-            return JSONResponse(status_code=status_code, content={"status": "error", "error": response["error"]})
-
-        return JSONResponse(status_code=201, content=response)
-
-    except HTTPException as he:
-        raise he
+            return JSONResponse(status_code=400, content={"status": "error", "error": response["error"]})
+        
+        return response
     except Exception as e:
         return JSONResponse(status_code=500, content={"status": "error", "error": f"Unexpected error: {str(e)}"})
     
@@ -38,7 +33,7 @@ def get_plant_data(
     current_user: str = Depends(get_current_user)
 ):
     try: 
-        response = service.get_plants()
+        response = service.get_plants(current_user)
 
         if "error" in response:
             status_code = 400 if "Duplicate" in response["error"] else 500

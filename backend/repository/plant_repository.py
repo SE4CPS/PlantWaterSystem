@@ -5,8 +5,8 @@ class PlantRepository:
     def __init__(self, dal: PlantDAL):
         self.dal = dal
 
-    def add_plant(self, plant: PlantSchema):
-        return self.dal.create_plant(plant)
+    def add_plant(self, plant: PlantSchema, username: str):
+        return self.dal.create_plant(plant, username)
     
-    def get_plants(self):
-        return self.dal.get_plants()
+    def get_plants(self, username: str):
+        return self.dal.get_plants(username)
