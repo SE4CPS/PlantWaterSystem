@@ -11,35 +11,37 @@ from schemas.user_create_schema import UserCreateSchema
 auth_router = APIRouter(prefix="/api")
 
 # Custom form for email-based authentication
-class EmailPasswordForm:
-    def __init__(self, email: str = Form(...), password: str = Form(...)):
-        self.email = email
+# Change to username-based authentication
+class UsernamePasswordForm:
+    def __init__(self, username: str = Form(...), password: str = Form(...)):
+        self.username = username
         self.password = password
 
 # Generate JWT token
 @auth_router.post("/token")
-def login_for_access_token(form_data: EmailPasswordForm = Depends(), user_service: UserService = Depends(get_user_service)):
-    user = user_service.get_user(form_data.email)
+def login_for_access_token(form_data: UsernamePasswordForm = Depends(), user_service: UserService = Depends(get_user_service)):
+    user = user_service.get_user(form_data.username)
 
-    if not user or not verify_password(form_data.password, user["userpassword"]):
-        raise HTTPException(status_code=401, detail="Incorrect email or password")
+    # if not user or not verify_password(form_data.password, user["userpassword"]):
+    if not user or form_data.password != user["userpassword"]:
+        raise HTTPException(status_code=401, detail="Incorrect username or password")
 
-    access_token = create_access_token({"sub": form_data.email}, expires_delta=timedelta(minutes=30))
+    access_token = create_access_token({"sub": form_data.username}, expires_delta=timedelta(minutes=30))
     return {"access_token": access_token, "token_type": "bearer"}
 
 @auth_router.post("/users", response_model=UserSchema)
 def create_user(user: UserCreateSchema, user_service: UserService = Depends(get_user_service)):
     try:
         # Hash the password before creating the user
-        hashed_password = hash_password(user.userpassword)
+        # hashed_password = hash_password(user.userpassword)
         
         user_details = user_service.create_user(
-            sensorid=user.sensorid,
             firstname=user.firstname,
             lastname=user.lastname,
             username=user.username,
-            userpassword=hashed_password,  # Use the hashed password
-            email=user.email
+            userpassword=user.userpassword,  # Use the hashed password
+            email=user.email,
+            phonenumber=user.phonenumber
         )
         # Check if the response contains an error (we assume error in the response means failure)
         if "error" in user_details:
