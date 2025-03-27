@@ -37,7 +37,16 @@ class SensorDataSchema(BaseModel):
     weather_fetched: str
 
 
+class UserPlantSensorSchema(BaseModel):
+    firstname: str
+    lastname: str
+    plantname: str
+    scientificname: str
+    sensorid: int
+    deviceid: str
+
+
 class SensorDataResponse(BaseModel):
     status_code: int
-    data: List[SensorDataSchema]
+    data: List[UserPlantSensorSchema]
 

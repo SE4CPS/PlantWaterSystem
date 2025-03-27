@@ -10,8 +10,8 @@ class PlantService:
         print("im her in service")
         return self.repository.add_plant(plant)
     
-    def get_plants(self):
-        return self.repository.get_plants()
+    def get_plants(self, username: str):
+        return self.repository.get_plants(username)
 
 
 def get_service():

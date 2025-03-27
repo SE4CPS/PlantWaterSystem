@@ -78,10 +78,10 @@ class PlantDAL:
             # Ensure that the connection is released
             release_connection(self.conn)
 
-    def get_plants(self):
+    def get_plants(self, username: str):
         try:
            
-            self.cursor.execute( "SELECT PlantID, PlantName, ScientificName, Threshold FROM plant;")
+            self.cursor.execute("SELECT FirstName, LastName, PlantName, ScientificName FROM UserData JOIN Plant ON UserData.UserId = Plant.UserId WHERE username = %s;", (username,))
 
             plants= self.cursor.fetchall()
 
@@ -94,10 +94,10 @@ class PlantDAL:
             
             plant_list=[
             {
-                "PlantID": plant[0],
-                "PlantName": plant[1],
-                "ScientificName": plant[2],
-                "Threshhold": plant[3]
+                "FirstName": plant[0],
+                "LastName": plant[1],
+                "PlantName": plant[2],
+                "ScientificName": plant[3]
             }
                 for plant in plants
             ]

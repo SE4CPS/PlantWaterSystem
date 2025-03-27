@@ -38,7 +38,7 @@ def get_plant_data(
     current_user: str = Depends(get_current_user)
 ):
     try: 
-        response = service.get_plants()
+        response = service.get_plants(current_user)
 
         if "error" in response:
             status_code = 400 if "Duplicate" in response["error"] else 500

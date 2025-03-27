@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
-from schemas.sensor_schema import MoistureDataListSchema, MoistureDataSchema, SensorDataResponse, SensorDataSchema
+from schemas.sensor_schema import MoistureDataListSchema, MoistureDataSchema, SensorDataResponse, SensorDataSchema, UserPlantSensorSchema
 from services.sensor_service import get_service, SensorService
 from fastapi import  Depends
 from fastapi.responses import JSONResponse
@@ -117,28 +117,30 @@ async def delete_sensor_data(
     except Exception as e:
         return JSONResponse(status_code=500, content={"status": "error", "error": f"Unexpected error: {str(e)}"})
 
-@add_moisture_data.get("/api/sensor_data/{sensor_id}", response_model=SensorDataResponse)
-async def get_sensor_data_by_id(
-    sensor_id: str,
+@add_moisture_data.get("/api/sensor_data/user/{username}", response_model=SensorDataResponse)
+async def get_sensor_data_by_username(
+    username: str,
     service: SensorService = Depends(get_service),
     current_user: str = Depends(get_current_user)
 ):
     try: 
-        response = service.get_sensor_data_by_id(sensor_id)
+        # Only allow users to access their own information
+        if current_user != username:
+            raise HTTPException(
+                status_code=403,
+                detail="Not authorized to access this user's information"
+            )
+
+        response = service.get_sensor_data_by_username(username)
 
         if "error" in response:
             status_code = 400 if "Duplicate" in response["error"] else 500
             return JSONResponse(status_code=status_code, content={"status": "error", "error": response["error"]})
         
-        # Ensure datetime fields are serialized properly
-        for item in response:
-            item["timestamp"] = serialize_datetime(item["timestamp"])
-            item["weather_fetched"] = serialize_datetime(item["weather_fetched"])
-        
         # Convert raw dicts into Pydantic models
-        sensor_data_objects = [SensorDataSchema(**item) for item in response]
+        plant_sensor_objects = [UserPlantSensorSchema(**item) for item in response]
 
-        return SensorDataResponse(status_code=200, data=sensor_data_objects)
+        return SensorDataResponse(status_code=200, data=plant_sensor_objects)
     except HTTPException as he:
         raise he
     except Exception as e:

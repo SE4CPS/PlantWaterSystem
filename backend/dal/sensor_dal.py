@@ -69,10 +69,16 @@ class SensorDAL:
             # Ensure that the connection is released
             release_connection(self.conn)
 
-    def get_sensor_data(self):
+    def get_sensor_data(self, username: str):
         try:
            
-            self.cursor.execute("SELECT readingid, timestamp, sensorid, adcvalue, moisturelevel, digitalstatus, weathertemp, weatherhumidity, weathersunlight, weatherwindspeed, location, weatherfetched FROM sensorsdata;")
+            self.cursor.execute("""
+                SELECT FirstName, LastName, PlantName, ScientificName, Sensors.SensorId, Sensors.DeviceId
+                FROM UserData
+                JOIN Plant ON UserData.UserId = Plant.UserId
+                JOIN Sensors ON Plant.PlantId = Sensors.PlantId
+                WHERE UserName = %s;
+            """, (username,))
 
             data= self.cursor.fetchall()
 
@@ -391,3 +397,47 @@ class SensorDAL:
 
         finally:
             release_connection(self.conn)
+
+    def get_sensor_data_by_username(self, username: str):
+        try:
+            if not username:
+                raise ValueError("Username must not be empty.")
+
+            self.cursor.execute("""
+                SELECT firstname, lastname, plantname, scientificname, Sensors.sensorid, Sensors.deviceid
+                FROM UserData
+                JOIN Plant ON UserData.UserId = Plant.UserId
+                JOIN Sensors ON Plant.PlantId = Sensors.PlantId
+                WHERE UserName = %s
+            """, (username,))
+
+            results = self.cursor.fetchall()
+
+            if not results:
+                return []
+
+            return [
+                {
+                    "firstname": row[0],
+                    "lastname": row[1],
+                    "plantname": row[2],
+                    "scientificname": row[3],
+                    "sensorid": row[4],
+                    "deviceid": row[5]
+                }
+                for row in results
+            ]
+
+        except (psycopg2.Error, DatabaseError) as db_error:
+            self.conn.rollback()
+            print(f"Database error: {db_error}")
+            return {"status": "error", "error": str(db_error)}
+
+        except ValueError as val_error:
+            print(f"Input error: {val_error}")
+            return {"status": "error", "error": str(val_error)}
+
+        except Exception as e:
+            self.conn.rollback()
+            print(f"Unexpected error: {e}")
+            return {"status": "error", "error": str(e)}
