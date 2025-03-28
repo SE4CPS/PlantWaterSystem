@@ -12,6 +12,19 @@ class AuthController{
             return Promise.reject(error);
         }
     }
+
+    public getUserDetails = async (username: string): Promise<AxiosResponse> => {
+        try {
+            const response = await axiosInstance.get('/users', {
+                params: {
+                    'username': username,
+                },
+            });
+            return response;
+        } catch (error: unknown) {
+            return Promise.reject(error);
+        }
+    }
     
 }
 

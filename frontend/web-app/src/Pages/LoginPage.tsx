@@ -33,12 +33,12 @@ function LoginPage() {
       toast.success("Login Successful", {
         position: 'top-right',
       });
-      localStorage.setItem('bearer', response.data.access_token);
+      localStorage.setItem('access_token', response.data.access_token);
+      const userDetailsResp = await authController.getUserDetails(body.username);
+      localStorage.setItem('userDetails', JSON.stringify(userDetailsResp.data));
       navigate('/');
 
     } catch (error:unknown) {
-      // eslint-disable-next-line no-console
-      console.log(error);
       handleApiError(error);
     }
     
