@@ -15,3 +15,11 @@ export interface PlantMetaData{
     sensorId: string;
     deviceId: string;
 }
+
+export interface SensorTableData{
+    date: string,
+    time: string,
+    adcvalue: string;
+    moisture_level: string;
+    digitalsatus: string;
+}

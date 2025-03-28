@@ -1,12 +1,29 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import closeBtn from '../Images/plant-card-close-btn-icon.svg'
 import dummyImage from '../Images/rose.png'
-import { PlantMetaData } from '../Interfaces/plantInterface'
+import { PlantMetaData, SensorTableData } from '../Interfaces/plantInterface'
 import { useNavigate } from 'react-router-dom'
+import sensorController from '../Controller/SensorController'
+import handleApiError from '../Utils/apiService'
 
 function PlantDetailCard({status, plantMetaData}: {status: string, plantMetaData: PlantMetaData}) {
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  const [sensorTableData, setSensorTableData] = useState<Array<SensorTableData>>([]);
+
+  useEffect(() => {
+    const fetchSensorTableData = async () => {
+      try {
+        const response = await sensorController.getSensorData();
+        setSensorTableData(response.data.data);
+      } catch (error) {
+        handleApiError(error);
+      }
+    }
+    fetchSensorTableData();
+  }, [])
+  
 
   return (
     <div className={`plant-detail-card font-poppins ${status}`}>
@@ -56,41 +73,19 @@ function PlantDetailCard({status, plantMetaData}: {status: string, plantMetaData
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>2/2/2025</td>
-                            <td>2:23 pm</td>
-                            <td>43243</td>
-                            <td>100%</td>
-                            <td>Good</td>
-                        </tr>
-                        <tr>
-                            <td>2/2/2025</td>
-                            <td>2:23 pm</td>
-                            <td>43243</td>
-                            <td>100%</td>
-                            <td>Good</td>
-                        </tr>
-                        <tr>
-                            <td>2/2/2025</td>
-                            <td>2:23 pm</td>
-                            <td>43243</td>
-                            <td>100%</td>
-                            <td>Good</td>
-                        </tr>
-                        <tr>
-                            <td>2/2/2025</td>
-                            <td>2:23 pm</td>
-                            <td>43243</td>
-                            <td>100%</td>
-                            <td>Good</td>
-                        </tr>
-                        <tr>
-                            <td>2/2/2025</td>
-                            <td>2:23 pm</td>
-                            <td>43243</td>
-                            <td>100%</td>
-                            <td>Good</td>
-                        </tr>
+                        {
+                          sensorTableData.map((data, index) => {
+                            return (
+                              <tr key={index}>
+                                <td>{data.date}</td>
+                                <td>{data.time}</td>
+                                <td>{data.adcvalue}</td>
+                                <td>{data.moisture_level}</td>
+                                <td>{data.digitalsatus}</td>
+                              </tr>
+                            )
+                          })
+                        }
                     </tbody>
                 </div>
             </div>
