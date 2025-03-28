@@ -17,3 +17,10 @@ export interface AuthContextAction{
 export interface UserData{
     username: string; 
 }
+
+// Login Interfaces
+
+export interface LoginObject{
+    username: string;
+    userpassword: string;
+}

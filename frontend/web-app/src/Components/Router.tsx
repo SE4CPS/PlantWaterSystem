@@ -9,6 +9,7 @@ import ErrorPage from "../Pages/ErrorPage";
 import NavBar from "./NavBar";
 import SignUpPage from "../Pages/SignUpPage";
 import DisplayPage from "../Pages/DisplayPage";
+import AddPlantPage from "../Pages/AddPlantPage";
 import SettingsPage from "../Pages/SettingsPage";
 
 const router = createBrowserRouter([
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
             {
                 path: '/display',
                 element: <DisplayPage />
+            },
+            {
+                path: '/add_plant',
+                element: <AddPlantPage />
             },
             {
                 path: '/settings',

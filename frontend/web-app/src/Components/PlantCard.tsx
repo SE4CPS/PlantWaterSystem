@@ -1,5 +1,6 @@
 import React from 'react'
 import '../Styles/custom/plantCard.css'
+import { useNavigate } from 'react-router-dom'
 // import dummyImage from '../Images/rose.png'
 
 const imageMap = new Map<string, string>([
@@ -9,9 +10,13 @@ const imageMap = new Map<string, string>([
   ['Sunflower', 'https://images.unsplash.com/photo-1597848212624-a19eb35e2651?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D']
 ])
 
-function PlantCard({status, name}: {status: string, name: string}) {
+function PlantCard({status, name, sensorId, deviceId}: {status: string, name: string, sensorId: string, deviceId: string}) {
+
+  const navigate = useNavigate();
+  const plantMetaData = {name, sensorId, deviceId}
+
   return (
-    <div className={`plantCard ${status}`}>
+    <div className={`plantCard ${status}`} onClick={()=>navigate('/plant_detail', { state: plantMetaData })}>
       {status==='dry'? <div className='plantCard-dry-status-indicator'><b>Water Me!</b></div> : null}
       <img className='plantCard-image' src={imageMap.get(name)} alt='Error Img'/>
       <div className='plantCard-detail'>
