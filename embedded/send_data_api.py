@@ -73,13 +73,12 @@ def fetch_recent_data(after=None):
 def send_request_curl(url, data):
     """
     Write the JSON payload to a temporary file and use curl with --write-out
-    to capture the HTTP status code. The payload key is "sensor_data" as required by the backend.
+    to capture the HTTP status code. The payload key is "data", as required by the backend.
     """
-    payload = json.dumps({"sensor_data": data})
+    payload = json.dumps({"data": data})
     with tempfile.NamedTemporaryFile(mode="w", delete=False) as tmp:
         tmp.write(payload)
         tmp_filename = tmp.name
-    # Build the curl command. The output will have the HTTP status code appended.
     command = [
         "curl",
         "--location",
@@ -137,7 +136,7 @@ def send_data_to_backend(url, after=None):
     data = fetch_recent_data(after=effective_after)
     if not data:
         logging.info("No new data to send.")
-        return True, None
+        return True, None  # No data is considered a success state.
     def send_request():
         return send_request_curl(url, data)
     success = retry_with_backoff(send_request)
@@ -165,7 +164,7 @@ def send_current_data():
 @app.route("/send-manual", methods=["GET", "POST"])
 def send_manual_data():
     """
-    Manual endpoint that sends data after the last confirmed send.
+    Manual endpoint to send data (only last 12 hours or data after the last confirmed send).
     """
     global LAST_SENT_TIMESTAMP
     success, data = send_data_to_backend(BACKEND_API_SEND_CURRENT, after=LAST_SENT_TIMESTAMP)
