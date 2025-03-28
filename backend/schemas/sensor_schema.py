@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from datetime import datetime
+from datetime import datetime, date, time
 from typing import List
 
 class MoistureDataSchema(BaseModel):
@@ -37,7 +37,28 @@ class SensorDataSchema(BaseModel):
     weather_fetched: str
 
 
+class UserPlantSensorSchema(BaseModel):
+    firstname: str
+    lastname: str
+    plantname: str
+    threshold: float
+    sensorid: int
+    deviceid: str
+
+
 class SensorDataResponse(BaseModel):
     status_code: int
-    data: List[SensorDataSchema]
+    data: List[UserPlantSensorSchema]
 
+class SensorDataDetailsResponse(BaseModel):
+    id: int
+    adcvalue: float
+    waterlevel: float
+    digitalsatus: str
+    moisture_level: float
+    date: date
+    time: time
+
+class SensorDataDetailsResponseList(BaseModel):
+    status_code: int
+    data: List[SensorDataDetailsResponse]

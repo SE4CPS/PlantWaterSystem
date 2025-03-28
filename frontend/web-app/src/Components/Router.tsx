@@ -10,6 +10,7 @@ import NavBar from "./NavBar";
 import SignUpPage from "../Pages/SignUpPage";
 import DisplayPage from "../Pages/DisplayPage";
 import AddPlantPage from "../Pages/AddPlantPage";
+import SettingsPage from "../Pages/SettingsPage";
 
 const router = createBrowserRouter([
     {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
             {
                 path: '/add_plant',
                 element: <AddPlantPage />
+            },
+            {
+                path: '/settings',
+                element: <SettingsPage />
             }
         ]
     },

@@ -11,41 +11,47 @@ from schemas.user_create_schema import UserCreateSchema
 auth_router = APIRouter(prefix="/api")
 
 # Custom form for email-based authentication
-class EmailPasswordForm:
-    def __init__(self, email: str = Form(...), password: str = Form(...)):
-        self.email = email
-        self.password = password
+# Change to username-based authentication
+class UsernamePasswordForm:
+    def __init__(self, username: str = Form(...), userpassword: str = Form(...)):
+        self.username = username
+        self.userpassword = userpassword
 
 # Generate JWT token
 @auth_router.post("/token")
-def login_for_access_token(form_data: EmailPasswordForm = Depends(), user_service: UserService = Depends(get_user_service)):
-    user = user_service.get_user(form_data.email)
+def login_for_access_token(form_data: UsernamePasswordForm = Depends(), user_service: UserService = Depends(get_user_service)):
+    user = user_service.get_user(form_data.username)
 
-    if not user or not verify_password(form_data.password, user["userpassword"]):
-        raise HTTPException(status_code=401, detail="Incorrect email or password")
+    # if not user or not verify_password(form_data.password, user["userpassword"]):
+    if not user or form_data.userpassword != user["userpassword"]:
+        raise HTTPException(status_code=401, detail="Incorrect username or password")
 
-    access_token = create_access_token({"sub": form_data.email}, expires_delta=timedelta(minutes=30))
+    access_token = create_access_token({"sub": form_data.username}, expires_delta=timedelta(minutes=30))
     return {"access_token": access_token, "token_type": "bearer"}
 
 @auth_router.post("/users", response_model=UserSchema)
 def create_user(user: UserCreateSchema, user_service: UserService = Depends(get_user_service)):
     try:
         # Hash the password before creating the user
-        hashed_password = hash_password(user.userpassword)
+        # hashed_password = hash_password(user.userpassword)
         
         user_details = user_service.create_user(
-            sensorid=user.sensorid,
             firstname=user.firstname,
             lastname=user.lastname,
             username=user.username,
-            userpassword=hashed_password,  # Use the hashed password
-            email=user.email
+            userpassword=user.userpassword,  # Use the hashed password
+            email=user.email,
+            phonenumber=user.phonenumber
         )
         # Check if the response contains an error (we assume error in the response means failure)
         if "error" in user_details:
             # If error is present, return the error response with an appropriate status code (400 or 500)
             status_code = 400 if "Duplicate" in user_details["error"] else 500
             return JSONResponse(status_code=status_code, content={"status": "error", "error": user_details["error"]})
+
+        # Remove userpassword from the response
+        if "userpassword" in user_details:
+            del user_details["userpassword"]
 
         # If the response is successful, return the response with a 201 status code
         return JSONResponse(status_code=201, content=user_details)
@@ -56,19 +62,23 @@ def create_user(user: UserCreateSchema, user_service: UserService = Depends(get_
     
 @auth_router.get("/users", response_model=UserSchema)
 def get_user(
-    email: str, 
+    username: str, 
     user_service: UserService = Depends(get_user_service),
     current_user: str = Depends(get_current_user)
 ):
     try:
         # Only allow users to access their own information
-        if current_user != email:
+        if current_user != username:
             raise HTTPException(
                 status_code=403,
                 detail="Not authorized to access this user's information"
             )
 
-        user_details = user_service.get_user(email)
+        user_details = user_service.get_user(username)
+        # Remove userpassword from the response
+        if "userpassword" in user_details:
+            del user_details["userpassword"]
+
         # Check if the response contains an error (we assume error in the response means failure)
         if "error" in user_details:
             # If error is present, return the error response with an appropriate status code (400 or 500)
