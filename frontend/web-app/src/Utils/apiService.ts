@@ -23,4 +23,13 @@ const handleApiError = (error:unknown) => {
     }
 }
 
+export const isAuthTokenInvalid = (error: unknown): boolean => {
+    if(axios.isAxiosError(error)){
+        if(error.response){
+            if(error.response.status === 401) return true;
+        }
+    }
+    return false;
+}
+
 export default handleApiError;
