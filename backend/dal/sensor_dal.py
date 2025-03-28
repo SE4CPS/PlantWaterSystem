@@ -444,11 +444,11 @@ class SensorDAL:
 
     def get_sensor_data_details_by_username(self):
         try:
-           
+
             self.cursor.execute("""
                 SELECT readingid, adcvalue, moisturelevel AS "Water Level", digitalstatus, timestamp AS "Date_Time"
                 FROM sensorsdata
-                WHERE sensorid = 1 AND deviceid = '00000000e23f5b4d'
+                WHERE sensorid = 1 AND deviceid = '00000000e23f5b4d' ORDER BY timestamp DESC
             """)
 
             results = self.cursor.fetchall()
