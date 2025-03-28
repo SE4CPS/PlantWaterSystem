@@ -32,7 +32,7 @@ function HomePage() {
       <div className='plantViewer'>
         {
           plantData.map((data, index)=>{
-            return <PlantCard key={index} status='good' name={data.PlantName} />
+            return <PlantCard key={index} status='good' name={data.plantname} sensorId={data.sensorid} deviceId={data.deviceid} />
           })
         }
         <AddNewPlantCard />

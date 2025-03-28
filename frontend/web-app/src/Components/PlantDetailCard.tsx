@@ -1,8 +1,13 @@
 import React from 'react'
 import closeBtn from '../Images/plant-card-close-btn-icon.svg'
 import dummyImage from '../Images/rose.png'
+import { PlantMetaData } from '../Interfaces/plantInterface'
+import { useNavigate } from 'react-router-dom'
 
-function PlantDetailCard({status}: {status: string}) {
+function PlantDetailCard({status, plantMetaData}: {status: string, plantMetaData: PlantMetaData}) {
+
+    const navigate = useNavigate();
+
   return (
     <div className={`plant-detail-card font-poppins ${status}`}>
         <div className='plant-detail-card-information'>
@@ -10,7 +15,7 @@ function PlantDetailCard({status}: {status: string}) {
                 <img className='plant-detail-card-image' src={dummyImage} alt='error img'/>
                 <div className='plant-detail-card-details'>
                     <div>
-                        Name: <b>Red Rose</b>
+                        Name: <b>{plantMetaData.name}</b>
                     </div>
                     <div>
                         Status: <b>Good</b>
@@ -19,10 +24,10 @@ function PlantDetailCard({status}: {status: string}) {
                         Last Watered: <b>3:15pm</b> on <b>2/6/2025</b>
                     </div>
                     <div>
-                        Sensor ID: <b>1111</b>
+                        Sensor ID: <b>{plantMetaData.sensorId}</b>
                     </div>
                     <div>
-                        Device ID: <b>1234</b>
+                        Device ID: <b>{plantMetaData.deviceId}</b>
                     </div>
                     <div>
                         Note: <b>Place this plant near the window</b>
@@ -30,7 +35,7 @@ function PlantDetailCard({status}: {status: string}) {
                 </div>
             </div>
             <div className='plant-detail-card-button-container'>
-                <img className='plant-detail-card-close-button' src={closeBtn} alt='error img'/>
+                <img className='plant-detail-card-close-button' src={closeBtn} alt='error img' onClick={()=>navigate('/')}/>
                 <button className='plant-detail-card-edit-button'>Edit</button>
                 <button className='plant-detail-card-delete-button'>Delete</button>
             </div>
