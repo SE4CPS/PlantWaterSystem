@@ -4,7 +4,7 @@ import dummyImage from '../Images/rose.png'
 import { PlantMetaData, SensorTableData } from '../Interfaces/plantInterface'
 import { useNavigate } from 'react-router-dom'
 import sensorController from '../Controller/SensorController'
-import handleApiError from '../Utils/apiService'
+import handleApiError, { isAuthTokenInvalid } from '../Utils/apiService'
 
 function PlantDetailCard({status, plantMetaData}: {status: string, plantMetaData: PlantMetaData}) {
 
@@ -18,11 +18,12 @@ function PlantDetailCard({status, plantMetaData}: {status: string, plantMetaData
         const response = await sensorController.getSensorData();
         setSensorTableData(response.data.data);
       } catch (error) {
+        if(isAuthTokenInvalid(error)) navigate('/')
         handleApiError(error);
       }
     }
     fetchSensorTableData();
-  }, [])
+  }, [navigate])
   
 
   return (
