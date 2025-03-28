@@ -12865,3 +12865,11 @@
 2025-03-27 20:19:45,796 - INFO - Sensor 2 - ADC: 13998, Moisture: 40.01%, Digital: Dry, Weather Temp: 14.5, Humidity: 85, Sunlight: 0.0, Wind: 6.3
 2025-03-27 20:19:45,820 - INFO - Sensor 3 - ADC: 16584, Moisture: 22.77%, Digital: Dry, Weather Temp: 14.5, Humidity: 85, Sunlight: 0.0, Wind: 6.3
 2025-03-27 20:19:45,844 - INFO - Sensor 4 - ADC: 16502, Moisture: 23.32%, Digital: Dry, Weather Temp: 14.5, Humidity: 85, Sunlight: 0.0, Wind: 6.3
+2025-03-27 20:24:32,369 - INFO - GPIO Cleanup Done.
+2025-03-27 20:24:32,427 - INFO - GPIO Cleanup Done.
+2025-03-27 20:24:36,300 - INFO - Location from ipinfo.io: 37.9577, -121.2908, Stockton, California, US
+2025-03-27 20:24:36,301 - INFO - Final device location set to: Stockton, California, US
+2025-03-27 20:24:37,446 - INFO - Sensor 1 - ADC: 13918, Moisture: 40.55%, Digital: Dry, Weather Temp: 14.5, Humidity: 85, Sunlight: 0.0, Wind: 6.3
+2025-03-27 20:24:37,485 - INFO - Sensor 2 - ADC: 13984, Moisture: 40.11%, Digital: Dry, Weather Temp: 14.5, Humidity: 85, Sunlight: 0.0, Wind: 6.3
+2025-03-27 20:24:37,509 - INFO - Sensor 3 - ADC: 16579, Moisture: 22.81%, Digital: Dry, Weather Temp: 14.5, Humidity: 85, Sunlight: 0.0, Wind: 6.3
+2025-03-27 20:24:37,533 - INFO - Sensor 4 - ADC: 16494, Moisture: 23.37%, Digital: Dry, Weather Temp: 14.5, Humidity: 85, Sunlight: 0.0, Wind: 6.3
