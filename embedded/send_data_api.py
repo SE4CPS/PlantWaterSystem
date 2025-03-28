@@ -72,8 +72,8 @@ def fetch_recent_data(after=None):
 
 def send_request_curl(url, data):
     """
-    Write the JSON payload to a temporary file and use curl with --write-out
-    to capture the HTTP status code. The payload key is "data" as required by the backend.
+    Write the JSON payload to a temporary file and use curl with --write-out to capture the HTTP status code.
+    The payload key is "data" as required by the backend.
     """
     payload = json.dumps({"data": data})
     with tempfile.NamedTemporaryFile(mode="w", delete=False) as tmp:
@@ -113,28 +113,49 @@ def retry_with_backoff(func, max_attempts=RETRY_ATTEMPTS, base_delay=BASE_DELAY)
     logging.error("All retry attempts failed.")
     return False
 
-def send_data_to_backend(url, after=None):
+def send_data_to_backend(url, after=None, limit_12_hours=True):
     """
     Determines the effective lower bound for unsent data.
-    If 'after' is not provided or the gap is more than 12 hours,
-    uses current time minus 12 hours.
-    Then fetches data and sends it via curl.
+
+    If limit_12_hours is True:
+      - If 'after' is not provided, it uses current time minus 12 hours.
+      - If 'after' is provided and the gap exceeds 12 hours, it resets to current time minus 12 hours.
+    If limit_12_hours is False (manual mode):
+      - If 'after' is provided, that value is used directly.
+      - If not provided, all data will be fetched.
+
+    Then fetches the data and sends it via curl.
     """
     now_dt = datetime.now()
-    if after is None:
-        effective_after_dt = now_dt - timedelta(hours=12)
-    else:
-        try:
-            last_dt = datetime.strptime(after, "%Y-%m-%d %H:%M:%S")
-        except Exception:
-            last_dt = now_dt - timedelta(hours=12)
-        if now_dt - last_dt > timedelta(hours=12):
+    if limit_12_hours:
+        if after is None:
             effective_after_dt = now_dt - timedelta(hours=12)
-            logging.error("Unsent data gap greater than 12 hours. Only sending last 12 hours of data.")
         else:
-            effective_after_dt = last_dt
-    effective_after = effective_after_dt.strftime("%Y-%m-%d %H:%M:%S")
-    data = fetch_recent_data(after=effective_after)
+            try:
+                last_dt = datetime.strptime(after, "%Y-%m-%d %H:%M:%S")
+            except Exception:
+                last_dt = now_dt - timedelta(hours=12)
+            if now_dt - last_dt > timedelta(hours=12):
+                effective_after_dt = now_dt - timedelta(hours=12)
+                logging.error("Unsent data gap greater than 12 hours. Only sending last 12 hours of data.")
+            else:
+                effective_after_dt = last_dt
+    else:
+        if after is not None:
+            try:
+                effective_after_dt = datetime.strptime(after, "%Y-%m-%d %H:%M:%S")
+            except Exception as e:
+                logging.error("Invalid 'after' timestamp provided for manual send")
+                return False, None
+        else:
+            effective_after_dt = None  # No filtering by time if not provided.
+
+    if effective_after_dt is not None:
+        effective_after = effective_after_dt.strftime("%Y-%m-%d %H:%M:%S")
+        data = fetch_recent_data(after=effective_after)
+    else:
+        data = fetch_recent_data()
+
     if not data:
         logging.info("No new data to send.")
         return True, None  # No data is considered a valid state.
@@ -146,10 +167,10 @@ def send_data_to_backend(url, after=None):
 @app.route("/send-current", methods=["GET", "POST"])
 def send_current_data():
     """
-    On-demand endpoint that sends data after the last confirmed send.
+    On-demand endpoint that sends data after the last confirmed send (with 12-hour limitation).
     """
     global LAST_SENT_TIMESTAMP
-    success, data = send_data_to_backend(BACKEND_API_SEND_CURRENT, after=LAST_SENT_TIMESTAMP)
+    success, data = send_data_to_backend(BACKEND_API_SEND_CURRENT, after=LAST_SENT_TIMESTAMP, limit_12_hours=True)
     if data is None:
         return jsonify({"message": "No new data to send"}), 200
     if success:
@@ -165,13 +186,14 @@ def send_current_data():
 @app.route("/send-manual", methods=["GET", "POST"])
 def send_manual_data():
     """
-    Manual endpoint that sends data after a provided 'after' timestamp (if given in the JSON body)
-    or uses the last confirmed send timestamp.
+    Manual endpoint that sends all data after the provided 'after' timestamp (if given)
+    without enforcing the 12-hour limit.
     """
     global LAST_SENT_TIMESTAMP
     req_json = request.get_json(silent=True) or {}
+    # In manual mode, we use the provided 'after' timestamp (or LAST_SENT_TIMESTAMP if not provided)
     after_timestamp = req_json.get("after", LAST_SENT_TIMESTAMP)
-    success, data = send_data_to_backend(BACKEND_API_SEND_CURRENT, after=after_timestamp)
+    success, data = send_data_to_backend(BACKEND_API_SEND_CURRENT, after=after_timestamp, limit_12_hours=False)
     if data is None:
         return jsonify({"message": "No new data to send"}), 200
     if success:
@@ -187,9 +209,9 @@ def send_manual_data():
 @app.route("/send-data", methods=["POST"])
 def send_data():
     """
-    Endpoint for scheduled auto-send that sends data from the last 12 hours.
+    Endpoint for scheduled auto-send that sends data (with 12-hour limitation).
     """
-    success, _ = send_data_to_backend(BACKEND_API_SEND_DATA)
+    success, _ = send_data_to_backend(BACKEND_API_SEND_DATA, limit_12_hours=True)
     if success:
         return jsonify({"message": "Data sent successfully"}), 200
     else:
@@ -203,8 +225,8 @@ def safe_task_execution(task):
 
 def schedule_data_sending():
     # Schedule auto-send at 00:00 and 12:00 daily using the auto-send URL.
-    schedule.every().day.at("00:00").do(lambda: safe_task_execution(lambda: send_data_to_backend(BACKEND_API_SEND_DATA)))
-    schedule.every().day.at("12:00").do(lambda: safe_task_execution(lambda: send_data_to_backend(BACKEND_API_SEND_DATA)))
+    schedule.every().day.at("00:00").do(lambda: safe_task_execution(lambda: send_data_to_backend(BACKEND_API_SEND_DATA, limit_12_hours=True)))
+    schedule.every().day.at("12:00").do(lambda: safe_task_execution(lambda: send_data_to_backend(BACKEND_API_SEND_DATA, limit_12_hours=True)))
     logging.info("Scheduled jobs registered successfully.")
     while True:
         schedule.run_pending()
