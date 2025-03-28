@@ -20,7 +20,7 @@ LAST_SENT_TIMESTAMP = None  # Tracks the last sent record's timestamp
 def fetch_recent_data(after=None):
     """
     Fetch records from the database.
-    If 'after' is provided, returns records with a timestamp greater than 'after'.
+    If 'after' is provided, returns records with timestamp greater than 'after'.
     Otherwise, returns records from the last 12 hours.
     """
     try:
@@ -57,7 +57,7 @@ def fetch_recent_data(after=None):
             "timestamp": row[1],
             "sensor_id": row[2],
             "adc_value": row[3],
-            "moisture_level": row[4],
+            "moisture_level": round(row[4], 2),
             "digital_status": row[5],
             "weather_temp": row[6],
             "weather_humidity": row[7],
@@ -73,7 +73,7 @@ def fetch_recent_data(after=None):
 def send_request_curl(url, data):
     """
     Write the JSON payload to a temporary file and use curl with --write-out
-    to capture the HTTP status code. The payload key is "data", as required by the backend.
+    to capture the HTTP status code. The payload key is "data" as required by the backend.
     """
     payload = json.dumps({"data": data})
     with tempfile.NamedTemporaryFile(mode="w", delete=False) as tmp:
@@ -116,7 +116,8 @@ def retry_with_backoff(func, max_attempts=RETRY_ATTEMPTS, base_delay=BASE_DELAY)
 def send_data_to_backend(url, after=None):
     """
     Determines the effective lower bound for unsent data.
-    If 'after' is not provided or the gap is more than 12 hours, uses current time minus 12 hours.
+    If 'after' is not provided or the gap is more than 12 hours,
+    uses current time minus 12 hours.
     Then fetches data and sends it via curl.
     """
     now_dt = datetime.now()
@@ -136,7 +137,7 @@ def send_data_to_backend(url, after=None):
     data = fetch_recent_data(after=effective_after)
     if not data:
         logging.info("No new data to send.")
-        return True, None  # No data is considered a success state.
+        return True, None  # No data is considered a valid state.
     def send_request():
         return send_request_curl(url, data)
     success = retry_with_backoff(send_request)
@@ -164,10 +165,13 @@ def send_current_data():
 @app.route("/send-manual", methods=["GET", "POST"])
 def send_manual_data():
     """
-    Manual endpoint to send data (only last 12 hours or data after the last confirmed send).
+    Manual endpoint that sends data after a provided 'after' timestamp (if given in the JSON body)
+    or uses the last confirmed send timestamp.
     """
     global LAST_SENT_TIMESTAMP
-    success, data = send_data_to_backend(BACKEND_API_SEND_CURRENT, after=LAST_SENT_TIMESTAMP)
+    req_json = request.get_json(silent=True) or {}
+    after_timestamp = req_json.get("after", LAST_SENT_TIMESTAMP)
+    success, data = send_data_to_backend(BACKEND_API_SEND_CURRENT, after=after_timestamp)
     if data is None:
         return jsonify({"message": "No new data to send"}), 200
     if success:
