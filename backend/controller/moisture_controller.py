@@ -6,14 +6,11 @@ from fastapi.responses import JSONResponse
 from typing import List
 from datetime import datetime
 from config.authentication import get_current_user
-# from fastapi.security import HTTPBasic, HTTPBasicCredentials
-# from services.user_service import get_user_service, UserService
+
+moisture_router = APIRouter()
 
 
-add_moisture_data = APIRouter()
-
-
-@add_moisture_data.post("/api/send-data", response_model=dict)
+@moisture_router.post("/api/send-data", response_model=dict)
 def add_moisture_entry(
     sensors: MoistureDataListSchema, 
     service: SensorService = Depends(get_service)
@@ -34,7 +31,7 @@ def add_moisture_entry(
     except Exception as e:
         return JSONResponse(status_code=500, content={"status": "error", "message": f"Unexpected error: {str(e)}"})
 
-@add_moisture_data.post("/api/send-current", response_model=dict)
+@moisture_router.post("/api/send-current", response_model=dict)
 async def send_current_data(
     sensors: MoistureDataSchema, 
     service: SensorService = Depends(get_service)
@@ -56,7 +53,7 @@ async def send_current_data(
     except Exception as e:
         return JSONResponse(status_code=500, content={"status": "error", "message": f"Unexpected error: {str(e)}"})
 
-@add_moisture_data.get("/api/send-current", response_model=dict)
+@moisture_router.get("/api/send-current", response_model=dict)
 async def get_current_data(
     service: SensorService = Depends(get_service)
 ):
@@ -74,7 +71,7 @@ def serialize_datetime(obj):
     return obj
 
 # For Frontend
-@add_moisture_data.get("/api/sensor_data", response_model=SensorDataResponse)
+@moisture_router.get("/api/sensor_data", response_model=SensorDataResponse)
 async def get_sensor_data(
     service: SensorService = Depends(get_service),
     current_user: str = Depends(get_current_user)
@@ -98,7 +95,7 @@ async def get_sensor_data(
     except Exception as e:
         return JSONResponse(status_code=500, content={"status": "error", "error": f"Unexpected error: {str(e)}"})
 
-@add_moisture_data.delete("/api/sensor_data/{reading_id}")
+@moisture_router.delete("/api/sensor_data/{reading_id}")
 async def delete_sensor_data(
     reading_id: str, 
     service: SensorService = Depends(get_service),
@@ -117,7 +114,7 @@ async def delete_sensor_data(
     except Exception as e:
         return JSONResponse(status_code=500, content={"status": "error", "error": f"Unexpected error: {str(e)}"})
 
-@add_moisture_data.get("/api/sensor_data/user/{username}", response_model=SensorDataResponse)
+@moisture_router.get("/api/sensor_data/user/{username}", response_model=SensorDataResponse)
 async def get_sensor_data_by_username(
     username: str,
     service: SensorService = Depends(get_service),
@@ -146,7 +143,7 @@ async def get_sensor_data_by_username(
     except Exception as e:
         return JSONResponse(status_code=500, content={"status": "error", "error": f"Unexpected error: {str(e)}"})
 
-@add_moisture_data.patch("/api/sensor_data/{reading_id}")
+@moisture_router.patch("/api/sensor_data/{reading_id}")
 async def update_sensor_data(
     reading_id: str,
     update_data: dict,
@@ -192,7 +189,7 @@ async def update_sensor_data(
     except Exception as e:
         return JSONResponse(status_code=500, content={"status": "error", "error": f"Unexpected error: {str(e)}"})
 
-@add_moisture_data.post("/api/sensor_data", response_model=dict)
+@moisture_router.post("/api/sensor_data", response_model=dict)
 async def add_sensor_data(
     sensor_data: dict,
     service: SensorService = Depends(get_service),
@@ -234,7 +231,7 @@ async def add_sensor_data(
     except Exception as e:
         return JSONResponse(status_code=500, content={"status": "error", "error": f"Unexpected error: {str(e)}"})
     
-@add_moisture_data.get("/api/sensor_data_details", response_model=SensorDataDetailsResponseList)
+@moisture_router.get("/api/sensor_data_details", response_model=SensorDataDetailsResponseList)
 async def get_sensor_data_details_by_username(
     service: SensorService = Depends(get_service),
     current_user: str = Depends(get_current_user)

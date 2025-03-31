@@ -7,9 +7,9 @@ from fastapi.responses import JSONResponse
 from config.authentication import get_current_user
 
 
-create_plant = APIRouter()
+plant_router = APIRouter()
 
-@create_plant.post("/api/plant/data", response_model=PlantSchema)
+@plant_router.post("/api/plant/data", response_model=PlantSchema)
 def create_plant_entry(
     plant: PlantSchema, 
     service: PlantService = Depends(get_service), 
@@ -27,7 +27,7 @@ def create_plant_entry(
         return JSONResponse(status_code=500, content={"status": "error", "error": f"Unexpected error: {str(e)}"})
     
 
-@create_plant.get("/api/plant/data", response_model=list)
+@plant_router.get("/api/plant/data", response_model=list)
 def get_plant_data(
     service: PlantService = Depends(get_service),
     current_user: str = Depends(get_current_user)
