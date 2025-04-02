@@ -12943,3 +12943,11 @@
 2025-04-01 18:40:18,707 - INFO - Sensor 2 - ADC: 14845, Moisture: 34.37%, Digital: Dry, Weather Temp: 11.6, Humidity: 75, Sunlight: 0.0, Wind: 19.6
 2025-04-01 18:40:18,732 - INFO - Sensor 3 - ADC: 19349, Moisture: 4.34%, Digital: Dry, Weather Temp: 11.6, Humidity: 75, Sunlight: 0.0, Wind: 19.6
 2025-04-01 18:40:18,758 - INFO - Sensor 4 - ADC: 19727, Moisture: 1.82%, Digital: Dry, Weather Temp: 11.6, Humidity: 75, Sunlight: 0.0, Wind: 19.6
+2025-04-01 18:55:19,898 - INFO - Sensor 1 - ADC: 14862, Moisture: 34.25%, Digital: Dry, Weather Temp: 11.2, Humidity: 75, Sunlight: 0.0, Wind: 14.1
+2025-04-01 18:55:19,928 - INFO - Sensor 2 - ADC: 14855, Moisture: 34.30%, Digital: Dry, Weather Temp: 11.2, Humidity: 75, Sunlight: 0.0, Wind: 14.1
+2025-04-01 18:55:19,951 - INFO - Sensor 3 - ADC: 19395, Moisture: 4.03%, Digital: Dry, Weather Temp: 11.2, Humidity: 75, Sunlight: 0.0, Wind: 14.1
+2025-04-01 18:55:19,976 - INFO - Sensor 4 - ADC: 19764, Moisture: 1.57%, Digital: Dry, Weather Temp: 11.2, Humidity: 75, Sunlight: 0.0, Wind: 14.1
+2025-04-01 19:10:21,018 - INFO - Sensor 1 - ADC: 14861, Moisture: 34.26%, Digital: Dry, Weather Temp: 10.9, Humidity: 67, Sunlight: 109.2, Wind: 12.1
+2025-04-01 19:10:21,042 - INFO - Sensor 2 - ADC: 14865, Moisture: 34.23%, Digital: Dry, Weather Temp: 10.9, Humidity: 67, Sunlight: 109.2, Wind: 12.1
+2025-04-01 19:10:21,065 - INFO - Sensor 3 - ADC: 19421, Moisture: 3.86%, Digital: Dry, Weather Temp: 10.9, Humidity: 67, Sunlight: 109.2, Wind: 12.1
+2025-04-01 19:10:21,092 - INFO - Sensor 4 - ADC: 19771, Moisture: 1.53%, Digital: Dry, Weather Temp: 10.9, Humidity: 67, Sunlight: 109.2, Wind: 12.1
