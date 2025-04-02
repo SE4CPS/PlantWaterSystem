@@ -1,242 +1,290 @@
-from flask import Flask, jsonify, request
+import os
+import json
+import time
+import logging
 import sqlite3
 import schedule
-import time
-import threading
-import logging
-import os
 import subprocess
-import json
 import tempfile
-from datetime import datetime, timedelta
-from config import DB_NAME, BACKEND_API_SEND_DATA, BACKEND_API_SEND_CURRENT, RETRY_ATTEMPTS, BASE_DELAY
+import threading
+from datetime import datetime
+from flask import Flask, request, jsonify
 
-logging.basicConfig(filename="api_log.log", level=logging.INFO,
-                    format="%(asctime)s - %(levelname)s - %(message)s")
+# Import all relevant settings from config.py
+from config import (
+    DB_NAME,
+    BACKEND_API_SEND_DATA,
+    BACKEND_API_SEND_CURRENT,
+    RETRY_ATTEMPTS,
+    BASE_DELAY,
+    # If you'd like, define CHUNK_SIZE=96 in config.py and import it:
+    # CHUNK_SIZE,
+)
+
+# If CHUNK_SIZE is not defined in config, define it here:
+CHUNK_SIZE = 96
+
+logging.basicConfig(
+    filename="api_log.log",
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
+# Single global last-sent timestamp used by all endpoints
+LAST_SENT_TIMESTAMP = None
 
 app = Flask(__name__)
-LAST_SENT_TIMESTAMP = None  # Tracks the last sent record's timestamp
 
-def fetch_recent_data(after=None):
+
+def fetch_data_after(timestamp):
     """
-    Fetch records from the database.
-    If 'after' is provided, returns records with timestamp greater than 'after'.
-    Otherwise, returns records from the last 12 hours.
+    Query the DB for all records whose timestamp is strictly greater than 'timestamp'.
+    The timestamp is a string, e.g. "YYYY-MM-DD HH:MM:SS".
+    Returns a list of dict, each containing:
+      {
+        "id": int,
+        "timestamp": str,
+        "sensor_id": int,
+        "adc_value": float,
+        "moisture_level": float,
+        "digital_status": str,
+        "weather_temp": float,
+        "weather_humidity": float,
+        "weather_sunlight": float,
+        "weather_wind_speed": float,
+        "location": str,
+        "weather_fetched": str,
+        "device_id": str
+      }
     """
     try:
         conn = sqlite3.connect(DB_NAME)
     except sqlite3.Error as e:
         logging.error(f"Database connection error: {e}")
         return []
+
+    data = []
     try:
-        cursor = conn.cursor()
-        if after:
-            cursor.execute("""
-                SELECT id, timestamp, sensor_id, adc_value, moisture_level, digital_status,
-                       weather_temp, weather_humidity, weather_sunlight, weather_wind_speed, location, weather_fetched, device_id
-                FROM moisture_data
-                WHERE timestamp > ?
-            """, (after,))
-        else:
-            lower_bound = (datetime.now() - timedelta(hours=12)).strftime("%Y-%m-%d %H:%M:%S")
-            cursor.execute("""
-                SELECT id, timestamp, sensor_id, adc_value, moisture_level, digital_status,
-                       weather_temp, weather_humidity, weather_sunlight, weather_wind_speed, location, weather_fetched, device_id
-                FROM moisture_data
-                WHERE timestamp > ?
-            """, (lower_bound,))
-        data = cursor.fetchall()
+        c = conn.cursor()
+        c.execute(
+            """
+            SELECT
+              id, timestamp, sensor_id, adc_value, moisture_level, digital_status,
+              weather_temp, weather_humidity, weather_sunlight, weather_wind_speed,
+              location, weather_fetched, device_id
+            FROM moisture_data
+            WHERE timestamp > ?
+            ORDER BY timestamp ASC
+            """,
+            (timestamp,)
+        )
+        rows = c.fetchall()
+        for row in rows:
+            record = {
+                "id": row[0],
+                "timestamp": row[1],
+                "sensor_id": row[2],
+                "adc_value": float(row[3]),
+                "moisture_level": float(f"{row[4]:.2f}"),
+                "digital_status": row[5],
+                "weather_temp": row[6],
+                "weather_humidity": row[7],
+                "weather_sunlight": row[8],
+                "weather_wind_speed": row[9],
+                "location": row[10],
+                "weather_fetched": row[11],
+                "device_id": row[12]
+            }
+            data.append(record)
     except sqlite3.Error as e:
         logging.error(f"Database query error: {e}")
-        return []
     finally:
         conn.close()
-    return [
-        {
-            "id": row[0],
-            "timestamp": row[1],
-            "sensor_id": row[2],
-            "adc_value": row[3],
-            "moisture_level": round(row[4], 2),
-            "digital_status": row[5],
-            "weather_temp": row[6],
-            "weather_humidity": row[7],
-            "weather_sunlight": row[8],
-            "weather_wind_speed": row[9],
-            "location": row[10],
-            "weather_fetched": row[11],
-            "device_id": row[12]
-        }
-        for row in data
-    ]
 
-def send_request_curl(url, data):
+    return data
+
+
+def chunkify(records, chunk_size=CHUNK_SIZE):
     """
-    Write the JSON payload to a temporary file and use curl with --write-out to capture the HTTP status code.
-    The payload key is "data" as required by the backend.
+    Break records into sub-lists of size up to chunk_size.
     """
-    payload = json.dumps({"data": data})
-    with tempfile.NamedTemporaryFile(mode="w", delete=False) as tmp:
-        tmp.write(payload)
-        tmp_filename = tmp.name
-    command = [
-        "curl",
-        "--location",
-        "--silent",
-        "--show-error",
+    for i in range(0, len(records), chunk_size):
+        yield records[i:i + chunk_size]
+
+
+def send_request_curl(url, chunk):
+    """
+    Sends a single chunk of data to the given URL using curl.
+    The payload must have 'data' as the root key per the backend format.
+    """
+    payload = json.dumps({"data": chunk})
+    with tempfile.NamedTemporaryFile(mode="w", delete=False) as tmp_file:
+        tmp_file.write(payload)
+        tmp_filename = tmp_file.name
+
+    cmd = [
+        "curl", "--location", "--silent", "--show-error",
         "--header", "Content-Type: application/json",
         "--data-binary", f"@{tmp_filename}",
         "--write-out", "%{http_code}",
         url
     ]
-    result = subprocess.run(command, capture_output=True, text=True)
+    result = subprocess.run(cmd, capture_output=True, text=True)
     os.remove(tmp_filename)
-    if result.returncode == 0:
-        output = result.stdout.strip()
-        http_code = output[-3:]
-        if http_code == "200":
-            return True
-        else:
-            logging.error(f"Curl command returned HTTP code {http_code}: {output}")
-            return False
-    else:
+
+    if result.returncode != 0:
         logging.error(f"Curl command failed: {result.stderr}")
         return False
 
-def retry_with_backoff(func, max_attempts=RETRY_ATTEMPTS, base_delay=BASE_DELAY):
-    for attempt in range(max_attempts):
+    output = result.stdout.strip()
+    http_code = output[-3:]
+    if http_code == "200":
+        return True
+    else:
+        logging.error(f"Curl returned HTTP code {http_code}. Output: {output}")
+        return False
+
+
+def retry_with_backoff(func):
+    """
+    Retries a function with exponential backoff, up to RETRY_ATTEMPTS.
+    Returns True if success, False if repeated failures.
+    """
+    for attempt in range(RETRY_ATTEMPTS):
         if func():
             return True
-        delay = base_delay * (2 ** attempt)
-        logging.warning(f"Retrying after {delay} seconds...")
+        delay = BASE_DELAY * (2 ** attempt)
+        logging.warning(f"Chunk send failed. Retrying after {delay} seconds...")
         time.sleep(delay)
-    logging.error("All retry attempts failed.")
+    logging.error("All retry attempts for this chunk have failed.")
     return False
 
-def send_data_to_backend(url, after=None, limit_12_hours=True):
+
+def send_in_chunks(url, records, last_ts):
     """
-    Determines the effective lower bound for unsent data.
+    Takes a list of 'records' and sends them in chunk_size increments to 'url'.
+    If any chunk fails after RETRY_ATTEMPTS, we stop.
+    On success, we update the last-sent timestamp to the last record's timestamp in that chunk.
 
-    If limit_12_hours is True:
-      - If 'after' is not provided, it uses current time minus 12 hours.
-      - If 'after' is provided and the gap exceeds 12 hours, it resets to current time minus 12 hours.
-    If limit_12_hours is False (manual mode):
-      - If 'after' is provided, that value is used directly.
-      - If not provided, all data will be fetched.
-
-    Then fetches the data and sends it via curl.
+    returns (success, updated_ts):
+      success: bool
+      updated_ts: final timestamp if success, else the original last_ts
     """
-    now_dt = datetime.now()
-    if limit_12_hours:
-        if after is None:
-            effective_after_dt = now_dt - timedelta(hours=12)
-        else:
-            try:
-                last_dt = datetime.strptime(after, "%Y-%m-%d %H:%M:%S")
-            except Exception:
-                last_dt = now_dt - timedelta(hours=12)
-            if now_dt - last_dt > timedelta(hours=12):
-                effective_after_dt = now_dt - timedelta(hours=12)
-                logging.error("Unsent data gap greater than 12 hours. Only sending last 12 hours of data.")
-            else:
-                effective_after_dt = last_dt
-    else:
-        if after is not None:
-            try:
-                effective_after_dt = datetime.strptime(after, "%Y-%m-%d %H:%M:%S")
-            except Exception as e:
-                logging.error("Invalid 'after' timestamp provided for manual send")
-                return False, None
-        else:
-            effective_after_dt = None  # No filtering by time if not provided.
+    current_ts = last_ts
+    for chunk in chunkify(records, CHUNK_SIZE):
+        def attempt_chunk():
+            return send_request_curl(url, chunk)
+        success = retry_with_backoff(attempt_chunk)
+        if not success:
+            return False, current_ts
+        # If we succeeded, update current_ts to the last record in the chunk
+        current_ts = chunk[-1]["timestamp"]
+    return True, current_ts
 
-    if effective_after_dt is not None:
-        effective_after = effective_after_dt.strftime("%Y-%m-%d %H:%M:%S")
-        data = fetch_recent_data(after=effective_after)
-    else:
-        data = fetch_recent_data()
 
-    if not data:
-        logging.info("No new data to send.")
-        return True, None  # No data is considered a valid state.
-    def send_request():
-        return send_request_curl(url, data)
-    success = retry_with_backoff(send_request)
-    return success, data if success else None
-
-@app.route("/send-current", methods=["GET", "POST"])
-def send_current_data():
+def get_last_sent():
     """
-    On-demand endpoint that sends data after the last confirmed send (with 12-hour limitation).
+    Retrieve the global LAST_SENT_TIMESTAMP, defaulting to a far-past date if None.
     """
     global LAST_SENT_TIMESTAMP
-    success, data = send_data_to_backend(BACKEND_API_SEND_CURRENT, after=LAST_SENT_TIMESTAMP, limit_12_hours=True)
-    if data is None:
-        return jsonify({"message": "No new data to send"}), 200
-    if success:
-        try:
-            max_ts = max(record["timestamp"] for record in data)
-            LAST_SENT_TIMESTAMP = max_ts
-        except Exception as e:
-            logging.error(f"Error updating LAST_SENT_TIMESTAMP: {e}")
-        return jsonify({"message": "Current data sent successfully"}), 200
-    else:
-        return jsonify({"message": "Failed to send current data"}), 500
+    if LAST_SENT_TIMESTAMP is None:
+        LAST_SENT_TIMESTAMP = "1970-01-01 00:00:00"
+    return LAST_SENT_TIMESTAMP
 
-@app.route("/send-manual", methods=["GET", "POST"])
-def send_manual_data():
+
+def set_last_sent(ts):
     """
-    Manual endpoint that sends all data after the provided 'after' timestamp (if given)
-    without enforcing the 12-hour limit.
+    Update the global LAST_SENT_TIMESTAMP.
     """
     global LAST_SENT_TIMESTAMP
-    req_json = request.get_json(silent=True) or {}
-    # In manual mode, we use the provided 'after' timestamp (or LAST_SENT_TIMESTAMP if not provided)
-    after_timestamp = req_json.get("after", LAST_SENT_TIMESTAMP)
-    success, data = send_data_to_backend(BACKEND_API_SEND_CURRENT, after=after_timestamp, limit_12_hours=False)
-    if data is None:
-        return jsonify({"message": "No new data to send"}), 200
-    if success:
-        try:
-            max_ts = max(record["timestamp"] for record in data)
-            LAST_SENT_TIMESTAMP = max_ts
-        except Exception as e:
-            logging.error(f"Error updating LAST_SENT_TIMESTAMP: {e}")
-        return jsonify({"message": "Manual data sent successfully"}), 200
-    else:
-        return jsonify({"message": "Failed to send manual data"}), 500
+    LAST_SENT_TIMESTAMP = ts
 
-@app.route("/send-data", methods=["POST"])
-def send_data():
+
+@app.route("/auto", methods=["POST"])
+def auto_send():
     """
-    Endpoint for scheduled auto-send that sends data (with 12-hour limitation).
+    Auto-sends data (hourly) using the first API (BACKEND_API_SEND_DATA).
+    Sends all data after get_last_sent(), in up to 96-record chunks.
     """
-    success, _ = send_data_to_backend(BACKEND_API_SEND_DATA, limit_12_hours=True)
+    last_ts = get_last_sent()
+    records = fetch_data_after(last_ts)
+    if not records:
+        logging.info("Auto-sender: No new data.")
+        return jsonify({"message": "No new data"}), 200
+
+    success, updated_ts = send_in_chunks(BACKEND_API_SEND_DATA, records, last_ts)
     if success:
-        return jsonify({"message": "Data sent successfully"}), 200
+        set_last_sent(updated_ts)
+        return jsonify({"message": "Auto send success"}), 200
     else:
-        return jsonify({"message": "Failed to send data"}), 500
+        return jsonify({"message": "Auto send failed"}), 500
 
-def safe_task_execution(task):
-    try:
-        task()
-    except Exception as e:
-        logging.error(f"Scheduled task failed: {e}")
 
-def schedule_data_sending():
-    # Schedule auto-send at 00:00 and 12:00 daily using the auto-send URL.
-    schedule.every().day.at("00:00").do(lambda: safe_task_execution(lambda: send_data_to_backend(BACKEND_API_SEND_DATA, limit_12_hours=True)))
-    schedule.every().day.at("12:00").do(lambda: safe_task_execution(lambda: send_data_to_backend(BACKEND_API_SEND_DATA, limit_12_hours=True)))
-    logging.info("Scheduled jobs registered successfully.")
+@app.route("/on-demand", methods=["POST"])
+def on_demand():
+    """
+    Called by the backend to get data from the second API (BACKEND_API_SEND_CURRENT).
+    We still use the same global 'last sent' timestamp to avoid re-sending duplicates.
+    """
+    last_ts = get_last_sent()
+    records = fetch_data_after(last_ts)
+    if not records:
+        logging.info("On-demand: No new data.")
+        return jsonify({"message": "No new data"}), 200
+
+    success, updated_ts = send_in_chunks(BACKEND_API_SEND_CURRENT, records, last_ts)
+    if success:
+        set_last_sent(updated_ts)
+        return jsonify({"message": "On-demand send success"}), 200
+    else:
+        return jsonify({"message": "On-demand send failed"}), 500
+
+
+@app.route("/manual", methods=["POST"])
+def manual_send():
+    """
+    Manual endpoint for chunked send using the first API (BACKEND_API_SEND_DATA).
+    If user provides {"after": "..."} in JSON, we start from that; otherwise we start from last-sent timestamp.
+    """
+    req_data = request.get_json(silent=True) or {}
+    after_ts = req_data.get("after", get_last_sent())
+
+    records = fetch_data_after(after_ts)
+    if not records:
+        return jsonify({"message": "No new data"}), 200
+
+    success, updated_ts = send_in_chunks(BACKEND_API_SEND_DATA, records, after_ts)
+    if success:
+        set_last_sent(updated_ts)
+        return jsonify({"message": "Manual send success"}), 200
+    else:
+        return jsonify({"message": "Manual send failed"}), 500
+
+
+def schedule_auto():
+    """
+    Schedules the auto endpoint to run once every hour.
+    """
+    schedule.every().hour.do(lambda: auto_send())
+
+
+def schedule_runner():
+    """
+    Background thread to run the schedule every second.
+    """
     while True:
         schedule.run_pending()
         time.sleep(1)
 
-def run_schedule_in_thread():
-    thread = threading.Thread(target=schedule_data_sending)
-    thread.daemon = True
-    thread.start()
 
 if __name__ == "__main__":
-    run_schedule_in_thread()
+    logging.info("Starting up send_data_api with hourly scheduling...")
+
+    # Register the auto-send job
+    schedule_auto()
+
+    # Launch the scheduling thread
+    t = threading.Thread(target=schedule_runner, daemon=True)
+    t.start()
+
     app.run(host="0.0.0.0", port=5001, debug=False)
