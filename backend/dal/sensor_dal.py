@@ -398,7 +398,7 @@ class SensorDAL:
         finally:
             release_connection(self.conn)
 
-    def get_sensor_data_by_username(self, username: str):
+    def get_sensor_data_by_username(self, username: str):   
         try:
             if not username:
                 raise ValueError("Username must not be empty.")
@@ -442,14 +442,14 @@ class SensorDAL:
             print(f"Unexpected error: {e}")
             return {"status": "error", "error": str(e)}
 
-    def get_sensor_data_details_by_username(self):
+    def get_sensor_data_details_by_sensorid_and_deviceid(self, sensorid: str, deviceid: str):
         try:
 
             self.cursor.execute("""
                 SELECT readingid, adcvalue, moisturelevel AS "Water Level", digitalstatus, timestamp AS "Date_Time"
                 FROM sensorsdata
-                WHERE sensorid = 1 AND deviceid = '00000000e23f5b4d' ORDER BY timestamp DESC
-            """)
+                WHERE sensorid = %s AND deviceid = %s ORDER BY readingid DESC LIMIT 5
+            """, (sensorid, deviceid))
 
             results = self.cursor.fetchall()
 
