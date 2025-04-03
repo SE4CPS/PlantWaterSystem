@@ -21,8 +21,8 @@ class SensorService:
     def get_sensor_data_by_username(self, username: str):
         return self.repository.get_sensor_data_by_username(username)
     
-    def get_sensor_data_details_by_username(self):
-        return self.repository.get_sensor_data_details_by_username()
+    def get_sensor_data_details_by_sensorid_and_deviceid(self, sensorid: str, deviceid: str):
+        return self.repository.get_sensor_data_details_by_sensorid_and_deviceid(sensorid, deviceid)
 
     def update_sensor_data(self, reading_id: str, update_data: dict):
         return self.repository.update_sensor_data(reading_id, update_data)

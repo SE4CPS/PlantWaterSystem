@@ -232,12 +232,22 @@ async def add_sensor_data(
         return JSONResponse(status_code=500, content={"status": "error", "error": f"Unexpected error: {str(e)}"})
     
 @moisture_router.get("/api/sensor_data_details", response_model=SensorDataDetailsResponseList)
-async def get_sensor_data_details_by_username(
+async def get_sensor_data_details_by_sensorid_and_deviceid(
+    sensorid: str,
+    deviceid: str,
     service: SensorService = Depends(get_service),
     current_user: str = Depends(get_current_user)
 ):
     try: 
-        response = service.get_sensor_data_details_by_username()
+
+        # Only allow users to access their own information
+        if sensorid == None or deviceid == None:
+            raise HTTPException(    
+                status_code=400,
+                detail="Sensor ID and Device ID are required"
+            )
+
+        response = service.get_sensor_data_details_by_sensorid_and_deviceid(sensorid, deviceid)
 
         if "error" in response:
             status_code = 400 if "Duplicate" in response["error"] else 500
