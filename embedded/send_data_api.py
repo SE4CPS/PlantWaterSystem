@@ -11,7 +11,7 @@ import tempfile
 from datetime import datetime, timedelta
 from config import DB_NAME, BACKEND_API_SEND_DATA, BACKEND_API_SEND_CURRENT, RETRY_ATTEMPTS, BASE_DELAY
 
-# Configure logging: log only errors and key success messages.
+# Configure logging: log only errors (and key messages if desired)
 logging.basicConfig(filename="api_log.log", level=logging.ERROR,
                     format="%(asctime)s - %(levelname)s - %(message)s")
 
@@ -26,29 +26,20 @@ def fetch_recent_data(after=None):
     If 'after' is provided, fetch records with timestamp > after;
     otherwise, fetch records from the past hour.
 
-    IMPORTANT: The query column names must exactly match the names in the NeonDB table.
-    Here we assume that the database columns are named:
-      - timestamp
-      - sensorid
-      - adcvalue
-      - moisturelevel
-      - digitalstatus
-      - weathertemp
-      - weatherhumidity
-      - weathersunlight
-      - weatherwindspeed
-      - location
-      - weatherfetched
-      - device_id
+    IMPORTANT: The query column names must match the actual NeonDB table column names.
+    Here we assume that the table 'moisture_data' has columns:
+      timestamp, sensor_id, adc_value, moisture_level, digital_status,
+      weather_temp, weather_humidity, weather_sunlight, weather_wind_speed,
+      location, weather_fetched, device_id
     """
     try:
         conn = sqlite3.connect(DB_NAME)
         cursor = conn.cursor()
         if after:
             query = """
-                SELECT timestamp, sensorid, adcvalue, moisturelevel, digitalstatus,
-                       weathertemp, weatherhumidity, weathersunlight, weatherwindspeed,
-                       location, weatherfetched, device_id
+                SELECT timestamp, sensor_id, adc_value, moisture_level, digital_status,
+                       weather_temp, weather_humidity, weather_sunlight, weather_wind_speed,
+                       location, weather_fetched, device_id
                 FROM moisture_data
                 WHERE timestamp > ?
             """
@@ -56,9 +47,9 @@ def fetch_recent_data(after=None):
         else:
             lower_bound = (datetime.now() - timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S")
             query = """
-                SELECT timestamp, sensorid, adcvalue, moisturelevel, digitalstatus,
-                       weathertemp, weatherhumidity, weathersunlight, weatherwindspeed,
-                       location, weatherfetched, device_id
+                SELECT timestamp, sensor_id, adc_value, moisture_level, digital_status,
+                       weather_temp, weather_humidity, weather_sunlight, weather_wind_speed,
+                       location, weather_fetched, device_id
                 FROM moisture_data
                 WHERE timestamp > ?
             """
@@ -74,16 +65,16 @@ def fetch_recent_data(after=None):
     for row in rows:
         record = {
             "timestamp": row[0],
-            "sensor_id": row[1],            # now coming from column 'sensorid'
-            "adc_value": row[2],            # coming from 'adcvalue'
-            "moisture_level": round(row[3], 2),  # 'moisturelevel'
-            "digital_status": row[4],       # 'digitalstatus'
-            "weather_temp": row[5],         # 'weathertemp'
-            "weather_humidity": row[6],     # 'weatherhumidity'
-            "weather_sunlight": row[7],     # 'weathersunlight'
-            "weather_wind_speed": row[8],   # 'weatherwindspeed'
+            "sensor_id": row[1],
+            "adc_value": row[2],
+            "moisture_level": round(row[3], 2),
+            "digital_status": row[4],
+            "weather_temp": row[5],
+            "weather_humidity": row[6],
+            "weather_sunlight": row[7],
+            "weather_wind_speed": row[8],
             "location": row[9],
-            "weather_fetched": row[10],     # 'weatherfetched'
+            "weather_fetched": row[10],
             "device_id": row[11]
         }
         records.append(record)
@@ -92,8 +83,8 @@ def fetch_recent_data(after=None):
 def send_request_curl(url, data):
     """
     Write the JSON payload (wrapped in key "data") to a temporary file and use curl to send it.
-    If the HTTP response is 200 or the output contains an error message indicating a duplicate key
-    or "connection already closed", we treat the send as successful.
+    If the response HTTP code is 200 or if the response text indicates a duplicate key
+    or "connection already closed" error, treat the send as successful.
     """
     payload = json.dumps({"data": data})
     with tempfile.NamedTemporaryFile(mode="w", delete=False) as tmp:
@@ -117,11 +108,12 @@ def send_request_curl(url, data):
         output = result.stdout.strip()
         http_code = output[-3:]
         if http_code == "200":
+            # Log success (error level used here as per configuration)
             logging.error("Data sent successfully.")
             return True, output
         elif ("duplicate key value violates unique constraint" in output or
               "connection already closed" in output):
-            logging.error("Duplicate or connection closed error encountered; treating as success.")
+            logging.error("Duplicate key or connection closed error; treating as success.")
             return True, output
         else:
             logging.error(f"Curl command returned HTTP code {http_code}: {output}")
@@ -142,12 +134,12 @@ def retry_with_backoff(func, max_attempts=RETRY_ATTEMPTS, base_delay=BASE_DELAY)
 
 def send_data_to_backend(url, after=None):
     """
-    Determine the effective 'after' timestamp (the later of the provided timestamp and LAST_SENT_TIMESTAMP),
+    Determine the effective 'after' timestamp (based on the provided timestamp and LAST_SENT_TIMESTAMP),
     fetch data from the DB, and send it via curl.
     """
     global LAST_SENT_TIMESTAMP
     try:
-        provided_dt = datetime.strptime(after, "%Y-%m-%d %H:%M:%S") if after else datetime.now() - timedelta(hours=1)
+        provided_dt = datetime.strptime(after, "%Y-%m-%d %H:%M:%S") if after else (datetime.now() - timedelta(hours=1))
     except Exception:
         provided_dt = datetime.now() - timedelta(hours=1)
 
