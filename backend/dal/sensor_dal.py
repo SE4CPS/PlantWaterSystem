@@ -448,7 +448,9 @@ class SensorDAL:
             self.cursor.execute("""
                 SELECT readingid, adcvalue, moisturelevel AS "Water Level", digitalstatus, timestamp AS "Date_Time"
                 FROM sensorsdata
-                WHERE sensorid = %s AND deviceid = %s ORDER BY readingid DESC LIMIT 5
+                WHERE sensorid = %s AND deviceid = %s 
+                ORDER BY readingid DESC 
+                LIMIT 5
             """, (sensorid, deviceid))
 
             results = self.cursor.fetchall()
