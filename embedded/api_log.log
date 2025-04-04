@@ -157,3 +157,6 @@
 2025-04-04 11:35:40,850 - ERROR - No new data to send.
 2025-04-04 12:35:41,685 - ERROR - Database connection/query error: no such column: sensorid
 2025-04-04 12:35:41,687 - ERROR - No new data to send.
+2025-04-04 12:59:26,085 - ERROR - Database connection/query error: no such column: sensorid
+2025-04-04 12:59:26,087 - ERROR - No new data to send.
+2025-04-04 12:59:26,089 - INFO - 10.0.0.180 - - [04/Apr/2025 12:59:26] "POST /manual HTTP/1.1" 200 -
