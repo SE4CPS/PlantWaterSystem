@@ -11,46 +11,58 @@ import tempfile
 from datetime import datetime, timedelta
 from config import DB_NAME, BACKEND_API_SEND_DATA, BACKEND_API_SEND_CURRENT, RETRY_ATTEMPTS, BASE_DELAY
 
-# Configure logging to capture errors and our key success messages.
+# Configure logging: log only errors and key success messages.
 logging.basicConfig(filename="api_log.log", level=logging.ERROR,
                     format="%(asctime)s - %(levelname)s - %(message)s")
 
 app = Flask(__name__)
 
-# Global variable to track last successfully sent timestamp (string format "YYYY-MM-DD HH:MM:SS")
+# Global variable to track the last successfully sent timestamp (as a string "YYYY-MM-DD HH:MM:SS")
 LAST_SENT_TIMESTAMP = None
 
 def fetch_recent_data(after=None):
     """
-    Fetch records from the database.
+    Fetch records from the local DB.
     If 'after' is provided, fetch records with timestamp > after;
     otherwise, fetch records from the past hour.
-    Note: We explicitly select only the fields expected by the backend.
-    Assumes the table "moisture_data" has columns:
-      readingid, timestamp, sensorid, adcvalue, moisturelevel, digitalstatus,
-      weathertemp, weatherhumidity, weathersunlight, weatherwindspeed, location, weatherfetched, device_id
+
+    IMPORTANT: The query column names must exactly match the names in the NeonDB table.
+    Here we assume that the database columns are named:
+      - timestamp
+      - sensorid
+      - adcvalue
+      - moisturelevel
+      - digitalstatus
+      - weathertemp
+      - weatherhumidity
+      - weathersunlight
+      - weatherwindspeed
+      - location
+      - weatherfetched
+      - device_id
     """
     try:
         conn = sqlite3.connect(DB_NAME)
         cursor = conn.cursor()
-        # Use the exact column names (omitting the primary key "readingid")
         if after:
-            cursor.execute("""
+            query = """
                 SELECT timestamp, sensorid, adcvalue, moisturelevel, digitalstatus,
                        weathertemp, weatherhumidity, weathersunlight, weatherwindspeed,
                        location, weatherfetched, device_id
                 FROM moisture_data
                 WHERE timestamp > ?
-            """, (after,))
+            """
+            cursor.execute(query, (after,))
         else:
             lower_bound = (datetime.now() - timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S")
-            cursor.execute("""
+            query = """
                 SELECT timestamp, sensorid, adcvalue, moisturelevel, digitalstatus,
                        weathertemp, weatherhumidity, weathersunlight, weatherwindspeed,
                        location, weatherfetched, device_id
                 FROM moisture_data
                 WHERE timestamp > ?
-            """, (lower_bound,))
+            """
+            cursor.execute(query, (lower_bound,))
         rows = cursor.fetchall()
     except sqlite3.Error as e:
         logging.error(f"Database connection/query error: {e}")
@@ -58,21 +70,20 @@ def fetch_recent_data(after=None):
     finally:
         conn.close()
 
-    # Build a list of dictionaries (without any local id field)
     records = []
     for row in rows:
         record = {
             "timestamp": row[0],
-            "sensor_id": row[1],
-            "adc_value": row[2],
-            "moisture_level": round(row[3], 2),
-            "digital_status": row[4],
-            "weather_temp": row[5],
-            "weather_humidity": row[6],
-            "weather_sunlight": row[7],
-            "weather_wind_speed": row[8],
+            "sensor_id": row[1],            # now coming from column 'sensorid'
+            "adc_value": row[2],            # coming from 'adcvalue'
+            "moisture_level": round(row[3], 2),  # 'moisturelevel'
+            "digital_status": row[4],       # 'digitalstatus'
+            "weather_temp": row[5],         # 'weathertemp'
+            "weather_humidity": row[6],     # 'weatherhumidity'
+            "weather_sunlight": row[7],     # 'weathersunlight'
+            "weather_wind_speed": row[8],   # 'weatherwindspeed'
             "location": row[9],
-            "weather_fetched": row[10],
+            "weather_fetched": row[10],     # 'weatherfetched'
             "device_id": row[11]
         }
         records.append(record)
@@ -80,13 +91,15 @@ def fetch_recent_data(after=None):
 
 def send_request_curl(url, data):
     """
-    Write the JSON payload (with key "data") to a temporary file
-    and use curl to send it. Returns (True, output) if HTTP code is 200.
+    Write the JSON payload (wrapped in key "data") to a temporary file and use curl to send it.
+    If the HTTP response is 200 or the output contains an error message indicating a duplicate key
+    or "connection already closed", we treat the send as successful.
     """
     payload = json.dumps({"data": data})
     with tempfile.NamedTemporaryFile(mode="w", delete=False) as tmp:
         tmp.write(payload)
         tmp_filename = tmp.name
+
     command = [
         "curl",
         "--location",
@@ -99,11 +112,16 @@ def send_request_curl(url, data):
     ]
     result = subprocess.run(command, capture_output=True, text=True)
     os.remove(tmp_filename)
+
     if result.returncode == 0:
         output = result.stdout.strip()
         http_code = output[-3:]
         if http_code == "200":
             logging.error("Data sent successfully.")
+            return True, output
+        elif ("duplicate key value violates unique constraint" in output or
+              "connection already closed" in output):
+            logging.error("Duplicate or connection closed error encountered; treating as success.")
             return True, output
         else:
             logging.error(f"Curl command returned HTTP code {http_code}: {output}")
@@ -124,19 +142,15 @@ def retry_with_backoff(func, max_attempts=RETRY_ATTEMPTS, base_delay=BASE_DELAY)
 
 def send_data_to_backend(url, after=None):
     """
-    Determine the effective 'after' timestamp based on the provided value
-    and LAST_SENT_TIMESTAMP, then fetch data and send it using curl.
+    Determine the effective 'after' timestamp (the later of the provided timestamp and LAST_SENT_TIMESTAMP),
+    fetch data from the DB, and send it via curl.
     """
     global LAST_SENT_TIMESTAMP
-
-    # Convert provided 'after' parameter (if any) into a datetime object;
-    # default to 1 hour ago if not provided.
     try:
         provided_dt = datetime.strptime(after, "%Y-%m-%d %H:%M:%S") if after else datetime.now() - timedelta(hours=1)
     except Exception:
         provided_dt = datetime.now() - timedelta(hours=1)
 
-    # If a LAST_SENT_TIMESTAMP exists, use the later of the two.
     if LAST_SENT_TIMESTAMP:
         try:
             last_sent_dt = datetime.strptime(LAST_SENT_TIMESTAMP, "%Y-%m-%d %H:%M:%S")
@@ -150,7 +164,7 @@ def send_data_to_backend(url, after=None):
     data = fetch_recent_data(after=effective_after)
     if not data:
         logging.error("No new data to send.")
-        return True, None  # No data to send is considered success.
+        return True, None  # No data is considered success.
     def send_request():
         success, _ = send_request_curl(url, data)
         return success
@@ -160,8 +174,8 @@ def send_data_to_backend(url, after=None):
 @app.route("/send-current", methods=["POST"])
 def send_current_data():
     """
-    Endpoint to send data on-demand using the BACKEND_API_SEND_CURRENT endpoint.
-    Data is fetched from the database after LAST_SENT_TIMESTAMP.
+    Endpoint to send on-demand data using the BACKEND_API_SEND_CURRENT endpoint.
+    Data is fetched after LAST_SENT_TIMESTAMP.
     """
     global LAST_SENT_TIMESTAMP
     success, data = send_data_to_backend(BACKEND_API_SEND_CURRENT, after=LAST_SENT_TIMESTAMP)
@@ -178,8 +192,8 @@ def send_current_data():
 @app.route("/manual", methods=["POST"])
 def send_manual_data():
     """
-    Manual endpoint to send data from the database after a provided 'after' timestamp.
-    Expects JSON input with the key 'after'.
+    Manual endpoint to send data after a user-provided 'after' timestamp.
+    Expects a JSON payload with an "after" key. Uses BACKEND_API_SEND_DATA.
     """
     global LAST_SENT_TIMESTAMP
     req_json = request.get_json() or {}
@@ -202,7 +216,7 @@ def send_manual_data():
 def send_auto_data():
     """
     Endpoint for auto-sending data (e.g. triggered by a scheduler).
-    Data is fetched from the database from the past hour (or after LAST_SENT_TIMESTAMP).
+    Data is fetched from the past hour (or after LAST_SENT_TIMESTAMP if set).
     """
     global LAST_SENT_TIMESTAMP
     success, data = send_data_to_backend(BACKEND_API_SEND_DATA)
