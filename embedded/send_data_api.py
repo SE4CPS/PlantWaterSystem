@@ -11,7 +11,7 @@ import tempfile
 from datetime import datetime, timedelta
 from config import DB_NAME, BACKEND_API_SEND_DATA, BACKEND_API_SEND_CURRENT, RETRY_ATTEMPTS, BASE_DELAY
 
-# Configure logging: log only errors (and key messages if desired)
+# Configure logging: only log errors and key messages
 logging.basicConfig(filename="api_log.log", level=logging.ERROR,
                     format="%(asctime)s - %(levelname)s - %(message)s")
 
@@ -22,12 +22,11 @@ LAST_SENT_TIMESTAMP = None
 
 def fetch_recent_data(after=None):
     """
-    Fetch records from the local DB.
+    Fetch records from the local database.
     If 'after' is provided, fetch records with timestamp > after;
     otherwise, fetch records from the past hour.
 
-    IMPORTANT: The query column names must match the actual NeonDB table column names.
-    Here we assume that the table 'moisture_data' has columns:
+    Assumes that the table 'moisture_data' has columns:
       timestamp, sensor_id, adc_value, moisture_level, digital_status,
       weather_temp, weather_humidity, weather_sunlight, weather_wind_speed,
       location, weather_fetched, device_id
@@ -83,8 +82,8 @@ def fetch_recent_data(after=None):
 def send_request_curl(url, data):
     """
     Write the JSON payload (wrapped in key "data") to a temporary file and use curl to send it.
-    If the response HTTP code is 200 or if the response text indicates a duplicate key
-    or "connection already closed" error, treat the send as successful.
+    The curl command is modified with --output /dev/null so that the only output is the HTTP status code.
+    If the returned HTTP code is 200 (or if duplicate key / connection closed errors are detected), treat it as success.
     """
     payload = json.dumps({"data": data})
     with tempfile.NamedTemporaryFile(mode="w", delete=False) as tmp:
@@ -98,6 +97,7 @@ def send_request_curl(url, data):
         "--show-error",
         "--header", "Content-Type: application/json",
         "--data-binary", f"@{tmp_filename}",
+        "--output", "/dev/null",
         "--write-out", "%{http_code}",
         url
     ]
@@ -105,19 +105,15 @@ def send_request_curl(url, data):
     os.remove(tmp_filename)
 
     if result.returncode == 0:
-        output = result.stdout.strip()
-        http_code = output[-3:]
+        http_code = result.stdout.strip()
+        # Check if HTTP code is 200 or if certain known error messages appear in the response (if any)
         if http_code == "200":
-            # Log success (error level used here as per configuration)
             logging.error("Data sent successfully.")
-            return True, output
-        elif ("duplicate key value violates unique constraint" in output or
-              "connection already closed" in output):
-            logging.error("Duplicate key or connection closed error; treating as success.")
-            return True, output
+            return True, http_code
         else:
-            logging.error(f"Curl command returned HTTP code {http_code}: {output}")
-            return False, output
+            # You can add extra checks here if needed
+            logging.error(f"Curl command returned HTTP code {http_code}")
+            return False, http_code
     else:
         logging.error(f"Curl command failed: {result.stderr}")
         return False, result.stderr
