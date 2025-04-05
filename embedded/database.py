@@ -9,7 +9,7 @@ def setup_database(conn):
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS moisture_data (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+            timestamp DATETIME DEFAULT LOCALTIMESTAMP,
             device_id TEXT,
             sensor_id INTEGER,
             adc_value REAL,
