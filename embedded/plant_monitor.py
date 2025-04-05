@@ -141,9 +141,11 @@ def main_loop():
                 last_weather_data = new_weather
                 last_weather_time = current_sec
         w_temp, w_humidity, w_sunlight, w_wind_speed = (last_weather_data if last_weather_data else (None, None, None, None))
-        # Use UTC ISO-8601 for the sensor reading timestamp and weather fetched time.
-        utc_now = datetime.utcnow().isoformat() + "Z"
-        weather_fetched_str = datetime.utcfromtimestamp(last_weather_time).isoformat() + "Z" if last_weather_time else "Unknown"
+        # Get the local time in the system's timezone (PDT in Stockton)
+        local_now = datetime.now().astimezone().isoformat()
+        # Convert weather fetched time similarly.
+        weather_fetched_str = (datetime.fromtimestamp(last_weather_time).astimezone().isoformat()
+                               if last_weather_time else "Unknown")
         for index, sensor in enumerate(SENSORS, start=1):
             if not sensor["active"]:
                 continue
@@ -152,12 +154,12 @@ def main_loop():
                   f"Temp: {w_temp}, Humidity: {w_humidity}, Sunlight: {w_sunlight}, Wind: {w_wind_speed}")
             logging.info(f"Sensor {index} - ADC: {adc_value}, Moisture: {moisture_level:.2f}%, Digital: {digital_status}, "
                          f"Weather Temp: {w_temp}, Humidity: {w_humidity}, Sunlight: {w_sunlight}, Wind: {w_wind_speed}")
-            # Create a record tuple; note that timestamp and weather_fetched use UTC ISO-8601.
+            # Save the record with timestamps in PDT ISO-8601 format.
             record = (DEVICE_ID, index, adc_value, moisture_level, digital_status,
                       w_temp, w_humidity, w_sunlight, w_wind_speed,
                       DEVICE_LOCATION, weather_fetched_str)
             database.save_record(conn, record)
-            csv_record = [utc_now, DEVICE_ID, index, adc_value, f"{moisture_level:.2f}",
+            csv_record = [local_now, DEVICE_ID, index, adc_value, f"{moisture_level:.2f}",
                           digital_status, w_temp, w_humidity, w_sunlight, w_wind_speed,
                           DEVICE_LOCATION, weather_fetched_str]
             save_to_csv(csv_record)
