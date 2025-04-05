@@ -14377,3 +14377,69 @@
 2025-04-05 08:34:55,509 - INFO - Sensor 2 - ADC: 15480, Moisture: 30.13%, Digital: Dry, Weather Temp: 10.2, Humidity: 50, Sunlight: 0.0, Wind: 7.1
 2025-04-05 08:34:55,535 - INFO - Sensor 3 - ADC: 23016, Moisture: 0.00%, Digital: Dry, Weather Temp: 10.2, Humidity: 50, Sunlight: 0.0, Wind: 7.1
 2025-04-05 08:34:55,560 - INFO - Sensor 4 - ADC: 24111, Moisture: 0.00%, Digital: Dry, Weather Temp: 10.2, Humidity: 50, Sunlight: 0.0, Wind: 7.1
+2025-04-05 08:35:55,586 - INFO - Sensor 1 - ADC: 15373, Moisture: 30.85%, Digital: Dry, Weather Temp: 10.2, Humidity: 50, Sunlight: 0.0, Wind: 7.1
+2025-04-05 08:35:55,621 - INFO - Sensor 2 - ADC: 15468, Moisture: 30.21%, Digital: Dry, Weather Temp: 10.2, Humidity: 50, Sunlight: 0.0, Wind: 7.1
+2025-04-05 08:35:55,644 - INFO - Sensor 3 - ADC: 22857, Moisture: 0.00%, Digital: Dry, Weather Temp: 10.2, Humidity: 50, Sunlight: 0.0, Wind: 7.1
+2025-04-05 08:35:55,667 - INFO - Sensor 4 - ADC: 24171, Moisture: 0.00%, Digital: Dry, Weather Temp: 10.2, Humidity: 50, Sunlight: 0.0, Wind: 7.1
+2025-04-05 08:36:55,695 - INFO - Sensor 1 - ADC: 15349, Moisture: 31.01%, Digital: Dry, Weather Temp: 10.2, Humidity: 50, Sunlight: 0.0, Wind: 7.1
+2025-04-05 08:36:55,722 - INFO - Sensor 2 - ADC: 15481, Moisture: 30.13%, Digital: Dry, Weather Temp: 10.2, Humidity: 50, Sunlight: 0.0, Wind: 7.1
+2025-04-05 08:36:55,748 - INFO - Sensor 3 - ADC: 22869, Moisture: 0.00%, Digital: Dry, Weather Temp: 10.2, Humidity: 50, Sunlight: 0.0, Wind: 7.1
+2025-04-05 08:36:55,776 - INFO - Sensor 4 - ADC: 24170, Moisture: 0.00%, Digital: Dry, Weather Temp: 10.2, Humidity: 50, Sunlight: 0.0, Wind: 7.1
+2025-04-05 08:37:01,035 - INFO - GPIO Cleanup Done.
+2025-04-05 08:37:01,038 - INFO - GPIO Cleanup Done.
+2025-04-05 08:37:04,689 - INFO - Location from ipinfo.io: 37.9577, -121.2908, Stockton, California, US
+2025-04-05 08:37:04,693 - INFO - Final device location set to: Stockton, California, US
+2025-04-05 08:37:05,833 - INFO - Sensor 1 - ADC: 15364, Moisture: 30.91%, Digital: Dry, Weather Temp: 10.2, Humidity: 50, Sunlight: 0.0, Wind: 7.1
+2025-04-05 08:37:05,872 - INFO - Sensor 2 - ADC: 15478, Moisture: 30.15%, Digital: Dry, Weather Temp: 10.2, Humidity: 50, Sunlight: 0.0, Wind: 7.1
+2025-04-05 08:37:05,896 - INFO - Sensor 3 - ADC: 22932, Moisture: 0.00%, Digital: Dry, Weather Temp: 10.2, Humidity: 50, Sunlight: 0.0, Wind: 7.1
+2025-04-05 08:37:05,920 - INFO - Sensor 4 - ADC: 24102, Moisture: 0.00%, Digital: Dry, Weather Temp: 10.2, Humidity: 50, Sunlight: 0.0, Wind: 7.1
+2025-04-05 08:38:05,968 - INFO - Sensor 1 - ADC: 15354, Moisture: 30.97%, Digital: Dry, Weather Temp: 10.2, Humidity: 50, Sunlight: 0.0, Wind: 7.1
+2025-04-05 08:38:05,992 - INFO - Sensor 2 - ADC: 15486, Moisture: 30.09%, Digital: Dry, Weather Temp: 10.2, Humidity: 50, Sunlight: 0.0, Wind: 7.1
+2025-04-05 08:38:06,016 - INFO - Sensor 3 - ADC: 22905, Moisture: 0.00%, Digital: Dry, Weather Temp: 10.2, Humidity: 50, Sunlight: 0.0, Wind: 7.1
+2025-04-05 08:38:06,040 - INFO - Sensor 4 - ADC: 24103, Moisture: 0.00%, Digital: Dry, Weather Temp: 10.2, Humidity: 50, Sunlight: 0.0, Wind: 7.1
+2025-04-05 08:39:06,068 - INFO - Sensor 1 - ADC: 15352, Moisture: 30.99%, Digital: Dry, Weather Temp: 10.2, Humidity: 50, Sunlight: 0.0, Wind: 7.1
+2025-04-05 08:39:06,093 - INFO - Sensor 2 - ADC: 15486, Moisture: 30.09%, Digital: Dry, Weather Temp: 10.2, Humidity: 50, Sunlight: 0.0, Wind: 7.1
+2025-04-05 08:39:06,118 - INFO - Sensor 3 - ADC: 22862, Moisture: 0.00%, Digital: Dry, Weather Temp: 10.2, Humidity: 50, Sunlight: 0.0, Wind: 7.1
+2025-04-05 08:39:06,145 - INFO - Sensor 4 - ADC: 24199, Moisture: 0.00%, Digital: Dry, Weather Temp: 10.2, Humidity: 50, Sunlight: 0.0, Wind: 7.1
+2025-04-05 08:39:32,331 - INFO - GPIO Cleanup Done.
+2025-04-05 08:39:32,333 - INFO - GPIO Cleanup Done.
+2025-04-05 09:03:42,672 - INFO - Location from ipinfo.io: 37.9577, -121.2908, Stockton, California, US
+2025-04-05 09:03:42,673 - INFO - Final device location set to: Stockton, California, US
+2025-04-05 09:03:43,765 - INFO - Sensor 1 - ADC: 15349, Moisture: 31.01%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:03:43,808 - INFO - Sensor 2 - ADC: 15457, Moisture: 30.29%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:03:43,837 - INFO - Sensor 3 - ADC: 22924, Moisture: 0.00%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:03:43,862 - INFO - Sensor 4 - ADC: 24089, Moisture: 0.00%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:04:43,908 - INFO - Sensor 1 - ADC: 15339, Moisture: 31.07%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:04:43,930 - INFO - Sensor 2 - ADC: 15469, Moisture: 30.21%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:04:43,954 - INFO - Sensor 3 - ADC: 22910, Moisture: 0.00%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:04:43,980 - INFO - Sensor 4 - ADC: 24086, Moisture: 0.00%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:05:44,014 - INFO - Sensor 1 - ADC: 15380, Moisture: 30.80%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:05:44,037 - INFO - Sensor 2 - ADC: 15468, Moisture: 30.21%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:05:44,063 - INFO - Sensor 3 - ADC: 22803, Moisture: 0.00%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:05:44,086 - INFO - Sensor 4 - ADC: 24095, Moisture: 0.00%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:06:44,113 - INFO - Sensor 1 - ADC: 15354, Moisture: 30.97%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:06:44,137 - INFO - Sensor 2 - ADC: 15454, Moisture: 30.31%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:06:44,161 - INFO - Sensor 3 - ADC: 22943, Moisture: 0.00%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:06:44,191 - INFO - Sensor 4 - ADC: 24111, Moisture: 0.00%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:07:44,216 - INFO - Sensor 1 - ADC: 15333, Moisture: 31.11%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:07:44,263 - INFO - Sensor 2 - ADC: 15450, Moisture: 30.33%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:07:44,286 - INFO - Sensor 3 - ADC: 22849, Moisture: 0.00%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:07:44,311 - INFO - Sensor 4 - ADC: 24128, Moisture: 0.00%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:08:44,341 - INFO - Sensor 1 - ADC: 15336, Moisture: 31.09%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:08:44,364 - INFO - Sensor 2 - ADC: 15448, Moisture: 30.35%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:08:44,388 - INFO - Sensor 3 - ADC: 22947, Moisture: 0.00%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:08:44,413 - INFO - Sensor 4 - ADC: 24039, Moisture: 0.00%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:09:44,440 - INFO - Sensor 1 - ADC: 15349, Moisture: 31.01%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:09:44,470 - INFO - Sensor 2 - ADC: 15473, Moisture: 30.18%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:09:44,498 - INFO - Sensor 3 - ADC: 22858, Moisture: 0.00%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:09:44,527 - INFO - Sensor 4 - ADC: 24090, Moisture: 0.00%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:10:44,558 - INFO - Sensor 1 - ADC: 15353, Moisture: 30.98%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:10:44,585 - INFO - Sensor 2 - ADC: 15464, Moisture: 30.24%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:10:44,611 - INFO - Sensor 3 - ADC: 22933, Moisture: 0.00%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:10:44,638 - INFO - Sensor 4 - ADC: 24120, Moisture: 0.00%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:11:44,668 - INFO - Sensor 1 - ADC: 15337, Moisture: 31.09%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:11:44,693 - INFO - Sensor 2 - ADC: 15442, Moisture: 30.39%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:11:44,716 - INFO - Sensor 3 - ADC: 22936, Moisture: 0.00%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:11:44,740 - INFO - Sensor 4 - ADC: 24048, Moisture: 0.00%, Digital: Dry, Weather Temp: 11.5, Humidity: 70, Sunlight: 252.2, Wind: 4.8
+2025-04-05 09:12:07,358 - INFO - GPIO Cleanup Done.
+2025-04-05 09:12:07,360 - INFO - GPIO Cleanup Done.
