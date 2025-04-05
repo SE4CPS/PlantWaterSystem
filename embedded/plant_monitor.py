@@ -71,7 +71,6 @@ def convert_adc_to_moisture(adc_value):
     return round(max(0, min(100, moisture_level)), 2)
 
 def read_sensor_channel(sensor):
-    # Read the ADC value and digital state for a sensor
     try:
         chan = AnalogIn(ads, sensor["analog"])
         adc_value = chan.value
@@ -89,7 +88,6 @@ def read_sensor_channel(sensor):
         return 0, 0, "Error"
 
 def read_sensor_with_retries(sensor):
-    # Attempt to read sensor data multiple times
     for attempt in range(MAX_RETRIES):
         try:
             return read_sensor_channel(sensor)
@@ -125,7 +123,7 @@ def main_loop():
         sys.exit(1)
 
     database.setup_database(conn)
-    # Detect device location; store only the city name
+    # Detect device location; use only the city name.
     DEVICE_LAT, DEVICE_LON, loc_name = weather_api.detect_location()
     DEVICE_LOCATION = loc_name if loc_name else "Unknown"
     print(f"Detected device location: {DEVICE_LOCATION}")
@@ -135,7 +133,6 @@ def main_loop():
 
     while True:
         current_sec = time.time()
-        # Fetch new weather data if needed
         if last_weather_time == 0 or (current_sec - last_weather_time) >= WEATHER_FETCH_INTERVAL:
             new_weather = weather_api.get_weather_data(DEVICE_LAT, DEVICE_LON)
             if new_weather and any(field is not None for field in new_weather):
@@ -145,41 +142,28 @@ def main_loop():
         w_temp, w_humidity, w_sunlight, w_wind_speed = (
             last_weather_data if last_weather_data else (None, None, None, None)
         )
+        # Store local time in ISO8601 without conversion (i.e. use the system's local time as is)
+        local_now_str = datetime.now().astimezone().isoformat()
+        weather_fetched_str = (
+            datetime.fromtimestamp(last_weather_time).astimezone().isoformat()
+            if last_weather_time
+            else "Unknown"
+        )
 
-        # 1) Generate a naive local time string (no offset)
-        local_now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        # 2) Do the same for weather_fetched
-        if last_weather_time:
-            weather_fetched_str = datetime.fromtimestamp(last_weather_time).strftime("%Y-%m-%d %H:%M:%S")
-        else:
-            weather_fetched_str = "Unknown"
-
-        # For each sensor
         for index, sensor in enumerate(SENSORS, start=1):
             if not sensor["active"]:
                 continue
-
             adc_value, moisture_level, digital_status = read_sensor_with_retries(sensor)
-            print(
-                f"Sensor {index} - ADC: {adc_value}, Moisture: {moisture_level:.2f}%, "
-                f"Digital: {digital_status}, Temp: {w_temp}, Humidity: {w_humidity}, "
-                f"Sunlight: {w_sunlight}, Wind: {w_wind_speed}"
-            )
-            logging.info(
-                f"Sensor {index} - ADC: {adc_value}, Moisture: {moisture_level:.2f}%, "
-                f"Digital: {digital_status}, Weather Temp: {w_temp}, "
-                f"Humidity: {w_humidity}, Sunlight: {w_sunlight}, Wind: {w_wind_speed}"
-            )
-
-            # Insert row into DB (the 'timestamp' field in DB is naive local time)
+            print(f"Sensor {index} - ADC: {adc_value}, Moisture: {moisture_level:.2f}%, Digital: {digital_status}, "
+                  f"Temp: {w_temp}, Humidity: {w_humidity}, Sunlight: {w_sunlight}, Wind: {w_wind_speed}")
+            logging.info(f"Sensor {index} - ADC: {adc_value}, Moisture: {moisture_level:.2f}%, Digital: {digital_status}, "
+                         f"Weather Temp: {w_temp}, Humidity: {w_humidity}, Sunlight: {w_sunlight}, Wind: {w_wind_speed}")
             record = (
                 DEVICE_ID, index, adc_value, moisture_level, digital_status,
                 w_temp, w_humidity, w_sunlight, w_wind_speed,
                 DEVICE_LOCATION, weather_fetched_str
             )
             database.save_record(conn, record)
-
-            # Write row to CSV
             csv_record = [
                 local_now_str,
                 DEVICE_ID,
@@ -195,7 +179,6 @@ def main_loop():
                 weather_fetched_str
             ]
             save_to_csv(csv_record)
-
         database.delete_old_records(conn)
         time.sleep(SENSOR_READ_INTERVAL)
 

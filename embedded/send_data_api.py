@@ -25,8 +25,7 @@ LAST_SENT_ID = 0
 
 def _no_conversion(ts: str | None) -> str | None:
     """
-    Do not convert or shift the timestamp. Return it exactly as stored in the DB.
-    If the DB says '2025-04-05 12:46:05', we pass '2025-04-05 12:46:05'.
+    Return the timestamp as stored in the database without any conversion.
     """
     return ts
 
@@ -39,28 +38,18 @@ def _sanitize_txt(val):
 def fetch_next_group(last_id: int) -> list[dict]:
     """
     Fetch rows from the moisture_data table with id > last_id.
-    Group them by the 'timestamp' column (which your code stores in local time, e.g. 'YYYY-MM-DD HH:MM:SS').
-    Return the first group that has exactly 4 rows (one per sensor_id).
+    Group them by the 'timestamp' field (stored as ISO8601 local time).
+    Return the first group that has exactly 4 rows (one per sensor with distinct sensor_id).
     """
     try:
         conn = sqlite3.connect(DB_NAME)
         cur = conn.cursor()
         cur.execute(
             """
-            SELECT
-                id,
-                timestamp,
-                sensor_id,
-                adc_value,
-                moisture_level,
-                digital_status,
-                weather_temp,
-                weather_humidity,
-                weather_sunlight,
-                weather_wind_speed,
-                location,
-                weather_fetched,
-                device_id
+            SELECT id, timestamp, sensor_id, adc_value, moisture_level,
+                   digital_status, weather_temp, weather_humidity,
+                   weather_sunlight, weather_wind_speed,
+                   location, weather_fetched, device_id
             FROM moisture_data
             WHERE id > ?
             ORDER BY id ASC
@@ -77,15 +66,12 @@ def fetch_next_group(last_id: int) -> list[dict]:
     if not rows:
         return []
 
-    from collections import defaultdict
     groups = defaultdict(list)
     for row in rows:
-        (r_id, ts, sensor_id, adc_val, moist_lvl, dig_status,
-         w_temp, w_hum, w_sun, w_wind, loc, w_fetch, dev_id) = row
-
+        r_id, ts, sensor_id, adc_val, moist_lvl, dig_status, w_temp, w_hum, w_sun, w_wind, loc, w_fetch, dev_id = row
         groups[ts].append({
             "id": r_id,
-            "timestamp": ts,   # e.g. "2025-04-05 12:46:05" local time
+            "timestamp": ts,  # Already in desired format, e.g. "2025-04-05T12:46:05.441839-07:00"
             "sensor_id": sensor_id,
             "adc_value": _sanitize_num(adc_val),
             "moisture_level": round(_sanitize_num(moist_lvl), 2),
@@ -95,21 +81,21 @@ def fetch_next_group(last_id: int) -> list[dict]:
             "weather_sunlight": _sanitize_num(w_sun),
             "weather_wind_speed": _sanitize_num(w_wind),
             "location": _sanitize_txt(loc),
-            "weather_fetched": _sanitize_txt(w_fetch),  # also stored as local time
+            "weather_fetched": w_fetch,  # Already stored as desired
             "device_id": _sanitize_txt(dev_id),
         })
 
-    # Return the first group that has exactly 4 rows and distinct sensor_ids
-    for ts_key in sorted(groups.keys()):
-        group = groups[ts_key]
-        if len(group) == 4 and len({g["sensor_id"] for g in group}) == 4:
+    for ts in sorted(groups.keys()):
+        group = groups[ts]
+        if len(group) == 4 and len({r["sensor_id"] for r in group}) == 4:
             return group
     return []
 
 def send_one_reading(url: str, reading: dict) -> (bool, bool):
     """
-    Send a single reading as JSON. The 'data' key is a list containing exactly one reading.
-    The 'timestamp' is used exactly as in the DB: 'YYYY-MM-DD HH:MM:SS'.
+    Send a single reading as a JSON payload.
+    The payload wraps the reading inside a top-level "data" key whose value is a list.
+    Returns (success, duplicate_flag).
     """
     payload = {
         "data": [
@@ -126,7 +112,7 @@ def send_one_reading(url: str, reading: dict) -> (bool, bool):
                 "weather_sunlight": reading["weather_sunlight"],
                 "weather_wind_speed": reading["weather_wind_speed"],
                 "location": reading["location"],
-                "weather_fetched": reading["weather_fetched"],
+                "weather_fetched": _no_conversion(reading["weather_fetched"]),
             }
         ]
     }
@@ -162,8 +148,9 @@ def retry_with_backoff(func, attempts=RETRY_ATTEMPTS, base=BASE_DELAY) -> (bool,
 
 def send_next_group(url: str) -> bool:
     """
-    Fetch the next group of 4 readings (same local timestamp).
-    Send each reading individually. If a reading fails (other than duplicate), stop.
+    Fetch the next complete group of 4 readings (with the same timestamp)
+    and send each reading individually.
+    Update LAST_SENT_ID to the maximum id in the group after processing.
     """
     global LAST_SENT_ID
     group = fetch_next_group(LAST_SENT_ID)
@@ -182,9 +169,6 @@ def send_next_group(url: str) -> bool:
     return True
 
 def send_all_available(url: str) -> bool:
-    """
-    Loop until no more complete groups remain or one fails.
-    """
     while True:
         group = fetch_next_group(LAST_SENT_ID)
         if not group:
@@ -193,10 +177,6 @@ def send_all_available(url: str) -> bool:
             return False
 
 def get_min_id_after_timestamp(ts_str: str) -> int | None:
-    """
-    Return the min ID where the DB's 'timestamp' > ts_str.
-    The DB stores naive local times e.g. "2025-04-05 12:46:05".
-    """
     try:
         conn = sqlite3.connect(DB_NAME)
         cur = conn.cursor()
@@ -256,6 +236,7 @@ def _scheduled_job():
     send_all_available(BACKEND_API_SEND_DATA)
 
 def _start_scheduler():
+    import schedule
     schedule.every(SENSOR_READ_INTERVAL).seconds.do(_scheduled_job)
     logging.info(f"Scheduler started: interval = {SENSOR_READ_INTERVAL} seconds.")
     while True:
