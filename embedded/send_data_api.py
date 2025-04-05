@@ -15,9 +15,10 @@ from config import (
     BACKEND_API_SEND_CURRENT,
     RETRY_ATTEMPTS,
     BASE_DELAY,
+    SENSOR_READ_INTERVAL,          # ← use the same cadence as sensor readings
 )
 
-# Configure logging
+# ────────────────────────── logging ────────────────────────────
 logging.basicConfig(
     filename="api_log.log",
     level=logging.ERROR,
@@ -25,47 +26,39 @@ logging.basicConfig(
 )
 
 app = Flask(__name__)
-
-# Track the last timestamp that was successfully delivered
-LAST_SENT_TIMESTAMP = None
+LAST_SENT_TIMESTAMP: str | None = None  # “YYYY‑MM‑DD HH:MM:SS”
 
 
-def fetch_recent_data(after=None):
-    """
-    Pull rows from the local SQLite DB newer than *after* (or the past hour).
-    Returns a list of dicts ready to be JSON‑serialised.
-    """
+# ───────────────────── helper / utility code ───────────────────
+def _to_iso(sql_dt: str | None) -> str | None:
+    if not sql_dt:
+        return None
+    try:
+        return datetime.strptime(sql_dt, "%Y-%m-%d %H:%M:%S").isoformat() + "Z"
+    except ValueError:
+        return sql_dt
+
+
+def _from_iso(iso_dt: str) -> str:
+    return iso_dt.replace("T", " ").rstrip("Z")
+
+
+def fetch_recent_data(after_sql: str):
     try:
         conn = sqlite3.connect(DB_NAME)
-        cursor = conn.cursor()
-
-        base_query = """
-            SELECT timestamp,
-                   sensor_id,                 -- ✅ correct column name
-                   adc_value,
-                   moisture_level,
-                   digital_status,
-                   weather_temp,
-                   weather_humidity,
-                   weather_sunlight,
-                   weather_wind_speed,
-                   location,
-                   weather_fetched,
-                   device_id
-            FROM moisture_data
-            WHERE timestamp > ?
-        """
-
-        if after:
-            cursor.execute(base_query, (after,))
-        else:
-            lower_bound = (
-                    datetime.now() - timedelta(hours=1)
-            ).strftime("%Y-%m-%d %H:%M:%S")
-            cursor.execute(base_query, (lower_bound,))
-
-        rows = cursor.fetchall()
-
+        cur = conn.cursor()
+        cur.execute(
+            """
+            SELECT id, timestamp, sensor_id, adc_value, moisture_level,
+                   digital_status, weather_temp, weather_humidity,
+                   weather_sunlight, weather_wind_speed,
+                   location, weather_fetched, device_id
+            FROM   moisture_data
+            WHERE  timestamp > ?
+            """,
+            (after_sql,),
+        )
+        rows = cur.fetchall()
     except sqlite3.Error as e:
         logging.error(f"Database connection/query error: {e}")
         return []
@@ -73,37 +66,34 @@ def fetch_recent_data(after=None):
         conn.close()
 
     records = []
-    for row in rows:
+    for r in rows:
         records.append(
             {
-                "timestamp": row[0],
-                "sensor_id": row[1],
-                "adc_value": row[2],
-                "moisture_level": round(row[3], 2),
-                "digital_status": row[4],
-                "weather_temp": row[5],
-                "weather_humidity": row[6],
-                "weather_sunlight": row[7],
-                "weather_wind_speed": row[8],
-                "location": row[9],
-                "weather_fetched": row[10],
-                "device_id": row[11],
+                "id": r[0],
+                "timestamp": _to_iso(r[1]),
+                "sensor_id": r[2],
+                "adc_value": r[3],
+                "moisture_level": round(r[4], 2),
+                "digital_status": r[5],
+                "weather_temp": r[6],
+                "weather_humidity": r[7],
+                "weather_sunlight": r[8],
+                "weather_wind_speed": r[9],
+                "location": r[10],
+                "weather_fetched": _to_iso(r[11]),
+                "device_id": r[12],
             }
         )
     return records
 
 
-def send_request_curl(url, data):
-    """
-    Use curl to POST the payload.  We treat an HTTP 200 as confirmation that
-    the backend accepted the data.
-    """
+def send_request_curl(url: str, data: list[dict]) -> bool:
     payload = json.dumps({"data": data})
     with tempfile.NamedTemporaryFile(mode="w", delete=False) as tmp:
         tmp.write(payload)
-        tmp_filename = tmp.name
+        fname = tmp.name
 
-    command = [
+    cmd = [
         "curl",
         "--location",
         "--silent",
@@ -111,130 +101,142 @@ def send_request_curl(url, data):
         "--header",
         "Content-Type: application/json",
         "--data-binary",
-        f"@{tmp_filename}",
+        f"@{fname}",
         "--output",
         "/dev/null",
         "--write-out",
         "%{http_code}",
         url,
     ]
-    result = subprocess.run(command, capture_output=True, text=True)
-    os.remove(tmp_filename)
+    res = subprocess.run(cmd, capture_output=True, text=True)
+    os.remove(fname)
 
-    if result.returncode == 0:
-        http_code = result.stdout.strip()
-        if http_code == "200":
-            logging.info("Data sent successfully.")  # ← log success as INFO
-            return True, http_code
-        else:
-            logging.error(f"Curl returned HTTP code {http_code}")
-            return False, http_code
-    else:
-        logging.error(f"Curl command failed: {result.stderr}")
-        return False, result.stderr
+    if res.returncode == 0 and res.stdout.strip() == "200":
+        logging.info("Data sent successfully.")
+        return True
+
+    code_or_err = res.stdout.strip() if res.returncode == 0 else res.stderr
+    logging.error(f"Curl send failed ({code_or_err})")
+    return False
 
 
-def retry_with_backoff(func, max_attempts=RETRY_ATTEMPTS, base_delay=BASE_DELAY):
-    for attempt in range(max_attempts):
+def retry_with_backoff(func, attempts=RETRY_ATTEMPTS, base=BASE_DELAY):
+    for n in range(attempts):
         if func():
             return True
-        delay = base_delay * (2 ** attempt)
-        logging.error(f"Retrying after {delay} seconds...")
+        delay = base * (2**n)
+        logging.error(f"Retrying after {delay} s…")
         time.sleep(delay)
     logging.error("All retry attempts failed.")
     return False
 
 
-def send_data_to_backend(url, after=None):
-    """
-    Fetch new data and push it to *url*. Returns (success, data_if_sent_or_None)
-    """
+def send_data_to_backend(url: str, after: str | None = None):
     global LAST_SENT_TIMESTAMP
 
     try:
-        provided_dt = (
+        provided = (
             datetime.strptime(after, "%Y-%m-%d %H:%M:%S")
             if after
-            else (datetime.now() - timedelta(hours=1))
+            else datetime.now() - timedelta(seconds=SENSOR_READ_INTERVAL)
         )
     except Exception:
-        provided_dt = datetime.now() - timedelta(hours=1)
+        provided = datetime.now() - timedelta(seconds=SENSOR_READ_INTERVAL)
 
     if LAST_SENT_TIMESTAMP:
         try:
-            last_sent_dt = datetime.strptime(LAST_SENT_TIMESTAMP, "%Y-%m-%d %H:%M:%S")
+            last_dt = datetime.strptime(LAST_SENT_TIMESTAMP, "%Y-%m-%d %H:%M:%S")
+            provided = max(provided, last_dt)
         except Exception:
-            last_sent_dt = provided_dt
-        effective_dt = max(provided_dt, last_sent_dt)
-    else:
-        effective_dt = provided_dt
+            pass
 
-    effective_after = effective_dt.strftime("%Y-%m-%d %H:%M:%S")
-    data = fetch_recent_data(after=effective_after)
+    after_sql = provided.strftime("%Y-%m-%d %H:%M:%S")
+    data = fetch_recent_data(after_sql)
+
     if not data:
         logging.error("No new data to send.")
-        return True, None  # nothing new is not a failure
+        return True, None
 
-    success = retry_with_backoff(lambda: send_request_curl(url, data)[0])
-    return success, data if success else None
+    ok = retry_with_backoff(lambda: send_request_curl(url, data))
+    return ok, data if ok else None
 
 
+# ───────────────────────────── routes ─────────────────────────────
 @app.route("/send-current", methods=["POST"])
-def send_current_data():
-    success, data = send_data_to_backend(BACKEND_API_SEND_CURRENT, after=LAST_SENT_TIMESTAMP)
+def send_current():
+    ok, data = send_data_to_backend(
+        BACKEND_API_SEND_CURRENT, after=LAST_SENT_TIMESTAMP
+    )
     if data:
-        LAST_SENT_TIMESTAMP = max(record["timestamp"] for record in data)
+        LAST_SENT_TIMESTAMP = _from_iso(max(rec["timestamp"] for rec in data))
     return (
-        jsonify({"message": "Current data sent successfully" if success else "Failed to send current data"}),
-        200 if success else 500,
+        jsonify(
+            {
+                "message": "Current data sent successfully"
+                if ok
+                else "Failed to send current data"
+            }
+        ),
+        200 if ok else 500,
     )
 
 
 @app.route("/manual", methods=["POST"])
-def send_manual_data():
-    req_json = request.get_json() or {}
-    after_timestamp = req_json.get("after")
-    if not after_timestamp:
+def manual_send():
+    req = request.get_json() or {}
+    after = req.get("after")
+    if not after:
         return jsonify({"message": "Missing 'after' timestamp in request"}), 400
 
-    success, data = send_data_to_backend(BACKEND_API_SEND_DATA, after=after_timestamp)
+    ok, data = send_data_to_backend(BACKEND_API_SEND_DATA, after=after)
     if data:
-        LAST_SENT_TIMESTAMP = max(record["timestamp"] for record in data)
+        LAST_SENT_TIMESTAMP = _from_iso(max(rec["timestamp"] for rec in data))
     return (
-        jsonify({"message": "Manual data sent successfully" if success else "Failed to send manual data"}),
-        200 if success else 500,
+        jsonify(
+            {
+                "message": "Manual data sent successfully"
+                if ok
+                else "Failed to send manual data"
+            }
+        ),
+        200 if ok else 500,
     )
 
 
 @app.route("/send-data", methods=["POST"])
-def send_auto_data():
-    success, data = send_data_to_backend(BACKEND_API_SEND_DATA)
+def auto_send():
+    ok, data = send_data_to_backend(BACKEND_API_SEND_DATA)
     if data:
-        LAST_SENT_TIMESTAMP = max(record["timestamp"] for record in data)
+        LAST_SENT_TIMESTAMP = _from_iso(max(rec["timestamp"] for rec in data))
     return (
-        jsonify({"message": "Data sent successfully" if success else "Failed to send data"}),
-        200 if success else 500,
+        jsonify(
+            {
+                "message": "Data sent successfully"
+                if ok
+                else "Failed to send data"
+            }
+        ),
+        200 if ok else 500,
     )
 
 
-def scheduled_job():
+# ───────────────────── scheduler thread ────────────────────
+def _scheduled_job():
     send_data_to_backend(BACKEND_API_SEND_DATA)
 
 
-def schedule_data_sending():
-    schedule.every(1).hours.do(scheduled_job)
-    logging.info("Scheduled job registered successfully.")
+def _start_scheduler():
+    # run the job every SENSOR_READ_INTERVAL seconds (real‑time push)
+    schedule.every(SENSOR_READ_INTERVAL).seconds.do(_scheduled_job)
+    logging.info(
+        f"Scheduler started: pushing data every {SENSOR_READ_INTERVAL} seconds."
+    )
     while True:
         schedule.run_pending()
         time.sleep(1)
 
 
-def run_schedule_in_thread():
-    thread = threading.Thread(target=schedule_data_sending)
-    thread.daemon = True
-    thread.start()
-
-
+# ───────────────────────────── main ───────────────────────────────
 if __name__ == "__main__":
-    run_schedule_in_thread()
+    threading.Thread(target=_start_scheduler, daemon=True).start()
     app.run(host="0.0.0.0", port=5001, debug=False)

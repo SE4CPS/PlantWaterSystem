@@ -1,7 +1,7 @@
 # Central configuration and device serial extraction
 
 # Time intervals (in seconds)
-SENSOR_READ_INTERVAL = 900         # 15 minutes between sensor readings
+SENSOR_READ_INTERVAL = 60         # 15 minutes between sensor readings
 DATA_RETENTION_DAYS = 7            # Days to retain data in the database
 WEATHER_FETCH_INTERVAL = 900       # 15 minutes between weather API calls
 
