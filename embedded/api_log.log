@@ -163,3 +163,47 @@
 2025-04-04 13:09:09,269 - ERROR - Database connection/query error: no such column: sensorid
 2025-04-04 13:09:09,269 - ERROR - No new data to send.
 2025-04-04 13:09:09,271 - INFO - 10.0.0.180 - - [04/Apr/2025 13:09:09] "POST /manual HTTP/1.1" 200 -
+2025-04-04 13:13:42,650 - ERROR - Database connection/query error: no such column: sensorid
+2025-04-04 13:13:42,652 - ERROR - No new data to send.
+2025-04-04 13:13:42,656 - INFO - 10.0.0.180 - - [04/Apr/2025 13:13:42] "POST /manual HTTP/1.1" 200 -
+2025-04-04 13:14:58,406 - ERROR - Database connection/query error: no such column: sensorid
+2025-04-04 13:14:58,407 - ERROR - No new data to send.
+2025-04-04 13:14:58,408 - INFO - 10.0.0.180 - - [04/Apr/2025 13:14:58] "POST /manual HTTP/1.1" 200 -
+2025-04-04 13:35:42,547 - ERROR - Database connection/query error: no such column: sensorid
+2025-04-04 13:35:42,548 - ERROR - No new data to send.
+2025-04-04 14:35:43,426 - ERROR - Database connection/query error: no such column: sensorid
+2025-04-04 14:35:43,429 - ERROR - No new data to send.
+2025-04-04 15:35:44,284 - ERROR - Database connection/query error: no such column: sensorid
+2025-04-04 15:35:44,292 - ERROR - No new data to send.
+2025-04-04 16:35:45,111 - ERROR - Database connection/query error: no such column: sensorid
+2025-04-04 16:35:45,111 - ERROR - No new data to send.
+2025-04-04 17:35:45,938 - ERROR - Database connection/query error: no such column: sensorid
+2025-04-04 17:35:45,939 - ERROR - No new data to send.
+2025-04-04 18:35:46,748 - ERROR - Database connection/query error: no such column: sensorid
+2025-04-04 18:35:46,757 - ERROR - No new data to send.
+2025-04-04 19:35:47,600 - ERROR - Database connection/query error: no such column: sensorid
+2025-04-04 19:35:47,602 - ERROR - No new data to send.
+2025-04-04 20:35:48,414 - ERROR - Database connection/query error: no such column: sensorid
+2025-04-04 20:35:48,419 - ERROR - No new data to send.
+2025-04-04 21:35:49,255 - ERROR - Database connection/query error: no such column: sensorid
+2025-04-04 21:35:49,257 - ERROR - No new data to send.
+2025-04-04 22:35:50,084 - ERROR - Database connection/query error: no such column: sensorid
+2025-04-04 22:35:50,085 - ERROR - No new data to send.
+2025-04-04 23:35:50,936 - ERROR - Database connection/query error: no such column: sensorid
+2025-04-04 23:35:50,946 - ERROR - No new data to send.
+2025-04-05 00:35:51,805 - ERROR - Database connection/query error: no such column: sensorid
+2025-04-05 00:35:51,810 - ERROR - No new data to send.
+2025-04-05 01:35:52,660 - ERROR - Database connection/query error: no such column: sensorid
+2025-04-05 01:35:52,661 - ERROR - No new data to send.
+2025-04-05 02:35:53,479 - ERROR - Database connection/query error: no such column: sensorid
+2025-04-05 02:35:53,483 - ERROR - No new data to send.
+2025-04-05 03:35:54,304 - ERROR - Database connection/query error: no such column: sensorid
+2025-04-05 03:35:54,305 - ERROR - No new data to send.
+2025-04-05 04:35:55,158 - ERROR - Database connection/query error: no such column: sensorid
+2025-04-05 04:35:55,158 - ERROR - No new data to send.
+2025-04-05 05:35:56,001 - ERROR - Database connection/query error: no such column: sensorid
+2025-04-05 05:35:56,003 - ERROR - No new data to send.
+2025-04-05 06:35:56,939 - ERROR - Database connection/query error: no such column: sensorid
+2025-04-05 06:35:56,983 - ERROR - No new data to send.
+2025-04-05 07:35:57,806 - ERROR - Database connection/query error: no such column: sensorid
+2025-04-05 07:35:57,806 - ERROR - No new data to send.
