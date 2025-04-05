@@ -79,3 +79,70 @@
 2025-04-05 09:11:45,029 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12855) already exists.\n"}
 2025-04-05 09:11:45,032 - ERROR - Retrying after 8 s…
 2025-04-05 09:11:53,033 - ERROR - All retry attempts failed.
+2025-04-05 09:22:06,837 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-04-05 09:22:06,837 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-05 09:23:08,952 - ERROR - Backend returned 500: {"status":"error","message":"Unexpected error: connection already closed"}
+2025-04-05 09:23:08,955 - ERROR - Retrying after 2 s…
+2025-04-05 09:23:16,285 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12855) already exists.\n"}
+2025-04-05 09:23:16,288 - ERROR - Retrying after 4 s…
+2025-04-05 09:23:23,242 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12855) already exists.\n"}
+2025-04-05 09:23:23,245 - ERROR - Retrying after 8 s…
+2025-04-05 09:23:31,246 - ERROR - All retry attempts failed.
+2025-04-05 09:24:34,240 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12855) already exists.\n"}
+2025-04-05 09:24:34,243 - ERROR - Retrying after 2 s…
+2025-04-05 09:24:39,240 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12855) already exists.\n"}
+2025-04-05 09:24:39,243 - ERROR - Retrying after 4 s…
+2025-04-05 09:24:46,098 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12855) already exists.\n"}
+2025-04-05 09:24:46,101 - ERROR - Retrying after 8 s…
+2025-04-05 09:24:54,101 - ERROR - All retry attempts failed.
+2025-04-05 09:26:02,189 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12855) already exists.\n"}
+2025-04-05 09:26:02,192 - ERROR - Retrying after 2 s…
+2025-04-05 09:26:07,150 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12855) already exists.\n"}
+2025-04-05 09:26:07,152 - ERROR - Retrying after 4 s…
+2025-04-05 09:26:14,033 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12855) already exists.\n"}
+2025-04-05 09:26:14,036 - ERROR - Retrying after 8 s…
+2025-04-05 09:26:22,036 - ERROR - All retry attempts failed.
+2025-04-05 09:27:24,892 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12859) already exists.\n"}
+2025-04-05 09:27:24,897 - ERROR - Retrying after 2 s…
+2025-04-05 09:27:34,787 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12859) already exists.\n"}
+2025-04-05 09:27:34,790 - ERROR - Retrying after 4 s…
+2025-04-05 09:27:42,767 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12859) already exists.\n"}
+2025-04-05 09:27:42,770 - ERROR - Retrying after 8 s…
+2025-04-05 09:27:50,771 - ERROR - All retry attempts failed.
+2025-04-05 09:28:53,688 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12859) already exists.\n"}
+2025-04-05 09:28:53,691 - ERROR - Retrying after 2 s…
+2025-04-05 09:28:58,581 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12859) already exists.\n"}
+2025-04-05 09:28:58,583 - ERROR - Retrying after 4 s…
+2025-04-05 09:29:05,400 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12859) already exists.\n"}
+2025-04-05 09:29:05,403 - ERROR - Retrying after 8 s…
+2025-04-05 09:29:13,403 - ERROR - All retry attempts failed.
+2025-04-05 09:30:16,938 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12859) already exists.\n"}
+2025-04-05 09:30:16,941 - ERROR - Retrying after 2 s…
+2025-04-05 09:30:21,804 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12859) already exists.\n"}
+2025-04-05 09:30:21,807 - ERROR - Retrying after 4 s…
+2025-04-05 09:30:28,669 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12859) already exists.\n"}
+2025-04-05 09:30:28,672 - ERROR - Retrying after 8 s…
+2025-04-05 09:30:36,672 - ERROR - All retry attempts failed.
+2025-04-05 09:31:39,598 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12859) already exists.\n"}
+2025-04-05 09:31:39,601 - ERROR - Retrying after 2 s…
+2025-04-05 09:31:44,412 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12859) already exists.\n"}
+2025-04-05 09:31:44,415 - ERROR - Retrying after 4 s…
+2025-04-05 09:31:51,319 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12859) already exists.\n"}
+2025-04-05 09:31:51,322 - ERROR - Retrying after 8 s…
+2025-04-05 09:31:59,325 - ERROR - All retry attempts failed.
+2025-04-05 09:33:02,274 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12859) already exists.\n"}
+2025-04-05 09:33:02,277 - ERROR - Retrying after 2 s…
+2025-04-05 09:33:07,193 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12859) already exists.\n"}
+2025-04-05 09:33:07,195 - ERROR - Retrying after 4 s…
+2025-04-05 09:33:14,067 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12859) already exists.\n"}
+2025-04-05 09:33:14,070 - ERROR - Retrying after 8 s…
+2025-04-05 09:33:22,071 - ERROR - All retry attempts failed.
+2025-04-05 09:34:25,082 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12859) already exists.\n"}
+2025-04-05 09:34:25,085 - ERROR - Retrying after 2 s…
+2025-04-05 09:34:29,934 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12859) already exists.\n"}
+2025-04-05 09:34:29,937 - ERROR - Retrying after 4 s…
+2025-04-05 09:34:36,736 - ERROR - Backend returned 500: {"status":"error","error":"Database error: duplicate key value violates unique constraint \"sensorsdata_readingid_key\"\nDETAIL:  Key (readingid)=(12859) already exists.\n"}
+2025-04-05 09:34:36,739 - ERROR - Retrying after 8 s…
