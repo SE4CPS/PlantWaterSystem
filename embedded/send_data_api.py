@@ -18,10 +18,11 @@ logging.basicConfig(
 
 app = Flask(__name__)
 
-LAST_SENT_ID = 0  # not persisted
+# Global pointer: the last DB id that has been sent (or skipped)
+LAST_SENT_ID = 0
 
 def _no_conversion(ts: str | None) -> str | None:
-    # Return exactly what's in DB, e.g. "2025-04-05 13:10:05 -07:00"
+    # Return the timestamp exactly as stored (e.g. "2025-04-05 14:31:50")
     return ts
 
 def _sanitize_num(val):
@@ -36,20 +37,9 @@ def fetch_next_group(last_id: int) -> list[dict]:
         cur = conn.cursor()
         cur.execute(
             """
-            SELECT
-                id,
-                timestamp,
-                sensor_id,
-                adc_value,
-                moisture_level,
-                digital_status,
-                weather_temp,
-                weather_humidity,
-                weather_sunlight,
-                weather_wind_speed,
-                location,
-                weather_fetched,
-                device_id
+            SELECT timestamp, device_id, sensor_id, adc_value, moisture_level,
+                   digital_status, weather_temp, weather_humidity,
+                   weather_sunlight, weather_wind_speed, location, weather_fetched, id
             FROM moisture_data
             WHERE id > ?
             ORDER BY id ASC
@@ -58,7 +48,7 @@ def fetch_next_group(last_id: int) -> list[dict]:
         )
         rows = cur.fetchall()
     except sqlite3.Error as e:
-        logging.error(f"DB query error: {e}")
+        logging.error(f"Database query error: {e}")
         return []
     finally:
         conn.close()
@@ -68,11 +58,10 @@ def fetch_next_group(last_id: int) -> list[dict]:
 
     groups = defaultdict(list)
     for row in rows:
-        (r_id, ts, sensor_id, adc_val, moist_lvl, dig_status,
-         w_temp, w_hum, w_sun, w_wind, loc, w_fetch, dev_id) = row
+        ts, device_id, sensor_id, adc_val, moist_lvl, dig_status, w_temp, w_hum, w_sun, w_wind, loc, w_fetch, r_id = row
         groups[ts].append({
-            "id": r_id,
             "timestamp": _no_conversion(ts),
+            "device_id": device_id,
             "sensor_id": sensor_id,
             "adc_value": _sanitize_num(adc_val),
             "moisture_level": round(_sanitize_num(moist_lvl), 2),
@@ -83,12 +72,11 @@ def fetch_next_group(last_id: int) -> list[dict]:
             "weather_wind_speed": _sanitize_num(w_wind),
             "location": _sanitize_txt(loc),
             "weather_fetched": _no_conversion(w_fetch),
-            "device_id": _sanitize_txt(dev_id),
+            "id": r_id,
         })
 
-    for key_ts in sorted(groups.keys()):
-        group = groups[key_ts]
-        # must have exactly 4 rows with distinct sensor_ids
+    for ts in sorted(groups.keys()):
+        group = groups[ts]
         if len(group) == 4 and len({g["sensor_id"] for g in group}) == 4:
             return group
     return []
@@ -98,7 +86,7 @@ def send_one_reading(url: str, reading: dict) -> (bool, bool):
         "data": [
             {
                 "id": reading["id"],
-                "timestamp": reading["timestamp"],
+                "timestamp": _no_conversion(reading["timestamp"]),
                 "device_id": reading["device_id"],
                 "sensor_id": reading["sensor_id"],
                 "adc_value": reading["adc_value"],
@@ -109,7 +97,7 @@ def send_one_reading(url: str, reading: dict) -> (bool, bool):
                 "weather_sunlight": reading["weather_sunlight"],
                 "weather_wind_speed": reading["weather_wind_speed"],
                 "location": reading["location"],
-                "weather_fetched": reading["weather_fetched"],
+                "weather_fetched": _no_conversion(reading["weather_fetched"]),
             }
         ]
     }
@@ -121,12 +109,12 @@ def send_one_reading(url: str, reading: dict) -> (bool, bool):
         else:
             txt = resp.text.lower()
             if "duplicate key" in txt or "already exists" in txt:
-                logging.error(f"Duplicate key error for {reading['id']}: {resp.text}")
+                logging.error(f"Duplicate key error for reading {reading['id']}: {resp.text}")
                 return False, True
-            logging.error(f"Backend returned {resp.status_code} for {reading['id']}: {resp.text}")
+            logging.error(f"Backend returned {resp.status_code} for reading {reading['id']}: {resp.text}")
             return False, False
     except Exception as e:
-        logging.error(f"HTTP send failed for {reading['id']}: {e}")
+        logging.error(f"HTTP send failed for reading {reading['id']}: {e}")
         return False, False
 
 def retry_with_backoff(func, attempts=RETRY_ATTEMPTS, base=BASE_DELAY) -> (bool, bool):
@@ -138,9 +126,9 @@ def retry_with_backoff(func, attempts=RETRY_ATTEMPTS, base=BASE_DELAY) -> (bool,
         if success:
             return True, dup_flag
         delay = base * (2 ** i)
-        logging.error(f"Retrying after {delay}s…")
+        logging.error(f"Retrying after {delay} s…")
         time.sleep(delay)
-    logging.error("All attempts failed.")
+    logging.error("All retry attempts failed.")
     return False, dup_flag
 
 def send_next_group(url: str) -> bool:
@@ -172,10 +160,7 @@ def get_min_id_after_timestamp(ts_str: str) -> int | None:
     try:
         conn = sqlite3.connect(DB_NAME)
         cur = conn.cursor()
-        cur.execute(
-            "SELECT MIN(id) FROM moisture_data WHERE timestamp > ?",
-            (ts_str,),
-        )
+        cur.execute("SELECT MIN(id) FROM moisture_data WHERE timestamp > ?", (ts_str,))
         row = cur.fetchone()
         conn.close()
         if row and row[0]:
@@ -194,7 +179,7 @@ def auto_send():
         if new_min is not None:
             global LAST_SENT_ID
             LAST_SENT_ID = new_min - 1
-            logging.info(f"Auto send reset: LAST_SENT_ID={LAST_SENT_ID}")
+            logging.info(f"Auto-send reset: LAST_SENT_ID set to {LAST_SENT_ID}")
     ok = send_all_available(BACKEND_API_SEND_DATA)
     if ok:
         return jsonify({"message": "Data sent successfully"}), 200
@@ -210,7 +195,7 @@ def manual_send():
         if new_min is not None:
             global LAST_SENT_ID
             LAST_SENT_ID = new_min - 1
-            logging.info(f"Manual send reset: LAST_SENT_ID={LAST_SENT_ID}")
+            logging.info(f"Manual reset: LAST_SENT_ID set to {LAST_SENT_ID}")
     ok = send_all_available(BACKEND_API_SEND_CURRENT)
     if ok:
         return jsonify({"message": "Current data sent successfully"}), 200
@@ -221,8 +206,9 @@ def _scheduled_job():
     send_all_available(BACKEND_API_SEND_DATA)
 
 def _start_scheduler():
+    import schedule
     schedule.every(SENSOR_READ_INTERVAL).seconds.do(_scheduled_job)
-    logging.info(f"Scheduler started. Interval={SENSOR_READ_INTERVAL} seconds.")
+    logging.info(f"Scheduler started: interval = {SENSOR_READ_INTERVAL} seconds.")
     while True:
         schedule.run_pending()
         time.sleep(1)
