@@ -1,13 +1,5 @@
 from flask import Flask, jsonify, request
-import sqlite3
-import schedule
-import time
-import threading
-import logging
-import os
-import subprocess
-import json
-import tempfile
+import sqlite3, schedule, time, threading, logging, os, json, tempfile, requests
 from datetime import datetime, timedelta
 from config import (
     DB_NAME,
@@ -15,7 +7,7 @@ from config import (
     BACKEND_API_SEND_CURRENT,
     RETRY_ATTEMPTS,
     BASE_DELAY,
-    SENSOR_READ_INTERVAL,          # ← use the same cadence as sensor readings
+    SENSOR_READ_INTERVAL,
 )
 
 # ────────────────────────── logging ────────────────────────────
@@ -43,7 +35,19 @@ def _from_iso(iso_dt: str) -> str:
     return iso_dt.replace("T", " ").rstrip("Z")
 
 
+def _sanitize_number(val):
+    return 0 if val is None else val
+
+
+def _sanitize_text(val):
+    return "" if val is None else val
+
+
 def fetch_recent_data(after_sql: str):
+    """
+    Return rows newer than *after_sql* as a list of dicts.
+    Converts None → 0 / "" so the backend never receives JSON nulls.
+    """
     try:
         conn = sqlite3.connect(DB_NAME)
         cur = conn.cursor()
@@ -72,52 +76,36 @@ def fetch_recent_data(after_sql: str):
                 "id": r[0],
                 "timestamp": _to_iso(r[1]),
                 "sensor_id": r[2],
-                "adc_value": r[3],
-                "moisture_level": round(r[4], 2),
-                "digital_status": r[5],
-                "weather_temp": r[6],
-                "weather_humidity": r[7],
-                "weather_sunlight": r[8],
-                "weather_wind_speed": r[9],
-                "location": r[10],
-                "weather_fetched": _to_iso(r[11]),
-                "device_id": r[12],
+                "adc_value": _sanitize_number(r[3]),
+                "moisture_level": round(_sanitize_number(r[4]), 2),
+                "digital_status": _sanitize_text(r[5]),
+                "weather_temp": _sanitize_number(r[6]),
+                "weather_humidity": _sanitize_number(r[7]),
+                "weather_sunlight": _sanitize_number(r[8]),
+                "weather_wind_speed": _sanitize_number(r[9]),
+                "location": _sanitize_text(r[10]),
+                "weather_fetched": _to_iso(r[11]) or _to_iso(r[1]),
+                "device_id": _sanitize_text(r[12]),
             }
         )
     return records
 
 
-def send_request_curl(url: str, data: list[dict]) -> bool:
-    payload = json.dumps({"data": data})
-    with tempfile.NamedTemporaryFile(mode="w", delete=False) as tmp:
-        tmp.write(payload)
-        fname = tmp.name
-
-    cmd = [
-        "curl",
-        "--location",
-        "--silent",
-        "--show-error",
-        "--header",
-        "Content-Type: application/json",
-        "--data-binary",
-        f"@{fname}",
-        "--output",
-        "/dev/null",
-        "--write-out",
-        "%{http_code}",
-        url,
-    ]
-    res = subprocess.run(cmd, capture_output=True, text=True)
-    os.remove(fname)
-
-    if res.returncode == 0 and res.stdout.strip() == "200":
-        logging.info("Data sent successfully.")
-        return True
-
-    code_or_err = res.stdout.strip() if res.returncode == 0 else res.stderr
-    logging.error(f"Curl send failed ({code_or_err})")
-    return False
+def send_request(url: str, data: list[dict]) -> bool:
+    """
+    POST *data* to *url* using requests.  HTTP 200 = success.
+    Logs response body on errors for easier debugging.
+    """
+    try:
+        resp = requests.post(url, json={"data": data}, timeout=15)
+        if resp.status_code == 200:
+            logging.info("Data sent successfully.")
+            return True
+        logging.error(f"Backend returned {resp.status_code}: {resp.text}")
+        return False
+    except Exception as e:
+        logging.error(f"HTTP send failed: {e}")
+        return False
 
 
 def retry_with_backoff(func, attempts=RETRY_ATTEMPTS, base=BASE_DELAY):
@@ -132,8 +120,13 @@ def retry_with_backoff(func, attempts=RETRY_ATTEMPTS, base=BASE_DELAY):
 
 
 def send_data_to_backend(url: str, after: str | None = None):
+    """
+    Fetch rows newer than *after* (SQL style) and push them to *url*.
+    Returns (success_bool, data_sent_or_None).
+    """
     global LAST_SENT_TIMESTAMP
 
+    # Determine effective lower bound
     try:
         provided = (
             datetime.strptime(after, "%Y-%m-%d %H:%M:%S")
@@ -157,7 +150,7 @@ def send_data_to_backend(url: str, after: str | None = None):
         logging.error("No new data to send.")
         return True, None
 
-    ok = retry_with_backoff(lambda: send_request_curl(url, data))
+    ok = retry_with_backoff(lambda: send_request(url, data))
     return ok, data if ok else None
 
 
@@ -226,7 +219,6 @@ def _scheduled_job():
 
 
 def _start_scheduler():
-    # run the job every SENSOR_READ_INTERVAL seconds (real‑time push)
     schedule.every(SENSOR_READ_INTERVAL).seconds.do(_scheduled_job)
     logging.info(
         f"Scheduler started: pushing data every {SENSOR_READ_INTERVAL} seconds."
