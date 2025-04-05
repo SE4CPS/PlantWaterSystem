@@ -1,7 +1,6 @@
 from flask import Flask, jsonify, request
 import sqlite3, schedule, time, threading, logging, os, requests
 from collections import defaultdict
-from datetime import datetime, timedelta, timezone
 from config import (
     DB_NAME,
     BACKEND_API_SEND_DATA,
@@ -24,10 +23,10 @@ LAST_SENT_ID = 0
 
 # ───────────────────────── Helper Functions ─────────────────────────
 
-def _to_pdt_iso(ts: str | None) -> str | None:
+def _no_conversion(ts: str | None) -> str | None:
     """
-    Given that your device now stores timestamps already in PDT ISO‑8601 format,
-    simply return the string as-is.
+    Do not convert or shift the timestamp. Return it exactly as stored in the DB.
+    If the DB says '2025-04-05 12:46:05', we pass '2025-04-05 12:46:05'.
     """
     return ts
 
@@ -40,18 +39,28 @@ def _sanitize_txt(val):
 def fetch_next_group(last_id: int) -> list[dict]:
     """
     Fetch rows from the moisture_data table with id > last_id.
-    Group them by the timestamp field (stored as ISO‑8601 text).
-    Return the first group that has exactly 4 rows (one per sensor with distinct sensor_id).
+    Group them by the 'timestamp' column (which your code stores in local time, e.g. 'YYYY-MM-DD HH:MM:SS').
+    Return the first group that has exactly 4 rows (one per sensor_id).
     """
     try:
         conn = sqlite3.connect(DB_NAME)
         cur = conn.cursor()
         cur.execute(
             """
-            SELECT id, timestamp, sensor_id, adc_value, moisture_level,
-                   digital_status, weather_temp, weather_humidity,
-                   weather_sunlight, weather_wind_speed,
-                   location, weather_fetched, device_id
+            SELECT
+                id,
+                timestamp,
+                sensor_id,
+                adc_value,
+                moisture_level,
+                digital_status,
+                weather_temp,
+                weather_humidity,
+                weather_sunlight,
+                weather_wind_speed,
+                location,
+                weather_fetched,
+                device_id
             FROM moisture_data
             WHERE id > ?
             ORDER BY id ASC
@@ -68,12 +77,15 @@ def fetch_next_group(last_id: int) -> list[dict]:
     if not rows:
         return []
 
+    from collections import defaultdict
     groups = defaultdict(list)
     for row in rows:
-        r_id, ts, sensor_id, adc_val, moist_lvl, dig_status, w_temp, w_hum, w_sun, w_wind, loc, w_fetch, dev_id = row
+        (r_id, ts, sensor_id, adc_val, moist_lvl, dig_status,
+         w_temp, w_hum, w_sun, w_wind, loc, w_fetch, dev_id) = row
+
         groups[ts].append({
             "id": r_id,
-            "timestamp": ts,  # Already stored as ISO‑8601 string (e.g. "2025-04-05T12:53:01.727266-07:00")
+            "timestamp": ts,   # e.g. "2025-04-05 12:46:05" local time
             "sensor_id": sensor_id,
             "adc_value": _sanitize_num(adc_val),
             "moisture_level": round(_sanitize_num(moist_lvl), 2),
@@ -83,38 +95,41 @@ def fetch_next_group(last_id: int) -> list[dict]:
             "weather_sunlight": _sanitize_num(w_sun),
             "weather_wind_speed": _sanitize_num(w_wind),
             "location": _sanitize_txt(loc),
-            "weather_fetched": w_fetch,  # Already stored as ISO‑8601 string
+            "weather_fetched": _sanitize_txt(w_fetch),  # also stored as local time
             "device_id": _sanitize_txt(dev_id),
         })
 
-    for ts in sorted(groups.keys()):
-        group = groups[ts]
-        if len(group) == 4 and len({r["sensor_id"] for r in group}) == 4:
+    # Return the first group that has exactly 4 rows and distinct sensor_ids
+    for ts_key in sorted(groups.keys()):
+        group = groups[ts_key]
+        if len(group) == 4 and len({g["sensor_id"] for g in group}) == 4:
             return group
     return []
 
 def send_one_reading(url: str, reading: dict) -> (bool, bool):
     """
-    Send a single reading as a JSON payload.
-    The payload wraps the reading inside a top-level "data" key whose value is a list.
-    Returns (success, duplicate_flag).
+    Send a single reading as JSON. The 'data' key is a list containing exactly one reading.
+    The 'timestamp' is used exactly as in the DB: 'YYYY-MM-DD HH:MM:SS'.
     """
-    reading_payload = {
-        "id": reading["id"],
-        "timestamp": _to_pdt_iso(reading["timestamp"]),
-        "device_id": reading["device_id"],
-        "sensor_id": reading["sensor_id"],
-        "adc_value": reading["adc_value"],
-        "moisture_level": reading["moisture_level"],
-        "digital_status": reading["digital_status"],
-        "weather_temp": reading["weather_temp"],
-        "weather_humidity": reading["weather_humidity"],
-        "weather_sunlight": reading["weather_sunlight"],
-        "weather_wind_speed": reading["weather_wind_speed"],
-        "location": reading["location"],
-        "weather_fetched": reading["weather_fetched"],
+    payload = {
+        "data": [
+            {
+                "id": reading["id"],
+                "timestamp": _no_conversion(reading["timestamp"]),
+                "device_id": reading["device_id"],
+                "sensor_id": reading["sensor_id"],
+                "adc_value": reading["adc_value"],
+                "moisture_level": reading["moisture_level"],
+                "digital_status": reading["digital_status"],
+                "weather_temp": reading["weather_temp"],
+                "weather_humidity": reading["weather_humidity"],
+                "weather_sunlight": reading["weather_sunlight"],
+                "weather_wind_speed": reading["weather_wind_speed"],
+                "location": reading["location"],
+                "weather_fetched": reading["weather_fetched"],
+            }
+        ]
     }
-    payload = {"data": [reading_payload]}  # Ensure this is a list.
     try:
         resp = requests.post(url, json=payload, timeout=15)
         if resp.status_code == 200:
@@ -147,10 +162,8 @@ def retry_with_backoff(func, attempts=RETRY_ATTEMPTS, base=BASE_DELAY) -> (bool,
 
 def send_next_group(url: str) -> bool:
     """
-    Fetch the next complete group of 4 readings (with identical timestamp)
-    and send each reading individually.
-    If any reading fails (other than a duplicate), return False.
-    Update LAST_SENT_ID to the maximum id in the group when finished.
+    Fetch the next group of 4 readings (same local timestamp).
+    Send each reading individually. If a reading fails (other than duplicate), stop.
     """
     global LAST_SENT_ID
     group = fetch_next_group(LAST_SENT_ID)
@@ -170,20 +183,19 @@ def send_next_group(url: str) -> bool:
 
 def send_all_available(url: str) -> bool:
     """
-    Keep sending complete groups (each of 4 readings) until no more groups remain.
+    Loop until no more complete groups remain or one fails.
     """
     while True:
         group = fetch_next_group(LAST_SENT_ID)
         if not group:
             return True
-        result = send_next_group(url)
-        if not result:
+        if not send_next_group(url):
             return False
 
 def get_min_id_after_timestamp(ts_str: str) -> int | None:
     """
-    Return the minimum id in moisture_data where timestamp > ts_str.
-    Assumes timestamps are stored as ISO‑8601 strings (e.g. "2025-04-05T12:53:01.727266-07:00").
+    Return the min ID where the DB's 'timestamp' > ts_str.
+    The DB stores naive local times e.g. "2025-04-05 12:46:05".
     """
     try:
         conn = sqlite3.connect(DB_NAME)
