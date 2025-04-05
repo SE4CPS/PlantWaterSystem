@@ -158,4 +158,93 @@ def send_next_group(url: str) -> bool:
         logging.info("No complete group to send.")
         return True
 
-    max_id_in_group =_
+    max_id_in_group = max(r["id"] for r in group)
+    for reading in group:
+        def attempt_send():
+            return send_one_reading(url, reading)
+        success, duplicate = retry_with_backoff(attempt_send)
+        if not (success or duplicate):
+            return False
+    LAST_SENT_ID = max_id_in_group
+    return True
+
+def send_all_available(url: str) -> bool:
+    while True:
+        group = fetch_next_group(LAST_SENT_ID)
+        if not group:
+            return True
+        if not send_next_group(url):
+            return False
+
+def get_min_id_after_timestamp(ts_str: str) -> int | None:
+    try:
+        conn = sqlite3.connect(DB_NAME)
+        cur = conn.cursor()
+        cur.execute(
+            """
+            SELECT MIN(id) FROM moisture_data
+            WHERE timestamp > ?
+            """,
+            (ts_str,),
+        )
+        row = cur.fetchone()
+        conn.close()
+        if row and row[0]:
+            return row[0]
+        return None
+    except Exception as e:
+        logging.error(f"get_min_id_after_timestamp error: {e}")
+        return None
+
+# ───────────────────────────── Routes ─────────────────────────────
+
+@app.route("/send-data", methods=["POST"])
+def auto_send():
+    req = request.get_json() or {}
+    after_str = req.get("after")
+    if after_str:
+        new_min = get_min_id_after_timestamp(after_str)
+        if new_min is not None:
+            global LAST_SENT_ID
+            LAST_SENT_ID = new_min - 1
+            logging.info(f"Auto-send reset: LAST_SENT_ID set to {LAST_SENT_ID}")
+    success = send_all_available(BACKEND_API_SEND_DATA)
+    if success:
+        return jsonify({"message": "Data sent successfully"}), 200
+    else:
+        return jsonify({"message": "Failed to send data"}), 500
+
+@app.route("/send-current", methods=["POST"])
+def manual_send():
+    req = request.get_json() or {}
+    after_str = req.get("after")
+    if after_str:
+        new_min = get_min_id_after_timestamp(after_str)
+        if new_min is not None:
+            global LAST_SENT_ID
+            LAST_SENT_ID = new_min - 1
+            logging.info(f"Manual reset: LAST_SENT_ID set to {LAST_SENT_ID}")
+    success = send_all_available(BACKEND_API_SEND_CURRENT)
+    if success:
+        return jsonify({"message": "Current data sent successfully"}), 200
+    else:
+        return jsonify({"message": "Failed to send current data"}), 500
+
+# ───────────────────── Scheduler Thread ─────────────────────
+
+def _scheduled_job():
+    send_all_available(BACKEND_API_SEND_DATA)
+
+def _start_scheduler():
+    import schedule
+    schedule.every(SENSOR_READ_INTERVAL).seconds.do(_scheduled_job)
+    logging.info(f"Scheduler started: interval = {SENSOR_READ_INTERVAL} seconds.")
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+# ───────────────────────────── Main ─────────────────────────────
+
+if __name__ == "__main__":
+    threading.Thread(target=_start_scheduler, daemon=True).start()
+    app.run(host="0.0.0.0", port=5001, debug=False)
