@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 import sqlite3, schedule, time, threading, logging, os, requests
 from collections import defaultdict
+from datetime import datetime, timedelta, timezone
 from config import (
     DB_NAME,
     BACKEND_API_SEND_DATA,
@@ -18,14 +19,29 @@ logging.basicConfig(
 
 app = Flask(__name__)
 
-# Global pointer: the last local DB id that has been sent (or skipped)
+# Global pointer: last local DB id sent (or skipped)
 LAST_SENT_ID = 0
 
 # ───────────────────────── Helper Functions ─────────────────────────
 
-# Since the DB now stores ISO‑8601 timestamps, we use identity functions:
-def _to_iso(ts: str | None) -> str | None:
-    return ts
+def _to_pdt_iso(ts: str | None) -> str | None:
+    """
+    Convert a UTC timestamp string in the format "YYYY-MM-DD HH:MM:SS"
+    into an ISO8601 string in PDT (UTC-7).
+    For example, "2025-04-05 19:46:05" (UTC) becomes "2025-04-05T12:46:05-07:00".
+    """
+    if not ts:
+        return None
+    try:
+        # Parse the UTC timestamp from the database.
+        utc_dt = datetime.strptime(ts, "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
+        # PDT is UTC-7.
+        pdt = timezone(timedelta(hours=-7))
+        pdt_dt = utc_dt.astimezone(pdt)
+        return pdt_dt.isoformat()
+    except Exception as e:
+        logging.error(f"_to_pdt_iso conversion error for '{ts}': {e}")
+        return ts
 
 def _sanitize_num(val):
     return 0 if val is None else val
@@ -36,9 +52,8 @@ def _sanitize_txt(val):
 def fetch_next_group(last_id: int) -> list[dict]:
     """
     Fetch rows from the moisture_data table with id > last_id.
-    Group them by the timestamp field (which is now an ISO‑8601 string).
-    Return the first group that has exactly 4 rows (one per sensor)
-    with distinct sensor_id values. If none found, return an empty list.
+    Group them by the timestamp field (which is stored as a text string in UTC).
+    Return the first group that has exactly 4 rows (one per sensor with distinct sensor_id).
     """
     try:
         conn = sqlite3.connect(DB_NAME)
@@ -70,7 +85,7 @@ def fetch_next_group(last_id: int) -> list[dict]:
         r_id, ts, sensor_id, adc_val, moist_lvl, dig_status, w_temp, w_hum, w_sun, w_wind, loc, w_fetch, dev_id = row
         groups[ts].append({
             "id": r_id,
-            "timestamp": ts,  # Already ISO‑8601
+            "timestamp": ts,  # Stored as "YYYY-MM-DD HH:MM:SS" in UTC
             "sensor_id": sensor_id,
             "adc_value": _sanitize_num(adc_val),
             "moisture_level": round(_sanitize_num(moist_lvl), 2),
@@ -80,7 +95,7 @@ def fetch_next_group(last_id: int) -> list[dict]:
             "weather_sunlight": _sanitize_num(w_sun),
             "weather_wind_speed": _sanitize_num(w_wind),
             "location": _sanitize_txt(loc),
-            "weather_fetched": w_fetch,  # Already ISO‑8601
+            "weather_fetched": w_fetch,  # Assumed stored as ISO8601 PDT already, or correct value.
             "device_id": _sanitize_txt(dev_id),
         })
 
@@ -92,25 +107,26 @@ def fetch_next_group(last_id: int) -> list[dict]:
 
 def send_one_reading(url: str, reading: dict) -> (bool, bool):
     """
-    Send a single reading (a JSON object with top-level fields) via POST.
-    Returns a tuple (success, duplicate_flag) where:
-      - success is True if HTTP 200 is returned.
-      - duplicate_flag is True if the response indicates the reading already exists.
+    Send a single reading as a JSON payload.
+    The payload is wrapped inside a top-level "data" field.
+    Returns (success, duplicate_flag).
     """
     payload = {
-        "id": reading["id"],
-        "timestamp": reading["timestamp"],
-        "device_id": reading["device_id"],
-        "sensor_id": reading["sensor_id"],
-        "adc_value": reading["adc_value"],
-        "moisture_level": reading["moisture_level"],
-        "digital_status": reading["digital_status"],
-        "weather_temp": reading["weather_temp"],
-        "weather_humidity": reading["weather_humidity"],
-        "weather_sunlight": reading["weather_sunlight"],
-        "weather_wind_speed": reading["weather_wind_speed"],
-        "location": reading["location"],
-        "weather_fetched": reading["weather_fetched"],
+        "data": {
+            "id": reading["id"],
+            "timestamp": _to_pdt_iso(reading["timestamp"]),
+            "device_id": reading["device_id"],
+            "sensor_id": reading["sensor_id"],
+            "adc_value": reading["adc_value"],
+            "moisture_level": reading["moisture_level"],
+            "digital_status": reading["digital_status"],
+            "weather_temp": reading["weather_temp"],
+            "weather_humidity": reading["weather_humidity"],
+            "weather_sunlight": reading["weather_sunlight"],
+            "weather_wind_speed": reading["weather_wind_speed"],
+            "location": reading["location"],
+            "weather_fetched": reading["weather_fetched"],  # Assume stored properly (or convert if needed)
+        }
     }
     try:
         resp = requests.post(url, json=payload, timeout=15)
@@ -118,8 +134,8 @@ def send_one_reading(url: str, reading: dict) -> (bool, bool):
             logging.info(f"Reading {reading['id']} sent successfully.")
             return True, False
         else:
-            resp_text = resp.text.lower()
-            if "duplicate key" in resp_text or "already exists" in resp_text:
+            txt = resp.text.lower()
+            if "duplicate key" in txt or "already exists" in txt:
                 logging.error(f"Duplicate key error for reading {reading['id']}: {resp.text}")
                 return False, True
             logging.error(f"Backend returned {resp.status_code} for reading {reading['id']}: {resp.text}")
@@ -129,10 +145,6 @@ def send_one_reading(url: str, reading: dict) -> (bool, bool):
         return False, False
 
 def retry_with_backoff(func, attempts=RETRY_ATTEMPTS, base=BASE_DELAY) -> (bool, bool):
-    """
-    Retry the provided function with exponential backoff.
-    Returns (final_success, duplicate_flag).
-    """
     dup_flag = False
     for i in range(attempts):
         success, dup = func()
@@ -148,11 +160,10 @@ def retry_with_backoff(func, attempts=RETRY_ATTEMPTS, base=BASE_DELAY) -> (bool,
 
 def send_next_group(url: str) -> bool:
     """
-    Fetch the next complete group of 4 readings (all having the same timestamp)
-    and send each reading as a separate POST request.
-    If any reading fails (other than due to a duplicate error), stop and return False.
-    If a duplicate key error is encountered, treat that reading as already sent.
-    Update LAST_SENT_ID to the maximum id in the group once done.
+    Fetch the next complete group of 4 readings (all with the same timestamp)
+    and send each reading individually.
+    If a reading fails (other than due to a duplicate), stop and return False.
+    Otherwise, update LAST_SENT_ID to the max id in the group.
     """
     global LAST_SENT_ID
     group = fetch_next_group(LAST_SENT_ID)
@@ -166,16 +177,13 @@ def send_next_group(url: str) -> bool:
             return send_one_reading(url, reading)
         success, duplicate = retry_with_backoff(attempt_send)
         if not (success or duplicate):
-            # If any reading fails (and it's not a duplicate), stop sending this group.
             return False
     LAST_SENT_ID = max_id_in_group
     return True
 
 def send_all_available(url: str) -> bool:
     """
-    Keep sending complete groups (of 4 readings each) until no more groups are available.
-    Returns True if all available groups have been sent (or skipped due to duplicates),
-    or False if any group fails.
+    Keep sending complete groups (each with 4 readings) until no more groups are available.
     """
     while True:
         group = fetch_next_group(LAST_SENT_ID)
@@ -185,39 +193,10 @@ def send_all_available(url: str) -> bool:
         if not result:
             return False
 
-# ───────────────────────────── Routes ─────────────────────────────
-
-@app.route("/send-data", methods=["POST"])
-def auto_send():
-    # Auto-send uses BACKEND_API_SEND_DATA
-    success = send_all_available(BACKEND_API_SEND_DATA)
-    if success:
-        return jsonify({"message": "Data sent successfully"}), 200
-    else:
-        return jsonify({"message": "Failed to send data"}), 500
-
-@app.route("/send-current", methods=["POST"])
-def manual_send():
-    # Manual send uses BACKEND_API_SEND_CURRENT.
-    # Optionally, a JSON payload with {"after": "YYYY-MM-DD HH:MM:SS"} can reset LAST_SENT_ID.
-    req = request.get_json() or {}
-    after_str = req.get("after")
-    if after_str:
-        new_min = get_min_id_after_timestamp(after_str)
-        if new_min is not None:
-            global LAST_SENT_ID
-            LAST_SENT_ID = new_min - 1
-            logging.info(f"Manual reset: LAST_SENT_ID set to {LAST_SENT_ID}")
-    success = send_all_available(BACKEND_API_SEND_CURRENT)
-    if success:
-        return jsonify({"message": "Current data sent successfully"}), 200
-    else:
-        return jsonify({"message": "Failed to send current data"}), 500
-
 def get_min_id_after_timestamp(ts_str: str) -> int | None:
     """
-    Return the minimum id in moisture_data where timestamp > ts_str.
-    Assumes timestamps are stored as ISO‑8601 strings.
+    Return the minimum id from moisture_data where timestamp > ts_str.
+    Assumes the timestamp is stored as "YYYY-MM-DD HH:MM:SS" in UTC.
     """
     try:
         conn = sqlite3.connect(DB_NAME)
@@ -237,6 +216,40 @@ def get_min_id_after_timestamp(ts_str: str) -> int | None:
     except Exception as e:
         logging.error(f"get_min_id_after_timestamp error: {e}")
         return None
+
+# ───────────────────────────── Routes ─────────────────────────────
+
+@app.route("/send-data", methods=["POST"])
+def auto_send():
+    req = request.get_json() or {}
+    after_str = req.get("after")
+    if after_str:
+        new_min = get_min_id_after_timestamp(after_str)
+        if new_min is not None:
+            global LAST_SENT_ID
+            LAST_SENT_ID = new_min - 1
+            logging.info(f"Auto-send reset: LAST_SENT_ID set to {LAST_SENT_ID}")
+    success = send_all_available(BACKEND_API_SEND_DATA)
+    if success:
+        return jsonify({"message": "Data sent successfully"}), 200
+    else:
+        return jsonify({"message": "Failed to send data"}), 500
+
+@app.route("/send-current", methods=["POST"])
+def manual_send():
+    req = request.get_json() or {}
+    after_str = req.get("after")
+    if after_str:
+        new_min = get_min_id_after_timestamp(after_str)
+        if new_min is not None:
+            global LAST_SENT_ID
+            LAST_SENT_ID = new_min - 1
+            logging.info(f"Manual reset: LAST_SENT_ID set to {LAST_SENT_ID}")
+    success = send_all_available(BACKEND_API_SEND_CURRENT)
+    if success:
+        return jsonify({"message": "Current data sent successfully"}), 200
+    else:
+        return jsonify({"message": "Failed to send current data"}), 500
 
 # ───────────────────── Scheduler Thread ─────────────────────
 
