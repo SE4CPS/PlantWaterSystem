@@ -59,14 +59,13 @@ MAX_RETRIES = 3
 # Global variables for location and weather caching.
 DEVICE_LAT = None
 DEVICE_LON = None
-DEVICE_LOCATION = None
+DEVICE_LOCATION = None  # Only the city name will be stored/displayed
 last_weather_time = 0
-last_weather_data = None
+last_weather_data = None  # Cached tuple: (weather_temp, weather_humidity, weather_sunlight, weather_wind_speed)
 
-# --- Sensor Functions (integrated) ---
+# --- Sensor Functions ---
 
 def convert_adc_to_moisture(adc_value):
-    # Convert raw ADC value to moisture percentage
     moisture_level = ((MAX_ADC - adc_value) / (MAX_ADC - MIN_ADC)) * 100
     return round(max(0, min(100, moisture_level)), 2)
 
@@ -121,9 +120,8 @@ def main_loop():
     except sqlite3.Error as e:
         logging.error(f"Failed to connect to DB: {e}")
         sys.exit(1)
-
     database.setup_database(conn)
-    # Detect device location; use only the city name.
+    # Detect device location; store only the city name.
     DEVICE_LAT, DEVICE_LON, loc_name = weather_api.detect_location()
     DEVICE_LOCATION = loc_name if loc_name else "Unknown"
     print(f"Detected device location: {DEVICE_LOCATION}")
@@ -142,13 +140,10 @@ def main_loop():
         w_temp, w_humidity, w_sunlight, w_wind_speed = (
             last_weather_data if last_weather_data else (None, None, None, None)
         )
-        # Store local time in ISO8601 without conversion (i.e. use the system's local time as is)
-        local_now_str = datetime.now().astimezone().isoformat()
-        weather_fetched_str = (
-            datetime.fromtimestamp(last_weather_time).astimezone().isoformat()
-            if last_weather_time
-            else "Unknown"
-        )
+        # Use simple local time in "YYYY-MM-DD HH:MM:SS" format
+        local_now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        weather_fetched_str = (datetime.fromtimestamp(last_weather_time).strftime("%Y-%m-%d %H:%M:%S")
+                               if last_weather_time else "Unknown")
 
         for index, sensor in enumerate(SENSORS, start=1):
             if not sensor["active"]:

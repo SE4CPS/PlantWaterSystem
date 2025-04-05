@@ -18,14 +18,15 @@ logging.basicConfig(
 
 app = Flask(__name__)
 
-# Global pointer: the last local DB id that has been sent (or skipped)
+# Global pointer: the last DB id that has been sent (or skipped)
 LAST_SENT_ID = 0
 
 # ───────────────────────── Helper Functions ─────────────────────────
 
 def _no_conversion(ts: str | None) -> str | None:
     """
-    Return the timestamp as stored in the database without any conversion.
+    Return the timestamp as stored in the DB (a simple "YYYY-MM-DD HH:MM:SS" string)
+    without any conversion.
     """
     return ts
 
@@ -38,7 +39,7 @@ def _sanitize_txt(val):
 def fetch_next_group(last_id: int) -> list[dict]:
     """
     Fetch rows from the moisture_data table with id > last_id.
-    Group them by the 'timestamp' field (stored as ISO8601 local time).
+    Group them by the 'timestamp' field.
     Return the first group that has exactly 4 rows (one per sensor with distinct sensor_id).
     """
     try:
@@ -71,7 +72,7 @@ def fetch_next_group(last_id: int) -> list[dict]:
         r_id, ts, sensor_id, adc_val, moist_lvl, dig_status, w_temp, w_hum, w_sun, w_wind, loc, w_fetch, dev_id = row
         groups[ts].append({
             "id": r_id,
-            "timestamp": ts,  # Already in desired format, e.g. "2025-04-05T12:46:05.441839-07:00"
+            "timestamp": ts,  # Stored as simple "YYYY-MM-DD HH:MM:SS"
             "sensor_id": sensor_id,
             "adc_value": _sanitize_num(adc_val),
             "moisture_level": round(_sanitize_num(moist_lvl), 2),
@@ -81,7 +82,7 @@ def fetch_next_group(last_id: int) -> list[dict]:
             "weather_sunlight": _sanitize_num(w_sun),
             "weather_wind_speed": _sanitize_num(w_wind),
             "location": _sanitize_txt(loc),
-            "weather_fetched": w_fetch,  # Already stored as desired
+            "weather_fetched": _no_conversion(w_fetch),  # as stored
             "device_id": _sanitize_txt(dev_id),
         })
 
@@ -93,9 +94,8 @@ def fetch_next_group(last_id: int) -> list[dict]:
 
 def send_one_reading(url: str, reading: dict) -> (bool, bool):
     """
-    Send a single reading as a JSON payload.
-    The payload wraps the reading inside a top-level "data" key whose value is a list.
-    Returns (success, duplicate_flag).
+    Send a single reading as JSON.
+    The payload wraps the reading in a top-level "data" key, whose value is a list.
     """
     payload = {
         "data": [
@@ -148,9 +148,9 @@ def retry_with_backoff(func, attempts=RETRY_ATTEMPTS, base=BASE_DELAY) -> (bool,
 
 def send_next_group(url: str) -> bool:
     """
-    Fetch the next complete group of 4 readings (with the same timestamp)
+    Fetch the next complete group of 4 readings (with identical timestamp)
     and send each reading individually.
-    Update LAST_SENT_ID to the maximum id in the group after processing.
+    After processing, update LAST_SENT_ID to the max id in the group.
     """
     global LAST_SENT_ID
     group = fetch_next_group(LAST_SENT_ID)
@@ -158,93 +158,4 @@ def send_next_group(url: str) -> bool:
         logging.info("No complete group to send.")
         return True
 
-    max_id_in_group = max(r["id"] for r in group)
-    for reading in group:
-        def attempt_send():
-            return send_one_reading(url, reading)
-        success, duplicate = retry_with_backoff(attempt_send)
-        if not (success or duplicate):
-            return False
-    LAST_SENT_ID = max_id_in_group
-    return True
-
-def send_all_available(url: str) -> bool:
-    while True:
-        group = fetch_next_group(LAST_SENT_ID)
-        if not group:
-            return True
-        if not send_next_group(url):
-            return False
-
-def get_min_id_after_timestamp(ts_str: str) -> int | None:
-    try:
-        conn = sqlite3.connect(DB_NAME)
-        cur = conn.cursor()
-        cur.execute(
-            """
-            SELECT MIN(id) FROM moisture_data
-            WHERE timestamp > ?
-            """,
-            (ts_str,),
-        )
-        row = cur.fetchone()
-        conn.close()
-        if row and row[0]:
-            return row[0]
-        return None
-    except Exception as e:
-        logging.error(f"get_min_id_after_timestamp error: {e}")
-        return None
-
-# ───────────────────────────── Routes ─────────────────────────────
-
-@app.route("/send-data", methods=["POST"])
-def auto_send():
-    req = request.get_json() or {}
-    after_str = req.get("after")
-    if after_str:
-        new_min = get_min_id_after_timestamp(after_str)
-        if new_min is not None:
-            global LAST_SENT_ID
-            LAST_SENT_ID = new_min - 1
-            logging.info(f"Auto-send reset: LAST_SENT_ID set to {LAST_SENT_ID}")
-    success = send_all_available(BACKEND_API_SEND_DATA)
-    if success:
-        return jsonify({"message": "Data sent successfully"}), 200
-    else:
-        return jsonify({"message": "Failed to send data"}), 500
-
-@app.route("/send-current", methods=["POST"])
-def manual_send():
-    req = request.get_json() or {}
-    after_str = req.get("after")
-    if after_str:
-        new_min = get_min_id_after_timestamp(after_str)
-        if new_min is not None:
-            global LAST_SENT_ID
-            LAST_SENT_ID = new_min - 1
-            logging.info(f"Manual reset: LAST_SENT_ID set to {LAST_SENT_ID}")
-    success = send_all_available(BACKEND_API_SEND_CURRENT)
-    if success:
-        return jsonify({"message": "Current data sent successfully"}), 200
-    else:
-        return jsonify({"message": "Failed to send current data"}), 500
-
-# ───────────────────── Scheduler Thread ─────────────────────
-
-def _scheduled_job():
-    send_all_available(BACKEND_API_SEND_DATA)
-
-def _start_scheduler():
-    import schedule
-    schedule.every(SENSOR_READ_INTERVAL).seconds.do(_scheduled_job)
-    logging.info(f"Scheduler started: interval = {SENSOR_READ_INTERVAL} seconds.")
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
-
-# ───────────────────────────── Main ─────────────────────────────
-
-if __name__ == "__main__":
-    threading.Thread(target=_start_scheduler, daemon=True).start()
-    app.run(host="0.0.0.0", port=5001, debug=False)
+    max_id_in_group =_
