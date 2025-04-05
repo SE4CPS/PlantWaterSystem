@@ -1,7 +1,6 @@
 from flask import Flask, jsonify, request
 import sqlite3, schedule, time, threading, logging, os, json, requests
-from datetime import datetime, timedelta
-from zoneinfo import ZoneInfo
+from datetime import datetime, timedelta, timezone
 from config import (
     DB_NAME,
     BACKEND_API_SEND_DATA,
@@ -11,7 +10,6 @@ from config import (
     SENSOR_READ_INTERVAL,
 )
 
-# ────────────────────────── logging ────────────────────────────
 logging.basicConfig(
     filename="api_log.log",
     level=logging.ERROR,
@@ -19,26 +17,39 @@ logging.basicConfig(
 )
 
 app = Flask(__name__)
-# LAST_SENT_TIMESTAMP is stored as the original local timestamp string (e.g. "2025-04-05 08:37:04")
-LAST_SENT_TIMESTAMP: str | None = None
+LAST_SENT_TIMESTAMP: str | None = None  # “YYYY‑MM‑DD HH:MM:SS”
 
 # ───────────────────── helper / utility code ─────────────────────
 
-def _to_utc_iso(sql_dt: str | None) -> str | None:
+def _to_iso(sql_dt: str | None) -> str | None:
     """
-    Convert a naive datetime string from the local DB (assumed to be in
-    America/Los_Angeles time) to an ISO‑8601 UTC string.
-    Example: "2025-04-05 04:40:17" → "2025-04-05T11:40:17Z" (if PDT, UTC‑7)
+    Convert a local time string 'YYYY-MM-DD HH:MM:SS' from the local DB into
+    a proper ISO 8601 UTC timestamp.
+
+    This function:
+      1. Parses the local timestamp.
+      2. Attaches the system's local timezone.
+      3. Converts it to UTC.
+      4. Formats it as ISO 8601 with a trailing 'Z'.
     """
     if not sql_dt:
         return None
     try:
+        # Parse the naïve local time
         local_dt = datetime.strptime(sql_dt, "%Y-%m-%d %H:%M:%S")
-        local_dt = local_dt.replace(tzinfo=ZoneInfo("America/Los_Angeles"))
-        utc_dt = local_dt.astimezone(ZoneInfo("UTC"))
+        # Attach local timezone info (using the system's current timezone)
+        local_tz = datetime.now().astimezone().tzinfo
+        local_dt = local_dt.replace(tzinfo=local_tz)
+        # Convert to UTC
+        utc_dt = local_dt.astimezone(timezone.utc)
         return utc_dt.isoformat().replace("+00:00", "Z")
-    except ValueError:
+    except Exception as e:
+        logging.error(f"_to_iso conversion error: {e}")
         return sql_dt
+
+def _from_iso(iso_dt: str) -> str:
+    """Convert 'YYYY‑MM‑DDTHH:MM:SSZ' back to 'YYYY‑MM‑DD HH:MM:SS'."""
+    return iso_dt.replace("T", " ").rstrip("Z")
 
 def _sanitize_number(val):
     return 0 if val is None else val
@@ -46,40 +57,36 @@ def _sanitize_number(val):
 def _sanitize_text(val):
     return "" if val is None else val
 
+# Define a base epoch (Jan 1, 2020) to reduce the size of the unique id value.
+BASE_EPOCH = 1577836800  # Unix epoch seconds for 2020-01-01 00:00:00
+
 def _generate_unique_id(sensor_id: int) -> int:
     """
-    Generate a unique positive integer based on the current epoch milliseconds
-    plus the sensor_id. This avoids duplicate key errors at the backend.
+    Generate a unique id based on the current epoch seconds relative to BASE_EPOCH.
+    For example, in 2025 the difference is around 132,163,200 seconds.
+    Multiply by 10 and add the sensor_id (assumed to be 1–4) to ensure uniqueness.
+    This guarantees a value well within the 32‑bit signed integer range.
     """
-    epoch_ms = int(time.time() * 1000)
-    return epoch_ms + sensor_id
+    epoch_diff = int(time.time()) - BASE_EPOCH  # This is in seconds.
+    return epoch_diff * 10 + sensor_id
 
 def fetch_recent_data(after_sql: str):
     """
-    Retrieve rows from the local DB with timestamp > after_sql.
-    For each record, include the original local timestamp (key "local_ts")
-    and convert the timestamp to proper UTC ISO‑8601 (key "timestamp") for sending.
+    Return rows newer than *after_sql* as a list of dicts.
+    Converts None → 0 / "" so the backend never receives JSON nulls.
+    Instead of sending the local DB's id, generate a new unique id.
     """
     try:
         conn = sqlite3.connect(DB_NAME)
         cur = conn.cursor()
         cur.execute(
             """
-            SELECT
-                timestamp,
-                sensor_id,
-                adc_value,
-                moisture_level,
-                digital_status,
-                weather_temp,
-                weather_humidity,
-                weather_sunlight,
-                weather_wind_speed,
-                location,
-                weather_fetched,
-                device_id
-            FROM moisture_data
-            WHERE timestamp > ?
+            SELECT timestamp, sensor_id, adc_value, moisture_level,
+                   digital_status, weather_temp, weather_humidity,
+                   weather_sunlight, weather_wind_speed,
+                   location, weather_fetched, device_id
+            FROM   moisture_data
+            WHERE  timestamp > ?
             """,
             (after_sql,),
         )
@@ -91,36 +98,45 @@ def fetch_recent_data(after_sql: str):
         conn.close()
 
     records = []
-    for r in rows:
-        local_ts = r[0]  # original local DB timestamp (e.g., "2025-04-05 04:40:17")
-        sensor_id = r[1]
+    for row in rows:
+        (
+            local_ts,
+            sensor_id,
+            adc_val,
+            moist_lvl,
+            dig_status,
+            w_temp,
+            w_hum,
+            w_sun,
+            w_wind,
+            loc,
+            w_fetch,
+            dev_id
+        ) = row
+
         record = {
-            # Generate a new unique id for the payload
-            "id": _generate_unique_id(sensor_id if sensor_id else 0),
-            # Send the UTC-converted timestamp
-            "timestamp": _to_utc_iso(local_ts),
-            # Also include the original local timestamp for internal tracking
-            "local_ts": local_ts,
-            "sensor_id": sensor_id,
-            "adc_value": _sanitize_number(r[2]),
-            "moisture_level": round(_sanitize_number(r[3]), 2),
-            "digital_status": _sanitize_text(r[4]),
-            "weather_temp": _sanitize_number(r[5]),
-            "weather_humidity": _sanitize_number(r[6]),
-            "weather_sunlight": _sanitize_number(r[7]),
-            "weather_wind_speed": _sanitize_number(r[8]),
-            "location": _sanitize_text(r[9]),
-            # For weather_fetched, if missing, fallback to local_ts
-            "weather_fetched": _to_utc_iso(r[10]) or _to_utc_iso(local_ts),
-            "device_id": _sanitize_text(r[11]),
+            "id":               _generate_unique_id(sensor_id if sensor_id else 0),
+            "timestamp":        _to_iso(local_ts),
+            "sensor_id":        sensor_id,
+            "adc_value":        _sanitize_number(adc_val),
+            "moisture_level":   round(_sanitize_number(moist_lvl), 2),
+            "digital_status":   _sanitize_text(dig_status),
+            "weather_temp":     _sanitize_number(w_temp),
+            "weather_humidity": _sanitize_number(w_hum),
+            "weather_sunlight": _sanitize_number(w_sun),
+            "weather_wind_speed": _sanitize_number(w_wind),
+            "location":         _sanitize_text(loc),
+            "weather_fetched":  _to_iso(w_fetch) or _to_iso(local_ts),
+            "device_id":        _sanitize_text(dev_id),
         }
         records.append(record)
+
     return records
 
 def send_request(url: str, data: list[dict]) -> bool:
     """
-    POST the payload (with key "data") to the backend.
-    Logs the response on errors.
+    POST *data* to *url* using requests. HTTP 200 = success.
+    Logs response body on errors for easier debugging.
     """
     try:
         resp = requests.post(url, json={"data": data}, timeout=15)
@@ -138,15 +154,15 @@ def retry_with_backoff(func, attempts=RETRY_ATTEMPTS, base=BASE_DELAY):
         if func():
             return True
         delay = base * (2 ** n)
-        logging.error(f"Retrying after {delay} s…")
+        logging.error(f"Retrying after {delay} s…")
         time.sleep(delay)
     logging.error("All retry attempts failed.")
     return False
 
 def send_data_to_backend(url: str, after: str | None = None):
     """
-    Fetch new rows from the local DB (using local timestamps) and POST them
-    to the backend. LAST_SENT_TIMESTAMP is stored as a local timestamp string.
+    Fetch rows newer than *after* (SQL style) and push them to *url*.
+    Returns (success_bool, data_sent_or_None).
     """
     global LAST_SENT_TIMESTAMP
 
@@ -168,12 +184,13 @@ def send_data_to_backend(url: str, after: str | None = None):
 
     after_sql = provided.strftime("%Y-%m-%d %H:%M:%S")
     data = fetch_recent_data(after_sql)
+
     if not data:
         logging.error("No new data to send.")
         return True, None
 
-    ok = retry_with_backoff(lambda: send_request(url, data))
-    return ok, data if ok else None
+    success = retry_with_backoff(lambda: send_request(url, data))
+    return success, data if success else None
 
 # ───────────────────────────── routes ─────────────────────────────
 
@@ -181,8 +198,7 @@ def send_data_to_backend(url: str, after: str | None = None):
 def send_current():
     ok, data = send_data_to_backend(BACKEND_API_SEND_CURRENT, after=LAST_SENT_TIMESTAMP)
     if data:
-        # Update LAST_SENT_TIMESTAMP using the highest local_ts value from the payload.
-        LAST_SENT_TIMESTAMP = max(rec["local_ts"] for rec in data)
+        LAST_SENT_TIMESTAMP = _from_iso(max(r["timestamp"] for r in data))
     return (
         jsonify({"message": "Current data sent successfully" if ok else "Failed to send current data"}),
         200 if ok else 500,
@@ -197,7 +213,7 @@ def manual_send():
 
     ok, data = send_data_to_backend(BACKEND_API_SEND_DATA, after=after)
     if data:
-        LAST_SENT_TIMESTAMP = max(rec["local_ts"] for rec in data)
+        LAST_SENT_TIMESTAMP = _from_iso(max(r["timestamp"] for r in data))
     return (
         jsonify({"message": "Manual data sent successfully" if ok else "Failed to send manual data"}),
         200 if ok else 500,
@@ -207,7 +223,7 @@ def manual_send():
 def auto_send():
     ok, data = send_data_to_backend(BACKEND_API_SEND_DATA)
     if data:
-        LAST_SENT_TIMESTAMP = max(rec["local_ts"] for rec in data)
+        LAST_SENT_TIMESTAMP = _from_iso(max(r["timestamp"] for r in data))
     return (
         jsonify({"message": "Data sent successfully" if ok else "Failed to send data"}),
         200 if ok else 500,
