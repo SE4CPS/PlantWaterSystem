@@ -5,6 +5,7 @@ import threading
 import logging
 import requests
 import schedule
+from datetime import datetime
 from flask import Flask, jsonify, request
 from config import (
     DB_NAME,
@@ -52,6 +53,16 @@ def save_last_sent_id(last_id):
 LAST_SENT_ID = load_last_sent_id()
 
 
+def format_timestamp(ts):
+    """
+    Ensure the timestamp is a valid datetime string.
+    If the value is "LOCALTIMESTAMP", substitute it with the current time.
+    """
+    if isinstance(ts, str) and ts.strip().upper() == "LOCALTIMESTAMP":
+        return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    return ts
+
+
 def fetch_next_group(last_id):
     """
     Fetch the next complete group of sensor readings from the database.
@@ -82,13 +93,12 @@ def fetch_next_group(last_id):
         return []
 
     from collections import defaultdict
-
     groups = defaultdict(list)
     for row in rows:
         r_id, ts, sensor_id, adc_val, moist_lvl, dig_status, w_temp, w_hum, w_sun, w_wind, loc, w_fetch, dev_id = row
         groups[ts].append({
             "id": r_id,  # Row number from the DB
-            "timestamp": str(ts),  # Keep timestamp as text
+            "timestamp": str(ts),  # Stored as text
             "sensor_id": sensor_id,
             "adc_value": adc_val,
             "moisture_level": round(moist_lvl, 2) if moist_lvl is not None else 0,
@@ -119,7 +129,7 @@ def send_one_reading(url, reading):
         "data": [
             {
                 "id": reading["id"],
-                "timestamp": reading["timestamp"],
+                "timestamp": format_timestamp(reading["timestamp"]),
                 "sensor_id": reading["sensor_id"],
                 "adc_value": reading["adc_value"],
                 "moisture_level": reading["moisture_level"],
