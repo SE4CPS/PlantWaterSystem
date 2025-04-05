@@ -11,7 +11,7 @@ import tempfile
 from datetime import datetime, timedelta
 from config import DB_NAME, BACKEND_API_SEND_DATA, BACKEND_API_SEND_CURRENT, RETRY_ATTEMPTS, BASE_DELAY
 
-# Configure logging: only log errors and key messages
+# Configure logging: only log errors (and key messages)
 logging.basicConfig(filename="api_log.log", level=logging.ERROR,
                     format="%(asctime)s - %(levelname)s - %(message)s")
 
@@ -26,7 +26,7 @@ def fetch_recent_data(after=None):
     If 'after' is provided, fetch records with timestamp > after;
     otherwise, fetch records from the past hour.
 
-    Assumes that the table 'moisture_data' has columns:
+    Assumes that the table 'moisture_data' has the following columns:
       timestamp, sensor_id, adc_value, moisture_level, digital_status,
       weather_temp, weather_humidity, weather_sunlight, weather_wind_speed,
       location, weather_fetched, device_id
@@ -82,8 +82,8 @@ def fetch_recent_data(after=None):
 def send_request_curl(url, data):
     """
     Write the JSON payload (wrapped in key "data") to a temporary file and use curl to send it.
-    The curl command is modified with --output /dev/null so that the only output is the HTTP status code.
-    If the returned HTTP code is 200 (or if duplicate key / connection closed errors are detected), treat it as success.
+    The command is built so that only the HTTP status code is returned.
+    If a 200 status is returned (or if certain acceptable errors occur), treat the send as successful.
     """
     payload = json.dumps({"data": data})
     with tempfile.NamedTemporaryFile(mode="w", delete=False) as tmp:
@@ -97,7 +97,7 @@ def send_request_curl(url, data):
         "--show-error",
         "--header", "Content-Type: application/json",
         "--data-binary", f"@{tmp_filename}",
-        "--output", "/dev/null",
+        "--output", "/dev/null",  # discard body output
         "--write-out", "%{http_code}",
         url
     ]
@@ -106,12 +106,10 @@ def send_request_curl(url, data):
 
     if result.returncode == 0:
         http_code = result.stdout.strip()
-        # Check if HTTP code is 200 or if certain known error messages appear in the response (if any)
         if http_code == "200":
             logging.error("Data sent successfully.")
             return True, http_code
         else:
-            # You can add extra checks here if needed
             logging.error(f"Curl command returned HTTP code {http_code}")
             return False, http_code
     else:
