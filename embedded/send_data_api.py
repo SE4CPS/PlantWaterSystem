@@ -116,11 +116,14 @@ def row_to_dict(row):
         "device_id": row[12] if row[12] is not None else "",
     }
 
+# Create a global session to reuse connections
+session = requests.Session()
+
 def send_one_reading(url, reading):
     """
     Send a single reading (row) as JSON to the given URL.
     The payload structure matches your curl example.
-    A higher timeout of 30 seconds is used.
+    Timeout is increased to 60 seconds.
     """
     payload = {
         "data": [
@@ -142,11 +145,11 @@ def send_one_reading(url, reading):
         ]
     }
     try:
-        response = requests.post(
+        response = session.post(
             url,
             json=payload,
             headers={"Content-Type": "application/json"},
-            timeout=30,  # Increased timeout from 15 to 30 seconds
+            timeout=60,  # Increased timeout
         )
         if response.status_code == 200:
             logging.info(f"Reading {reading['id']} sent successfully.")
@@ -191,7 +194,7 @@ def send_row(row, url):
     success, duplicate = retry_with_backoff(attempt_send)
     return reading["id"], success, duplicate
 
-def send_all_available(url, batch_size=10):
+def send_all_available(url, batch_size=10, max_workers=5):
     """
     Loop through the database and send unsent rows in batches concurrently.
     """
@@ -201,17 +204,17 @@ def send_all_available(url, batch_size=10):
         if not rows:
             logging.info("No new unsent rows found in the database.")
             break
-        with ThreadPoolExecutor(max_workers=batch_size) as executor:
+        # Limit concurrency with a fixed number of workers (max_workers)
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
             futures = {executor.submit(send_row, row, url): row for row in rows}
             for future in as_completed(futures):
-                row = futures[future]
                 try:
                     row_id, success, duplicate = future.result()
                     if success or duplicate:
                         LAST_SENT_ID = max(LAST_SENT_ID, row_id)
                         save_last_sent_id(LAST_SENT_ID)
                     else:
-                        logging.error(f"Failed to send reading {row[0]}. Stopping further attempts.")
+                        logging.error(f"Failed to send reading {row_id}. Stopping further attempts.")
                         return False
                 except Exception as e:
                     logging.error(f"Error in concurrent sending: {e}")
