@@ -15,6 +15,7 @@ from config import (
     RETRY_ATTEMPTS,
     BASE_DELAY,
 )
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # Configure logging
 logging.basicConfig(
@@ -29,11 +30,12 @@ app = Flask(__name__)
 LAST_SENT_FILE = "last_sent_id.txt"
 
 def load_last_sent_id():
-    """Load the last sent ID from persistent storage."""
+    """Load the last sent ID from persistent storage. Defaults to 0 if not found."""
     if os.path.exists(LAST_SENT_FILE):
         try:
             with open(LAST_SENT_FILE, "r") as f:
-                return int(f.read().strip())
+                content = f.read().strip()
+                return int(content) if content else 0
         except Exception as e:
             logging.error(f"Error loading LAST_SENT_ID: {e}")
     return 0
@@ -46,21 +48,23 @@ def save_last_sent_id(last_id):
     except Exception as e:
         logging.error(f"Error saving LAST_SENT_ID: {e}")
 
-# Global variable for the last sent row id, persistent across restarts.
+# Global variable for the last sent row id (persistent across restarts)
 LAST_SENT_ID = load_last_sent_id()
+logging.info(f"Starting with LAST_SENT_ID: {LAST_SENT_ID}")
 
 def format_timestamp(ts):
     """
     Ensure the timestamp is a valid datetime string.
-    If ts equals "LOCALTIMESTAMP" (case-insensitive), replace it with the current time.
+    If ts equals "LOCALTIMESTAMP" (case-insensitive), substitute with the current time.
     """
     if isinstance(ts, str) and ts.strip().upper() == "LOCALTIMESTAMP":
         return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return ts
 
-def fetch_next_row(last_id):
+def fetch_next_rows(last_id, batch_size=10):
     """
-    Fetch the next row (reading) from the database with id greater than last_id.
+    Fetch the next batch of rows (readings) from the database with id greater than last_id.
+    Returns a list of rows (each as a tuple) or an empty list if none are found.
     """
     try:
         conn = sqlite3.connect(DB_NAME)
@@ -73,26 +77,31 @@ def fetch_next_row(last_id):
             FROM moisture_data
             WHERE id > ?
             ORDER BY id ASC
-            LIMIT 1
+            LIMIT ?
             """,
-            (last_id,),
+            (last_id, batch_size),
         )
-        row = cursor.fetchone()
+        rows = cursor.fetchall()
         conn.close()
-        return row
+        if rows:
+            logging.debug(f"Fetched {len(rows)} rows starting after id {last_id}")
+        else:
+            logging.debug("No new rows found to send.")
+        return rows
     except Exception as e:
-        logging.error(f"Database error in fetch_next_row: {e}")
-        return None
+        logging.error(f"Database error in fetch_next_rows: {e}")
+        return []
 
 def row_to_dict(row):
     """
     Convert a database row to a dictionary matching the required JSON structure.
-    Row fields: id, timestamp, sensor_id, adc_value, moisture_level, digital_status,
-                weather_temp, weather_humidity, weather_sunlight, weather_wind_speed,
-                location, weather_fetched, device_id
+    Expected row format:
+    (id, timestamp, sensor_id, adc_value, moisture_level, digital_status,
+     weather_temp, weather_humidity, weather_sunlight, weather_wind_speed,
+     location, weather_fetched, device_id)
     """
     return {
-        "id": row[0],  # Use the database row number as the id
+        "id": row[0],  # Use the row number from the DB as id
         "timestamp": format_timestamp(str(row[1])),
         "sensor_id": row[2],
         "adc_value": row[3],
@@ -110,7 +119,8 @@ def row_to_dict(row):
 def send_one_reading(url, reading):
     """
     Send a single reading (row) as JSON to the given URL.
-    The JSON payload is structured to match the provided curl command.
+    The payload structure matches your curl example.
+    A higher timeout of 30 seconds is used.
     """
     payload = {
         "data": [
@@ -136,12 +146,13 @@ def send_one_reading(url, reading):
             url,
             json=payload,
             headers={"Content-Type": "application/json"},
-            timeout=15,
+            timeout=30,  # Increased timeout from 15 to 30 seconds
         )
         if response.status_code == 200:
             logging.info(f"Reading {reading['id']} sent successfully.")
             return True, False
         else:
+            # Check if the error indicates a duplicate entry.
             if "duplicate key" in response.text.lower() or "already exists" in response.text.lower():
                 logging.error(f"Duplicate error for reading {reading['id']}: {response.text}")
                 return False, True
@@ -166,26 +177,45 @@ def retry_with_backoff(func, attempts=RETRY_ATTEMPTS, base=BASE_DELAY):
         delay = base * (2 ** i)
         logging.error(f"Retrying after {delay} seconds...")
         time.sleep(delay)
-    logging.error("All retry attempts failed.")
+    logging.error("All retry attempts failed for this reading.")
     return False, dup_flag
 
-def send_all_available(url):
+def send_row(row, url):
     """
-    Iterate through and send each row in the database (one by one) that has not been sent.
+    Helper function to send a single row.
+    Returns a tuple (row_id, success, duplicate).
+    """
+    reading = row_to_dict(row)
+    def attempt_send():
+        return send_one_reading(url, reading)
+    success, duplicate = retry_with_backoff(attempt_send)
+    return reading["id"], success, duplicate
+
+def send_all_available(url, batch_size=10):
+    """
+    Loop through the database and send unsent rows in batches concurrently.
     """
     global LAST_SENT_ID
     while True:
-        row = fetch_next_row(LAST_SENT_ID)
-        if not row:
+        rows = fetch_next_rows(LAST_SENT_ID, batch_size)
+        if not rows:
+            logging.info("No new unsent rows found in the database.")
             break
-        reading = row_to_dict(row)
-        def attempt_send():
-            return send_one_reading(url, reading)
-        success, duplicate = retry_with_backoff(attempt_send)
-        if not (success or duplicate):
-            return False
-        LAST_SENT_ID = reading["id"]
-        save_last_sent_id(LAST_SENT_ID)
+        with ThreadPoolExecutor(max_workers=batch_size) as executor:
+            futures = {executor.submit(send_row, row, url): row for row in rows}
+            for future in as_completed(futures):
+                row = futures[future]
+                try:
+                    row_id, success, duplicate = future.result()
+                    if success or duplicate:
+                        LAST_SENT_ID = max(LAST_SENT_ID, row_id)
+                        save_last_sent_id(LAST_SENT_ID)
+                    else:
+                        logging.error(f"Failed to send reading {row[0]}. Stopping further attempts.")
+                        return False
+                except Exception as e:
+                    logging.error(f"Error in concurrent sending: {e}")
+                    return False
     return True
 
 def get_min_id_after_timestamp(ts_str):
@@ -211,10 +241,8 @@ def get_min_id_after_timestamp(ts_str):
 @app.route("/send-data", methods=["POST"])
 def auto_send():
     """
-    Auto-send endpoint: sends every row (reading) that hasn't been sent yet,
-    using the BACKEND_API_SEND_DATA URL.
-    Optionally, if an 'after' timestamp is provided in the request payload,
-    the LAST_SENT_ID is reset accordingly.
+    Auto-send endpoint (internal service). Optionally accepts an "after" timestamp
+    to reset the starting point, then sends unsent rows using BACKEND_API_SEND_DATA.
     """
     global LAST_SENT_ID
     req = request.get_json() or {}
@@ -225,6 +253,8 @@ def auto_send():
             LAST_SENT_ID = new_min - 1
             save_last_sent_id(LAST_SENT_ID)
             logging.info(f"Auto-send reset LAST_SENT_ID to {LAST_SENT_ID} using after timestamp {after_str}.")
+        else:
+            logging.info(f"No rows found with timestamp after {after_str}.")
     success = send_all_available(BACKEND_API_SEND_DATA)
     if success:
         return jsonify({"message": "Data sent successfully"}), 200
@@ -234,9 +264,8 @@ def auto_send():
 @app.route("/send-current", methods=["POST"])
 def manual_send():
     """
-    Manual send endpoint: sends every row (reading) that hasn't been sent yet,
-    using the BACKEND_API_SEND_CURRENT URL.
-    Expects an 'after' timestamp in the JSON payload.
+    Manual send endpoint (internal service). Requires an "after" timestamp,
+    resets LAST_SENT_ID accordingly, then sends unsent rows using BACKEND_API_SEND_CURRENT.
     """
     global LAST_SENT_ID
     req = request.get_json() or {}
@@ -247,6 +276,12 @@ def manual_send():
             LAST_SENT_ID = new_min - 1
             save_last_sent_id(LAST_SENT_ID)
             logging.info(f"Manual-send reset LAST_SENT_ID to {LAST_SENT_ID} using after timestamp {after_str}.")
+        else:
+            logging.info(f"No rows found with timestamp after {after_str}.")
+    else:
+        logging.error("Missing 'after' field in manual send request.")
+        return jsonify({"message": "Field 'after' is required"}), 400
+
     success = send_all_available(BACKEND_API_SEND_CURRENT)
     if success:
         return jsonify({"message": "Current data sent successfully"}), 200
