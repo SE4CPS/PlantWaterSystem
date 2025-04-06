@@ -109,7 +109,7 @@ def row_to_dict(row):
         "device_id": row[12] if row[12] is not None else "",
     }
 
-def send_unsent_rows_via_curl(url, batch_size=20):
+def send_unsent_rows_via_curl(url, batch_size=5):
     """
     Fetch all unsent rows (with id > LAST_SENT_ID), split into batches,
     convert each batch to a JSON payload, and send using a curl command.
@@ -121,7 +121,7 @@ def send_unsent_rows_via_curl(url, batch_size=20):
         logging.info("No unsent rows to send.")
         return True
 
-    # Process in batches of batch_size (default now 20)
+    # Process in batches of batch_size (default now 5)
     for i in range(0, len(rows), batch_size):
         batch = rows[i:i+batch_size]
         data = [row_to_dict(r) for r in batch]
