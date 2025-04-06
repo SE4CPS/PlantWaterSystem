@@ -3,6 +3,7 @@ import sqlite3
 import time
 import threading
 import logging
+import requests
 import schedule
 import subprocess
 import json
@@ -108,11 +109,11 @@ def row_to_dict(row):
         "device_id": row[12] if row[12] is not None else "",
     }
 
-def send_unsent_rows_via_curl(url):
+def send_unsent_rows_via_curl(url, batch_size=20):
     """
-    Fetch all unsent rows (with id > LAST_SENT_ID), convert them into a JSON payload,
-    and send the payload using a curl command.
-    On success, update LAST_SENT_ID to the ID of the last row sent.
+    Fetch all unsent rows (with id > LAST_SENT_ID), split into batches,
+    convert each batch to a JSON payload, and send using a curl command.
+    On success, update LAST_SENT_ID to the id of the last row sent.
     """
     global LAST_SENT_ID
     rows = fetch_all_unsent_rows(LAST_SENT_ID)
@@ -120,38 +121,40 @@ def send_unsent_rows_via_curl(url):
         logging.info("No unsent rows to send.")
         return True
 
-    data = [row_to_dict(r) for r in rows]
-    payload = {"data": data}
-    payload_filename = "payload.json"
-    try:
-        with open(payload_filename, "w") as f:
-            json.dump(payload, f)
-    except Exception as e:
-        logging.error(f"Error writing payload file: {e}")
-        return False
-
-    cmd = [
-        "curl",
-        "--location",
-        "--request", "POST",
-        url,
-        "--header", "Content-Type: application/json",
-        "--data", f"@{payload_filename}"
-    ]
-    try:
-        result = subprocess.run(cmd, capture_output=True, text=True)
-        if result.returncode == 0:
-            logging.info(f"Payload sent successfully via curl: {result.stdout}")
-            # Update LAST_SENT_ID to the id of the last row in our payload
-            LAST_SENT_ID = data[-1]["id"]
-            save_last_sent_id(LAST_SENT_ID)
-            return True
-        else:
-            logging.error(f"Curl command failed: {result.stderr}")
+    # Process in batches of batch_size (default now 20)
+    for i in range(0, len(rows), batch_size):
+        batch = rows[i:i+batch_size]
+        data = [row_to_dict(r) for r in batch]
+        payload = {"data": data}
+        payload_filename = "payload.json"
+        try:
+            with open(payload_filename, "w") as f:
+                json.dump(payload, f)
+        except Exception as e:
+            logging.error(f"Error writing payload file: {e}")
             return False
-    except Exception as e:
-        logging.error(f"Error executing curl command: {e}")
-        return False
+
+        cmd = [
+            "curl",
+            "--location",
+            "--request", "POST",
+            url,
+            "--header", "Content-Type: application/json",
+            "--data", f"@{payload_filename}"
+        ]
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True)
+            if result.returncode == 0 and "504" not in result.stdout and "Gateway Time-out" not in result.stdout:
+                logging.info(f"Batch starting at row {data[0]['id']} sent successfully.")
+                LAST_SENT_ID = data[-1]["id"]
+                save_last_sent_id(LAST_SENT_ID)
+            else:
+                logging.error(f"Curl command failed for batch starting at row {data[0]['id']}: {result.stdout}")
+                return False
+        except Exception as e:
+            logging.error(f"Error executing curl command: {e}")
+            return False
+    return True
 
 def get_min_id_after_timestamp(ts_str):
     """
@@ -176,9 +179,10 @@ def get_min_id_after_timestamp(ts_str):
 @app.route("/send-data", methods=["POST"])
 def auto_send():
     """
-    Auto-send endpoint: converts all unsent rows from the database into a JSON payload and
+    Auto-send endpoint: converts all unsent rows into a JSON payload (in batches) and
     sends it using curl to the BACKEND_API_SEND_DATA URL.
-    Optionally, if an 'after' timestamp is provided in the JSON payload, the LAST_SENT_ID is reset.
+    Optionally, if an 'after' timestamp is provided in the request payload,
+    LAST_SENT_ID is reset accordingly.
     """
     global LAST_SENT_ID
     req = request.get_json() or {}
@@ -198,7 +202,7 @@ def auto_send():
 @app.route("/send-current", methods=["POST"])
 def manual_send():
     """
-    Manual send endpoint: converts all unsent rows from the database into a JSON payload and
+    Manual send endpoint: converts all unsent rows into a JSON payload (in batches) and
     sends it using curl to the BACKEND_API_SEND_CURRENT URL.
     Expects an 'after' timestamp in the JSON payload.
     """
