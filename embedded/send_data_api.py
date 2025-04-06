@@ -136,7 +136,7 @@ def send_one_reading(url, reading):
             url,
             json=payload,
             headers={"Content-Type": "application/json"},
-            timeout=15,
+            timeout=15,  # Using 15 seconds as in the old working code.
         )
         if response.status_code == 200:
             logging.info(f"Reading {reading['id']} sent successfully.")
