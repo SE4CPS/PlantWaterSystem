@@ -3,8 +3,9 @@ import sqlite3
 import time
 import threading
 import logging
-import requests
 import schedule
+import subprocess
+import json
 from datetime import datetime
 from flask import Flask, jsonify, request
 from config import (
@@ -58,9 +59,10 @@ def format_timestamp(ts):
         return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return ts
 
-def fetch_next_row(last_id):
+def fetch_all_unsent_rows(last_id):
     """
-    Fetch the next row (reading) from the database with id greater than last_id.
+    Fetch all rows (readings) from the database with id greater than last_id.
+    Returns a list of rows (each as a tuple).
     """
     try:
         conn = sqlite3.connect(DB_NAME)
@@ -73,16 +75,15 @@ def fetch_next_row(last_id):
             FROM moisture_data
             WHERE id > ?
             ORDER BY id ASC
-            LIMIT 1
             """,
             (last_id,),
         )
-        row = cursor.fetchone()
+        rows = cursor.fetchall()
         conn.close()
-        return row
+        return rows
     except Exception as e:
-        logging.error(f"Database error in fetch_next_row: {e}")
-        return None
+        logging.error(f"Database error in fetch_all_unsent_rows: {e}")
+        return []
 
 def row_to_dict(row):
     """
@@ -92,7 +93,7 @@ def row_to_dict(row):
                 location, weather_fetched, device_id
     """
     return {
-        "id": row[0],  # Use the database row number as the id
+        "id": row[0],
         "timestamp": format_timestamp(str(row[1])),
         "sensor_id": row[2],
         "adc_value": row[3],
@@ -107,86 +108,50 @@ def row_to_dict(row):
         "device_id": row[12] if row[12] is not None else "",
     }
 
-def send_one_reading(url, reading):
+def send_unsent_rows_via_curl(url):
     """
-    Send a single reading (row) as JSON to the given URL.
-    The JSON payload is structured to match the provided curl command.
-    """
-    payload = {
-        "data": [
-            {
-                "id": reading["id"],
-                "timestamp": reading["timestamp"],
-                "sensor_id": reading["sensor_id"],
-                "adc_value": reading["adc_value"],
-                "moisture_level": reading["moisture_level"],
-                "digital_status": reading["digital_status"],
-                "weather_temp": reading["weather_temp"],
-                "weather_humidity": reading["weather_humidity"],
-                "weather_sunlight": reading["weather_sunlight"],
-                "weather_wind_speed": reading["weather_wind_speed"],
-                "location": reading["location"],
-                "weather_fetched": reading["weather_fetched"],
-                "device_id": reading["device_id"],
-            }
-        ]
-    }
-    try:
-        response = requests.post(
-            url,
-            json=payload,
-            headers={"Content-Type": "application/json"},
-            timeout=15,
-        )
-        if response.status_code == 200:
-            logging.info(f"Reading {reading['id']} sent successfully.")
-            return True, False
-        else:
-            if "duplicate key" in response.text.lower() or "already exists" in response.text.lower():
-                logging.error(f"Duplicate error for reading {reading['id']}: {response.text}")
-                return False, True
-            logging.error(f"Error sending reading {reading['id']}: {response.status_code} - {response.text}")
-            return False, False
-    except Exception as e:
-        logging.error(f"HTTP send failed for reading {reading['id']}: {e}")
-        return False, False
-
-def retry_with_backoff(func, attempts=RETRY_ATTEMPTS, base=BASE_DELAY):
-    """
-    Retry a function using exponential backoff.
-    Returns a tuple (success, duplicate_flag).
-    """
-    dup_flag = False
-    for i in range(attempts):
-        success, duplicate = func()
-        if duplicate:
-            dup_flag = True
-        if success:
-            return True, dup_flag
-        delay = base * (2 ** i)
-        logging.error(f"Retrying after {delay} seconds...")
-        time.sleep(delay)
-    logging.error("All retry attempts failed.")
-    return False, dup_flag
-
-def send_all_available(url):
-    """
-    Iterate through and send each row in the database (one by one) that has not been sent.
+    Fetch all unsent rows (with id > LAST_SENT_ID), convert them into a JSON payload,
+    and send the payload using a curl command.
+    On success, update LAST_SENT_ID to the ID of the last row sent.
     """
     global LAST_SENT_ID
-    while True:
-        row = fetch_next_row(LAST_SENT_ID)
-        if not row:
-            break
-        reading = row_to_dict(row)
-        def attempt_send():
-            return send_one_reading(url, reading)
-        success, duplicate = retry_with_backoff(attempt_send)
-        if not (success or duplicate):
+    rows = fetch_all_unsent_rows(LAST_SENT_ID)
+    if not rows:
+        logging.info("No unsent rows to send.")
+        return True
+
+    data = [row_to_dict(r) for r in rows]
+    payload = {"data": data}
+    payload_filename = "payload.json"
+    try:
+        with open(payload_filename, "w") as f:
+            json.dump(payload, f)
+    except Exception as e:
+        logging.error(f"Error writing payload file: {e}")
+        return False
+
+    cmd = [
+        "curl",
+        "--location",
+        "--request", "POST",
+        url,
+        "--header", "Content-Type: application/json",
+        "--data", f"@{payload_filename}"
+    ]
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        if result.returncode == 0:
+            logging.info(f"Payload sent successfully via curl: {result.stdout}")
+            # Update LAST_SENT_ID to the id of the last row in our payload
+            LAST_SENT_ID = data[-1]["id"]
+            save_last_sent_id(LAST_SENT_ID)
+            return True
+        else:
+            logging.error(f"Curl command failed: {result.stderr}")
             return False
-        LAST_SENT_ID = reading["id"]
-        save_last_sent_id(LAST_SENT_ID)
-    return True
+    except Exception as e:
+        logging.error(f"Error executing curl command: {e}")
+        return False
 
 def get_min_id_after_timestamp(ts_str):
     """
@@ -211,10 +176,9 @@ def get_min_id_after_timestamp(ts_str):
 @app.route("/send-data", methods=["POST"])
 def auto_send():
     """
-    Auto-send endpoint: sends every row (reading) that hasn't been sent yet,
-    using the BACKEND_API_SEND_DATA URL.
-    Optionally, if an 'after' timestamp is provided in the request payload,
-    the LAST_SENT_ID is reset accordingly.
+    Auto-send endpoint: converts all unsent rows from the database into a JSON payload and
+    sends it using curl to the BACKEND_API_SEND_DATA URL.
+    Optionally, if an 'after' timestamp is provided in the JSON payload, the LAST_SENT_ID is reset.
     """
     global LAST_SENT_ID
     req = request.get_json() or {}
@@ -225,7 +189,7 @@ def auto_send():
             LAST_SENT_ID = new_min - 1
             save_last_sent_id(LAST_SENT_ID)
             logging.info(f"Auto-send reset LAST_SENT_ID to {LAST_SENT_ID} using after timestamp {after_str}.")
-    success = send_all_available(BACKEND_API_SEND_DATA)
+    success = send_unsent_rows_via_curl(BACKEND_API_SEND_DATA)
     if success:
         return jsonify({"message": "Data sent successfully"}), 200
     else:
@@ -234,8 +198,8 @@ def auto_send():
 @app.route("/send-current", methods=["POST"])
 def manual_send():
     """
-    Manual send endpoint: sends every row (reading) that hasn't been sent yet,
-    using the BACKEND_API_SEND_CURRENT URL.
+    Manual send endpoint: converts all unsent rows from the database into a JSON payload and
+    sends it using curl to the BACKEND_API_SEND_CURRENT URL.
     Expects an 'after' timestamp in the JSON payload.
     """
     global LAST_SENT_ID
@@ -247,7 +211,7 @@ def manual_send():
             LAST_SENT_ID = new_min - 1
             save_last_sent_id(LAST_SENT_ID)
             logging.info(f"Manual-send reset LAST_SENT_ID to {LAST_SENT_ID} using after timestamp {after_str}.")
-    success = send_all_available(BACKEND_API_SEND_CURRENT)
+    success = send_unsent_rows_via_curl(BACKEND_API_SEND_CURRENT)
     if success:
         return jsonify({"message": "Current data sent successfully"}), 200
     else:
@@ -255,7 +219,7 @@ def manual_send():
 
 def scheduled_job():
     """Job for the scheduler to auto-send data at the defined interval."""
-    send_all_available(BACKEND_API_SEND_DATA)
+    send_unsent_rows_via_curl(BACKEND_API_SEND_DATA)
 
 def start_scheduler():
     """Start the scheduler to run the auto-send job every SENSOR_READ_INTERVAL seconds."""
