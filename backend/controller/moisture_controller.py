@@ -283,3 +283,22 @@ async def get_last_status(
         raise he
     except Exception as e:
         return JSONResponse(status_code=500, content={"status": "error", "error": f"Unexpected error: {str(e)}"})
+
+@moisture_router.get("/api/sensor-ids/")
+def get_sensor_id_by_device_id(
+    deviceid: str,
+    service: SensorService = Depends(get_service),
+    current_user: str = Depends(get_current_user)
+):
+    try:
+        response = service.get_sensor_id_by_device_id(deviceid)
+
+        if "error" in response:
+            status_code = 400 if "Duplicate" in response["error"] else 500
+            return JSONResponse(status_code=status_code, content={"status": "error", "error": response["error"]})
+        # Assuming response contains 'digital_status'
+        return JSONResponse(status_code=200, content=response)
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"status": "error", "error": f"Unexpected error: {str(e)}"})

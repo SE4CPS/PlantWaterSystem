@@ -495,7 +495,7 @@ class SensorDAL:
                 """, (sensorid, deviceid))
             
             results = self.cursor.fetchone()
-            print(results)
+
             if not results:
                 return {"digital_status": "Unknown"}
                 
@@ -511,6 +511,32 @@ class SensorDAL:
         except ValueError as val_error:
             print(f"Input error: {val_error}")          
             return {"status": "error", "error": str(val_error)}
+
+        except Exception as e:
+            self.conn.rollback()
+            print(f"Unexpected error: {e}")
+            return {"status": "error", "error": str(e)} 
+        
+    def get_sensor_id_by_device_id(self, deviceid: str):
+        try:
+            self.cursor.execute("""
+                SELECT sensorid
+                FROM sensors
+                WHERE deviceid = %s
+            """, (deviceid,))
+            
+            results = self.cursor.fetchall()
+            print(results)
+            if not results:
+                return {"sensorid": []}
+            return {
+                "sensor_ids": [row[0] for row in results]
+            }
+            
+        except (psycopg2.Error, DatabaseError) as db_error:
+            self.conn.rollback()
+            print(f"Database error: {db_error}")
+            return {"status": "error", "error": str(db_error)}
 
         except Exception as e:
             self.conn.rollback()

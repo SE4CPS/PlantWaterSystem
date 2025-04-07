@@ -32,3 +32,6 @@ class SensorRepository:
     
     def get_last_status(self, sensorid: str, deviceid: str):
         return self.dal.get_last_status(sensorid, deviceid)
+    
+    def get_sensor_id_by_device_id(self, deviceid: str):
+        return self.dal.get_sensor_id_by_device_id(deviceid)
