@@ -37,6 +37,9 @@ class SensorService:
     #     # Add any additional processing logic here (e.g., alerts if moisture < threshold)
     #     return create_moisture_data(db, data)
 
+    def get_last_status(self, sensorid: str, deviceid: str):
+        return self.repository.get_last_status(sensorid, deviceid)
+
 def get_service():
     dal = SensorDAL()
     repository = SensorRepository(dal)

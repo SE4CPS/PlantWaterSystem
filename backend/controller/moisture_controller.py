@@ -261,3 +261,25 @@ async def get_sensor_data_details_by_sensorid_and_deviceid(
         raise he
     except Exception as e:
         return JSONResponse(status_code=500, content={"status": "error", "error": f"Unexpected error: {str(e)}"})
+            
+@moisture_router.get("/api/plant/last_status")
+async def get_last_status(
+    sensorid: str,
+    deviceid: str,
+    service: SensorService = Depends(get_service),
+    current_user: str = Depends(get_current_user)
+):
+    try:
+        response = service.get_last_status(sensorid, deviceid)
+        print(response)
+        if "error" in response:
+            status_code = 400 if "Duplicate" in response["error"] else 500
+            return JSONResponse(status_code=status_code, content={"status": "error", "error": response["error"]})
+        
+        # Modify the response to return the desired format
+        digital_status = response.get('digital_status', 'Unknown')  # Assuming response contains 'digital_status'
+        return JSONResponse(status_code=200, content={"digital_status": digital_status})
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"status": "error", "error": f"Unexpected error: {str(e)}"})

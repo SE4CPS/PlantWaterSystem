@@ -29,3 +29,6 @@ class SensorRepository:
 
     def add_sensor_data(self, sensor_data: dict):
         return self.dal.add_sensor_data(sensor_data)
+    
+    def get_last_status(self, sensorid: str, deviceid: str):
+        return self.dal.get_last_status(sensorid, deviceid)
