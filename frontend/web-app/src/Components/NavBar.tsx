@@ -39,7 +39,7 @@ function NavBar() {
 						return <Link key={index} className={`navbar-link${location.pathname===page.path? ' text-white': ''}`} to={page.path}>{page.name}</Link>
 					})}
 				</div>
-				<button onClick={()=>navigate('/login')} className='navbar-login-logout-button'>Log In</button>
+				<button onClick={()=>navigate('/')} className='navbar-login-logout-button'>Log In</button>
 			</div>
 			<Outlet />
 		</>
