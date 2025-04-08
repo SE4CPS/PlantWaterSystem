@@ -10,3 +10,6 @@ class PlantRepository:
     
     def get_plants(self, username: str):
         return self.dal.get_plants(username)
+    
+    def delete_plant(self, sensor_id: str, username: str):
+        return self.dal.delete_plant(sensor_id, username)
