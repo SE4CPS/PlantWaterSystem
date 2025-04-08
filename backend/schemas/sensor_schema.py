@@ -38,10 +38,8 @@ class SensorDataSchema(BaseModel):
 
 
 class UserPlantSensorSchema(BaseModel):
-    firstname: str
-    lastname: str
+    plantid: int
     plantname: str
-    threshold: float
     sensorid: int
     deviceid: str
 
