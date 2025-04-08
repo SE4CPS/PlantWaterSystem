@@ -404,7 +404,7 @@ class SensorDAL:
                 raise ValueError("Username must not be empty.")
 
             self.cursor.execute("""
-                SELECT plantid, plantname, Sensors.sensorid, Sensors.deviceid
+                SELECT Sensors.plantid, plantname, Sensors.sensorid, Sensors.deviceid
                 FROM UserData
                 JOIN Plant ON UserData.UserId = Plant.UserId
                 JOIN Sensors ON Plant.PlantId = Sensors.PlantId
