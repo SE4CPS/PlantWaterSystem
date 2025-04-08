@@ -49,7 +49,7 @@ function AddNewPlantDetailCard() {
                     </div>
                 </div>
             </div>
-            <div className='plant-detail-card-button-container' onClick={()=>{navigate('/')}}>
+            <div className='plant-detail-card-button-container' onClick={()=>{navigate('/app/dashboard')}}>
                 <img className='plant-detail-card-close-button' src={closeBtn} alt='error img'/>
             </div>
         </div>

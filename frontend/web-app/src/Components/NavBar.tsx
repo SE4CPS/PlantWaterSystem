@@ -14,15 +14,15 @@ function NavBar() {
 		return [
 			{
 				name: 'Home',
-				path: '/',
+				path: '/app/dashboard',
 			},
 			{
 				name: 'About',
-				path: '/about',
+				path: '/app/about',
 			},
 			{
 				name: 'FAQ',
-				path: '/faq',
+				path: '/app/faq',
 			}
 		]
 	}, [])

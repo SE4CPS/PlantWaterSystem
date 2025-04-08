@@ -1,15 +1,21 @@
 import axios from "axios";
 
-
-const access_token = localStorage.getItem('access_token')
-
 const axiosInstance = axios.create({
-    baseURL: 'https://dev.sprout-ly.com/api',
+    baseURL: 'http://sproutly.com/api',
     timeout: 5000,
     headers: {
         "Content-Type": 'application/x-www-form-urlencoded',
-        Authorization: `Bearer ${access_token}`
     }
 })
+
+axiosInstance.interceptors.request.use(
+    config => {
+        config.headers.Authorization = `Bearer ${localStorage.getItem('access_token')}`;
+        return config;
+    },
+    error => {
+        return Promise.reject(error);
+    }
+)
 
 export default axiosInstance;
