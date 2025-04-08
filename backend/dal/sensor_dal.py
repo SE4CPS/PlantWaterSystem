@@ -520,9 +520,10 @@ class SensorDAL:
     def get_sensor_id_by_device_id(self, deviceid: str):
         try:
             self.cursor.execute("""
-                SELECT DISTINCT userssensor
+                SELECT sensorid
                 FROM sensors
-                WHERE deviceid = %s
+                WHERE deviceid = %s 
+                AND plantid IS NULL
             """, (deviceid,))
             
             results = self.cursor.fetchall()

@@ -10,85 +10,47 @@ class PlantDAL:
 
     def create_plant(self, plant: PlantSchema, username: str):
         try:
-            # Validate input data (optional, based on your requirements)
-            if not plant.PlantName or not plant.ScientificName or not isinstance(plant.Threshold, (int, float)):
+            # Validate input data
+            if not plant.plant_name or not isinstance(plant.device_id, str) or not isinstance(plant.sensor_id, str):
                 raise ValueError("Invalid input data")
-            
-            # First, get the user's ID from the username
+
+            # Get the user's ID
             self.cursor.execute("""
                 SELECT userid FROM UserData WHERE UserName = %s
             """, (username,))
-            
             user_result = self.cursor.fetchone()
             if not user_result:
                 raise ValueError(f"User with username {username} not found")
-            
             user_id = user_result[0]
-                
+
             # Execute the query to insert the plant data with UserId
             self.cursor.execute("""
-                INSERT INTO plant (plantName, scientificname, threshold, userId)
-                VALUES (%s, %s, %s, %s) RETURNING PlantID;
-            """, (plant.PlantName, plant.ScientificName, plant.Threshold, user_id))
+                WITH new_plant AS (
+                    INSERT INTO Plant (plantname, userid)
+                    VALUES (%s, %s)
+                    RETURNING plantid
+                )
+                UPDATE Sensors 
+                SET plantid = new_plant.plantid
+                FROM new_plant
+                WHERE deviceid = %s AND sensorid = %s;
+            """, (plant.plant_name, user_id, plant.device_id, plant.sensor_id))
 
-            # Commit the transaction
             self.conn.commit()
 
-            # Get the returned PlantID
-            plant_id = self.cursor.fetchone()[0]
-
-            # Return the response in JSON format
+            # Return the response including required fields
             return {
                 "status": "success",
-                "PlantID": plant_id,
-                "PlantName": plant.PlantName,
-                "ScientificName": plant.ScientificName,
-                "Threshold": plant.Threshold,
-                "UserId": user_id
-            }
-
-        except IntegrityError as e:
-            # Handle duplicate key error (unique constraint violation)
-            self.conn.rollback()  # Rollback transaction on error
-            error_message = f"Duplicate entry for PlantID: {plant.PlantID}. A plant with this ID already exists."
-            print(f"IntegrityError: {e}")
-            return {
-                "status": "error",
-                "error": error_message
-            }
-
-        except (psycopg2.Error, DatabaseError) as db_error:
-            # Handle other database errors
-            self.conn.rollback()  # Rollback transaction on error
-            error_message = f"Database error: {db_error}"
-            print(f"Database error: {db_error}")
-            return {
-                "status": "error",
-                "error": error_message
-            }
-
-        except ValueError as val_error:
-            # Handle input validation errors
-            error_message = f"Invalid input: {val_error}"
-            print(f"Input error: {val_error}")
-            return {
-                "status": "error",
-                "error": error_message
+                "plant_name": plant.plant_name,
+                "user_id": user_id,
+                "sensor_id": plant.sensor_id,
+                "device_id": plant.device_id,
+                "message": "Plant created and sensors updated."
             }
 
         except Exception as e:
-            # Catch any other unexpected errors
-            self.conn.rollback()  # Rollback transaction on error
-            error_message = f"Unexpected error: {e}"
-            print(f"Unexpected error: {e}")
-            return {
-                "status": "error",
-                "error": error_message
-            }
-
-        finally:
-            # Ensure that the connection is released
-            release_connection(self.conn)
+            self.conn.rollback()
+            return {"status": "error", "error": str(e)}
 
     def get_plants(self, username: str):
         try:
@@ -142,3 +104,27 @@ class PlantDAL:
         finally:
             # Ensure that the connection is released
             release_connection(self.conn)
+
+    def delete_plant(self, sensor_id: str, username: str):
+        try:
+            self.cursor.execute("""
+                WITH de_plant AS (
+                    SELECT plantid
+                    FROM Sensors 
+                    WHERE sensorid = %s
+                ),
+                update_sensor AS (
+                    UPDATE Sensors
+                    SET plantid = NULL
+                    WHERE sensorid = %s
+                )
+                DELETE FROM Plant
+                WHERE plantid IN (SELECT plantid FROM de_plant);
+            """, (sensor_id, sensor_id))
+            self.conn.commit()
+            return {"status": "success", "message": "Plant deleted successfully."}
+        except Exception as e:
+            self.conn.rollback()
+            return {"status": "error", "error": str(e)}
+        finally:
+            release_connection(self.conn)   
