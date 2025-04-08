@@ -404,7 +404,7 @@ class SensorDAL:
                 raise ValueError("Username must not be empty.")
 
             self.cursor.execute("""
-                SELECT firstname, lastname, plantname, threshold, Sensors.sensorid, Sensors.deviceid
+                SELECT Sensors.plantid, plantname, Sensors.sensorid, Sensors.deviceid
                 FROM UserData
                 JOIN Plant ON UserData.UserId = Plant.UserId
                 JOIN Sensors ON Plant.PlantId = Sensors.PlantId
@@ -418,12 +418,10 @@ class SensorDAL:
 
             return [
                 {
-                    "firstname": row[0],
-                    "lastname": row[1],
-                    "plantname": row[2],
-                    "threshold": row[3],
-                    "sensorid": row[4],
-                    "deviceid": row[5]
+                    "plantid": row[0],
+                    "plantname": row[1],
+                    "sensorid": row[2],
+                    "deviceid": row[3]
                 }
                 for row in results
             ]
