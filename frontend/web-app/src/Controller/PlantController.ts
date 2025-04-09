@@ -21,6 +21,15 @@ class PlantController{
             return Promise.reject(error);
         }
     }
+
+    public deletePlant = async (sensorid: string): Promise<AxiosResponse> => {
+        try {
+            const response = await axiosInstance.delete(`/sensor/${sensorid}`);
+            return response;
+        } catch (error) {
+            return Promise.reject(error);
+        }
+    }
 }
 
 const plantController = new PlantController();

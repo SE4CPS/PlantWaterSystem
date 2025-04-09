@@ -60,6 +60,7 @@
 
 .navbar-settings-dropdown-container{
     margin-top: 82.5px;
+    z-index: 1;
 }
 
 .navbar-settings-dropdown{

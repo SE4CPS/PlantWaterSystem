@@ -5,12 +5,27 @@ import { PlantMetaData, SensorTableData } from '../Interfaces/plantInterface'
 import { useNavigate } from 'react-router-dom'
 import sensorController from '../Controller/SensorController'
 import handleApiError, { isAuthTokenInvalid } from '../Utils/apiService'
+import plantController from '../Controller/PlantController'
+import { toast } from 'react-toastify'
 
 function PlantDetailCard({plantMetaData}: {plantMetaData: PlantMetaData}) {
 
   const navigate = useNavigate();
 
   const [sensorTableData, setSensorTableData] = useState<Array<SensorTableData>>([]);
+
+  const deletePlant = async (sensorId: string) => {
+    try {
+      const response = await plantController.deletePlant(sensorId);
+      toast.success(response.data.message, {
+        position: 'top-right',
+      })
+      navigate('/app/dashboard');
+    } catch (error: unknown) {
+      if(isAuthTokenInvalid(error)) navigate('/');
+      handleApiError(error);
+    }
+  }
 
   useEffect(() => {
     const fetchSensorTableData = async () => {
@@ -55,7 +70,7 @@ function PlantDetailCard({plantMetaData}: {plantMetaData: PlantMetaData}) {
             <div className='plant-detail-card-button-container'>
                 <img className='plant-detail-card-close-button' src={closeBtn} alt='error img' onClick={()=>navigate('/app/dashboard')}/>
                 {/* <button className='plant-detail-card-edit-button'>Edit</button> */}
-                <button className='plant-detail-card-delete-button'>Delete</button>
+                <button onClick={()=>deletePlant(plantMetaData.sensorId)} className='plant-detail-card-delete-button'>Delete</button>
             </div>
         </div>
         <div className='plant-detail-card-history'>
