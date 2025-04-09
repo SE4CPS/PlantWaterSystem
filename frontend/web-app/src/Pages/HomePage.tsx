@@ -22,7 +22,7 @@ function HomePage() {
           position: 'top-right',
         })
       } catch (error:unknown) {
-        if(isAuthTokenInvalid(error)) navigate('/login');
+        if(isAuthTokenInvalid(error)) navigate('/');
         handleApiError(error)
       }
     }
@@ -35,7 +35,7 @@ function HomePage() {
       <div className='plantViewer'>
         {
           plantData.map((data, index)=>{
-            return <PlantCard key={index} status='good' name={data.plantname} sensorId={data.sensorid} deviceId={data.deviceid} />
+            return <PlantCard key={index} name={data.plantname} sensorId={data.sensorid} deviceId={data.deviceid} />
           })
         }
         <AddNewPlantCard />

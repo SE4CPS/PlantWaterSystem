@@ -11,6 +11,7 @@ export interface AddPlantObject{
 }
 
 export interface PlantMetaData{
+    status: string;
     name: string;
     sensorId: string;
     deviceId: string;

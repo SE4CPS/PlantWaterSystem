@@ -24,7 +24,7 @@ function AddNewPlantDetailCard() {
   }
 
   return (
-    <div className={`plant-detail-card font-poppins good`}>
+    <div className={`plant-detail-card font-poppins Wet`}>
         <div className='plant-detail-card-information'>
             <div className='detail-and-image-container'>
                 <img className='plant-detail-card-image' src={dummyImage} alt='error img'/>

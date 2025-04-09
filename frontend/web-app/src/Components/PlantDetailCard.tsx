@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import sensorController from '../Controller/SensorController'
 import handleApiError, { isAuthTokenInvalid } from '../Utils/apiService'
 
-function PlantDetailCard({status, plantMetaData}: {status: string, plantMetaData: PlantMetaData}) {
+function PlantDetailCard({plantMetaData}: {plantMetaData: PlantMetaData}) {
 
   const navigate = useNavigate();
 
@@ -15,7 +15,7 @@ function PlantDetailCard({status, plantMetaData}: {status: string, plantMetaData
   useEffect(() => {
     const fetchSensorTableData = async () => {
       try {
-        const response = await sensorController.getSensorData();
+        const response = await sensorController.getSensorData(plantMetaData.deviceId, plantMetaData.sensorId);
         setSensorTableData(response.data.data);
       } catch (error) {
         if(isAuthTokenInvalid(error)) navigate('/')
@@ -23,11 +23,11 @@ function PlantDetailCard({status, plantMetaData}: {status: string, plantMetaData
       }
     }
     fetchSensorTableData();
-  }, [navigate])
+  }, [navigate, plantMetaData.deviceId, plantMetaData.sensorId])
   
 
   return (
-    <div className={`plant-detail-card font-poppins ${status}`}>
+    <div className={`plant-detail-card font-poppins ${plantMetaData.status}`}>
         <div className='plant-detail-card-information'>
             <div className='detail-and-image-container'>
                 <img className='plant-detail-card-image' src={dummyImage} alt='error img'/>
@@ -53,7 +53,7 @@ function PlantDetailCard({status, plantMetaData}: {status: string, plantMetaData
                 </div>
             </div>
             <div className='plant-detail-card-button-container'>
-                <img className='plant-detail-card-close-button' src={closeBtn} alt='error img' onClick={()=>navigate('/')}/>
+                <img className='plant-detail-card-close-button' src={closeBtn} alt='error img' onClick={()=>navigate('/app/dashboard')}/>
                 <button className='plant-detail-card-edit-button'>Edit</button>
                 <button className='plant-detail-card-delete-button'>Delete</button>
             </div>
