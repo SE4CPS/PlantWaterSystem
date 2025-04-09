@@ -10,6 +10,15 @@ class SensorController{
             return Promise.reject(error);
         }
     }
+
+    public getUnusedSensorIDs = async (deviceid: string): Promise<AxiosResponse> => {
+        try {
+            const response = await axiosInstance.get(`/sensor-ids?deviceid=${deviceid}`)
+            return response;
+        } catch (error: unknown) {
+            return Promise.reject(error)
+        }
+    }
 }
 
 const sensorController = new SensorController();

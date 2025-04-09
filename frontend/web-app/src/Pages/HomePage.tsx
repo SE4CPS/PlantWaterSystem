@@ -40,7 +40,7 @@ function HomePage() {
             return <PlantCard key={index} name={data.plantname} sensorId={data.sensorid} deviceId={data.deviceid} />
           })
         }
-        <AddNewPlantCard />
+        <AddNewPlantCard deviceId = {plantData.length !==0 ? plantData[0].deviceid : ''}/>
       </div>
     </div>
   )
