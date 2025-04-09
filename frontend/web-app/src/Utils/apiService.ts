@@ -27,6 +27,7 @@ export const isAuthTokenInvalid = (error: unknown): boolean => {
     if(axios.isAxiosError(error)){
         if(error.response){
             if(error.response.status === 401) return true;
+            if(error.response.status === 405) return true;
         }
     }
     return false;

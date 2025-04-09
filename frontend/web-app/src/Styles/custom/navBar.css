@@ -57,3 +57,56 @@
 .sproutly-logo-decoration:hover{
     cursor: pointer;
 }
+
+.navbar-settings-dropdown-container{
+    margin-top: 82.5px;
+}
+
+.navbar-settings-dropdown{
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar-dropdown-settings-btn{
+    all: unset;
+    height: 41.5px;
+    background-color: #E6F2D7;
+    display: flex;
+    line-height: 41.5px;
+    padding-left: 26px;
+    padding-right: 26px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-color: #E6F2D7;
+    font-size: 20px;
+    font-weight: 700;
+    transition: 0.4s;
+}
+
+.navbar-dropdown-settings-btn:hover{
+    background-color: #AFD582;
+    cursor: pointer;
+}
+
+
+.navbar-dropdown-logout-btn{
+    all: unset;
+    height: 41.5px;
+    background-color: #E6F2D7;
+    display: flex;
+    line-height: 41.5px;
+    padding-left: 26px;
+    padding-right: 26px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border-color: #E6F2D7;
+    font-size: 20px;
+    font-weight: 700;
+    transition: 0.4s;
+}
+
+.navbar-dropdown-logout-btn:hover{
+    background-color: #AFD582;
+    cursor: pointer;
+}
+

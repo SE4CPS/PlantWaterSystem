@@ -36,10 +36,10 @@ function PlantDetailCard({plantMetaData}: {plantMetaData: PlantMetaData}) {
                         Name: <b>{plantMetaData.name}</b>
                     </div>
                     <div>
-                        Status: <b>Good</b>
+                        Status: <b>{plantMetaData.status}</b>
                     </div>
                     <div>
-                        Last Watered: <b>3:15pm</b> on <b>2/6/2025</b>
+                        Last Watered: <b>{sensorTableData.length!==0 ? sensorTableData[0].time: ''}</b> on <b>{sensorTableData.length!==0 ? sensorTableData[0].date: ''}</b>
                     </div>
                     <div>
                         Sensor ID: <b>{plantMetaData.sensorId}</b>
@@ -47,14 +47,14 @@ function PlantDetailCard({plantMetaData}: {plantMetaData: PlantMetaData}) {
                     <div>
                         Device ID: <b>{plantMetaData.deviceId}</b>
                     </div>
-                    <div>
+                    {/* <div>
                         Note: <b>Place this plant near the window</b>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <div className='plant-detail-card-button-container'>
                 <img className='plant-detail-card-close-button' src={closeBtn} alt='error img' onClick={()=>navigate('/app/dashboard')}/>
-                <button className='plant-detail-card-edit-button'>Edit</button>
+                {/* <button className='plant-detail-card-edit-button'>Edit</button> */}
                 <button className='plant-detail-card-delete-button'>Delete</button>
             </div>
         </div>
@@ -68,8 +68,8 @@ function PlantDetailCard({plantMetaData}: {plantMetaData: PlantMetaData}) {
                         <tr>
                             <th>Date</th>
                             <th>Time</th>
-                            <th>ADC Value</th>
-                            <th>Moisture Level</th>
+                            {/* <th>ADC Value</th>
+                            <th>Moisture Level</th> */}
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -80,8 +80,8 @@ function PlantDetailCard({plantMetaData}: {plantMetaData: PlantMetaData}) {
                               <tr key={index}>
                                 <td>{data.date}</td>
                                 <td>{data.time}</td>
-                                <td>{data.adcvalue}</td>
-                                <td>{data.moisture_level}</td>
+                                {/* <td>{data.adcvalue}</td>
+                                <td>{data.moisture_level}</td> */}
                                 <td>{data.digitalsatus}</td>
                               </tr>
                             )

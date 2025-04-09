@@ -24,9 +24,9 @@ function PlantCard({name, sensorId, deviceId}: {name: string, sensorId: string, 
       try {
         const response = await plantController.getPlantStatus(sensorId, deviceId);
         setStatus(response.data.digital_status)
-        setPlantMetaData({
-          ...plantMetaData,
-          status: response.data.digital_status,
+        setPlantMetaData(plantMetaData => {
+          plantMetaData.status = response.data.digital_status;
+          return plantMetaData
         })
       } catch (error: unknown) {
         if(isAuthTokenInvalid(error)) navigate('/');
@@ -34,7 +34,7 @@ function PlantCard({name, sensorId, deviceId}: {name: string, sensorId: string, 
       }
     }
     fetchPlantStatus();
-  }, [sensorId, deviceId, navigate, plantMetaData])
+  }, [sensorId, deviceId, navigate])
   
   return (
     <div className={`plantCard ${status}`} onClick={()=>navigate('/app/plant_detail', { state: plantMetaData })}>
@@ -45,7 +45,7 @@ function PlantCard({name, sensorId, deviceId}: {name: string, sensorId: string, 
           Name: <b>{name}</b>
         </div>
         <div>
-          Status: <b>Good</b>
+          Status: <b>{status}</b>
         </div>
       </div>
     </div>

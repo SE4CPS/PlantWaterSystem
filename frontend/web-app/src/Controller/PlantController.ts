@@ -5,7 +5,7 @@ class PlantController{
     public getPlants= async (): Promise<AxiosResponse> =>{
         try{
             const userobject = localStorage.getItem('userDetails');
-            const user = JSON.parse(userobject? userobject: '');
+            const user = userobject ? JSON.parse(userobject) : {};
             const response = await axiosInstance.get(`/sensor_data/user/${user.username || ''}`);
             return response.data;
         }catch(error: unknown){
