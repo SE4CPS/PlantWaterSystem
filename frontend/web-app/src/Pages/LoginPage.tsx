@@ -3,50 +3,48 @@ import '../Styles/custom/loginPage.css';
 import sproutlyLogo from '../Images/sproutly-logo.svg';
 import sproutlyText from '../Images/sproutly-text.svg';
 import googleLogo from '../Images/google-logo.svg'
-import { LoginObject } from '../Interfaces/AuthInterfaces';
-import authController from '../Controller/AuthController';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import handleApiError from '../Utils/apiService';
+import apiService from '../Services/apiService';
 
 function LoginPage() {
-
-  const [loginObject, setLoginObject] = useState<LoginObject>({
+  const [credentials, setCredentials] = useState({
     username: '',
-    userpassword: '',
+    password: '',
   });
 
   const navigate = useNavigate();
 
-  const onLoginObjectChange =(key: string, value: string)=>{
-    const newObject: LoginObject = {
-      ...loginObject,
+  const handleInputChange = (key: string, value: string) => {
+    setCredentials({
+      ...credentials,
       [key]: value
-    };
-
-    setLoginObject(newObject);
+    });
   }
 
-  const onSubmit = async (body: LoginObject) => {
-    try {
-      const response = await authController.login(body);
-      toast.success("Login Successful", {
-        position: 'top-right',
-      });
-      localStorage.setItem('access_token', response.data.access_token);
-      const userDetailsResp = await authController.getUserDetails(body.username);
-      localStorage.setItem('userDetails', JSON.stringify(userDetailsResp.data));
-      navigate('/');
-
-    } catch (error:unknown) {
-      handleApiError(error);
-    }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     
+    try {
+      const { username, password } = credentials;
+      const tokenResponse = await apiService.getToken(username, password);
+      
+      // Store token
+      localStorage.setItem('token', tokenResponse.access_token);
+      
+      // Get user details
+      const userData = await apiService.getUser(username);
+      localStorage.setItem('userDetails', JSON.stringify(userData));
+      
+      toast.success("Login Successful");
+      navigate('/');
+    } catch {
+      // Login error, toast notification handled in API service
+    }
   }
 
   return (
     <div className="login-wrapper">
-      {}
       <div className="logo-container">
         <img src={sproutlyLogo} alt="Sproutly Logo" className="logo" />
         <img src={sproutlyText} alt="Sproutly Text" className="sproutly-text" />
@@ -67,17 +65,30 @@ function LoginPage() {
           <hr /> <span>or</span> <hr />
         </div>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <label htmlFor="username">Username *</label>
-          <input type="text" id="username" name="username" placeholder="Enter your username" value={loginObject.username} onChange={(e)=>onLoginObjectChange('username', e.target.value)} required />
+          <input 
+            type="text" 
+            id="username" 
+            name="username" 
+            placeholder="Enter your username" 
+            value={credentials.username} 
+            onChange={(e) => handleInputChange('username', e.target.value)} 
+            required 
+          />
 
           <label htmlFor="password">Password *</label>
-          <input type="password" id="password" name="password" placeholder="Enter your password" value={loginObject.userpassword} onChange={(e)=>onLoginObjectChange('userpassword', e.target.value)} required />
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            placeholder="Enter your password" 
+            value={credentials.password} 
+            onChange={(e) => handleInputChange('password', e.target.value)} 
+            required 
+          />
 
-          <button type='submit' className="login-btn" onClick={(e)=>{
-              e.preventDefault();
-              onSubmit(loginObject)
-            }}>Log In</button>
+          <button type='submit' className="login-btn">Log In</button>
         </form>
 
         <div className="footer-links">
