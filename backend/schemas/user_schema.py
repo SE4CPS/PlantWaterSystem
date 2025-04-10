@@ -8,3 +8,4 @@ class UserSchema(BaseModel):
     userpassword: str
     email: str
     phonenumber: str
+    deviceid: str
