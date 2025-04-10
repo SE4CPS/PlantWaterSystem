@@ -2,7 +2,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 // Change back to main backend URL - this should match your actual backend
-const BASE_URL = 'http://localhost:8000';
+const BASE_URL = 'http://sproutly-api:8000/api';
 
 // Create axios instance with default config
 const api = axios.create({
