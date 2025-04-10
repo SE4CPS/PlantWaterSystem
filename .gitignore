@@ -1,0 +1,19 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+build/
+dist/
+.env
+
+# Python
+venv/
+*.pyc
+__pycache__/
+.pytest_cache/
+instance/
+
+# Temporary files
+db.json
+*.log

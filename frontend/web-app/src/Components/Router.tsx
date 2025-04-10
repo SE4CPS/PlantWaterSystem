@@ -1,19 +1,30 @@
 import React from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import LoginPage from "../Pages/LoginPage";
 import HomePage from "../Pages/HomePage";
 import PlantDetailPage from "../Pages/PlantDetailPage";
 import AboutPage from "../Pages/AboutPage";
 import FaqPage from "../Pages/FaqPage";
 import ErrorPage from "../Pages/ErrorPage";
-import NavBar from "./NavBar";
 import SignUpPage from "../Pages/SignUpPage";
 import DisplayPage from "../Pages/DisplayPage";
 import AddPlantPage from "../Pages/AddPlantPage";
 import SettingsPage from "../Pages/SettingsPage";
+import NavBar from "./NavBar";
+import ProtectedRoute from "./ProtectedRoute.tsx";
+
+// Layout component including NavBar - used by both protected and unprotected routes
+const MainLayout = () => (
+  <>
+    <NavBar />
+    <Outlet /> {/* Child routes will render here */}
+  </>
+);
 
 const router = createBrowserRouter([
     {
+        path: '/error',
+        element: <ErrorPage />,
         errorElement: <ErrorPage />,
     },
     {
@@ -25,37 +36,44 @@ const router = createBrowserRouter([
         element: <SignUpPage />,
     },
     {
+        path: '/display',
+        element: <DisplayPage />,
+    },
+    {
+        // Settings route - uses MainLayout but is NOT protected
+        path: '/settings',
+        element: <MainLayout />,
+        children: [
+            { index: true, element: <SettingsPage /> }
+        ]
+    },
+    {
+        // Protected routes - use ProtectedRoute which includes MainLayout
         path: '/',
-        element: <NavBar />,
+        element: <ProtectedRoute />,
+        errorElement: <ErrorPage />,
         children: [
             {
-                path: '/',
+                index: true, // HomePage at '/'
                 element: <HomePage/>,
             },
             {
-                path: '/plant_detail',
+                path: 'plant_detail', 
                 element: <PlantDetailPage/>,
             },
             {
-                path: '/about',
+                path: 'about',
                 element: <AboutPage />,
             },
             {
-                path: '/faq',
+                path: 'faq',
                 element: <FaqPage />,
             },
             {
-                path: '/display',
-                element: <DisplayPage />
-            },
-            {
-                path: '/add_plant',
+                path: 'add_plant',
                 element: <AddPlantPage />
-            },
-            {
-                path: '/settings',
-                element: <SettingsPage />
             }
+            // Settings is now defined separately above
         ]
     },
 ]);
