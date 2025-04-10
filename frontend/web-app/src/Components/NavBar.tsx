@@ -22,6 +22,7 @@ function NavBar() {
 	}, []);
 
 	const userLogOut = () => {
+		setSettingsToggle(val => !val);
 		localStorage.clear();
 		navigate('/');
 	}
@@ -84,7 +85,10 @@ function NavBar() {
 					{
 						settingsToggle && (
 							<div className='navbar-settings-dropdown'>
-								<button className='navbar-dropdown-settings-btn' onClick={()=>navigate('/app/settings')}>Settings</button>
+								<button className='navbar-dropdown-settings-btn' onClick={()=>{
+										setSettingsToggle(val => !val);
+										navigate('/app/settings')
+									}}>Settings</button>
 								<button className='navbar-dropdown-logout-btn' onClick={()=>userLogOut()}>Log Out</button>
 							</div>
 						)
