@@ -27,11 +27,7 @@ function NavBar() {
 	}
 
 	const pageArray = useMemo(() => {
-		return [
-			{
-				name: 'Home',
-				path: '/app/dashboard',
-			},
+		let navArray = [
 			{
 				name: 'About',
 				path: '/app/about',
@@ -41,7 +37,28 @@ function NavBar() {
 				path: '/app/faq',
 			}
 		]
-	}, [])
+
+		if(userDetails){
+			navArray = [
+				{
+					name: 'Home',
+					path: '/app/dashboard',
+				},
+				...navArray,
+			];
+		}
+		else{
+			navArray = [
+				{
+					name: 'Login',
+					path: '/',
+				},
+				...navArray,
+			];
+		}
+
+		return navArray;
+	}, [userDetails])
 
 	return (
 		<>

@@ -47,7 +47,7 @@ function LoginPage() {
   return (
     <div className="login-wrapper">
       {}
-      <div className="logo-container">
+      <div onClick={()=>navigate('/display')} className="logo-container">
         <img src={sproutlyLogo} alt="Sproutly Logo" className="logo" />
         <img src={sproutlyText} alt="Sproutly Text" className="sproutly-text" />
       </div>
