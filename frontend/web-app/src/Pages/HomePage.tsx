@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom'
 function HomePage() {
 
   const userstring = localStorage.getItem('userDetails');
-  const user = userstring ? JSON.parse(userstring): '';
+  const user = userstring ? JSON.parse(userstring): {};
   const [plantData, setPlantData] = useState<Array<GetPlantData>>([]);
   const navigate = useNavigate();
 
@@ -40,7 +40,7 @@ function HomePage() {
             return <PlantCard key={index} name={data.plantname} sensorId={data.sensorid} deviceId={data.deviceid} />
           })
         }
-        <AddNewPlantCard deviceId = {plantData.length !==0 ? plantData[0].deviceid : ''}/>
+        <AddNewPlantCard/>
       </div>
     </div>
   )

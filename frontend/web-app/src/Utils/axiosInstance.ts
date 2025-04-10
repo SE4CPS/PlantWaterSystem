@@ -11,6 +11,14 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
     config => {
         config.headers.Authorization = `Bearer ${localStorage.getItem('access_token')}`;
+        switch (config.url) {
+            case '/plant/data':
+                config.headers["Content-Type"] = 'application/json';
+                break;
+            default:
+                config.headers["Content-Type"] = 'application/x-www-form-urlencoded';
+                break;
+        }
         return config;
     },
     error => {

@@ -1,5 +1,6 @@
 import { AxiosResponse } from "axios";
 import axiosInstance from "../Utils/axiosInstance";
+import { AddPlantRequestBody } from "../Interfaces/plantInterface";
 
 class PlantController{
     public getPlants= async (): Promise<AxiosResponse> =>{
@@ -25,6 +26,15 @@ class PlantController{
     public deletePlant = async (sensorid: string): Promise<AxiosResponse> => {
         try {
             const response = await axiosInstance.delete(`/sensor/${sensorid}`);
+            return response;
+        } catch (error) {
+            return Promise.reject(error);
+        }
+    }
+
+    public addPlant = async (body: AddPlantRequestBody): Promise<AxiosResponse> => {
+        try {
+            const response = await axiosInstance.post('/plant/data', body);
             return response;
         } catch (error) {
             return Promise.reject(error);

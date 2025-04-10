@@ -28,4 +28,6 @@ export interface UserDetails{
     lastname:string;
     phonenumber:string;
     username:string;
+    userid: number;
+    deviceid: string;
 }

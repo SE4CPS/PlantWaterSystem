@@ -2,22 +2,41 @@ import React, { useEffect, useState } from 'react'
 import closeBtn from '../Images/plant-card-close-btn-icon.svg'
 import dummyImage from '../Images/rose.png'
 import { useNavigate } from 'react-router-dom'
-import { AddPlantObject, SensorTableData } from '../Interfaces/plantInterface';
+import { AddPlantObject, AddPlantRequestBody, PlantMetaData, SensorTableData } from '../Interfaces/plantInterface';
 import handleApiError, { isAuthTokenInvalid } from '../Utils/apiService';
 import sensorController from '../Controller/SensorController';
+import { toast } from 'react-toastify';
+import plantController from '../Controller/PlantController';
+import { UserDetails } from '../Interfaces/AuthInterfaces';
 
-function AddNewPlantDetailCard({deviceId}: {deviceId: string}) {
+function AddNewPlantDetailCard() {
 
   const navigate = useNavigate();
 
   const [addPlantObject, setAddPlantObject] = useState<AddPlantObject>({
     name: '',
     sensorId: 'none',
-    note: '',
   })
 
   const [unusedSensorIds, setUnusedSensorIds] = useState<Array<string>>([]);
   const [sensorTableData, setSensorTableData] = useState<Array<SensorTableData>>([]);
+
+  const [userDetails, setUserDetails] = useState<UserDetails>({
+    deviceid: '',
+    email: '',
+    firstname: '',
+    lastname: '',
+    phonenumber: '',
+    userid: -1,
+    username: '',
+  });
+
+  useEffect(() => {
+    const userstring = localStorage.getItem('userDetails');
+    const user = userstring? JSON.parse(userstring) : {};
+    setUserDetails(user);
+  }, [])
+  
 
   const onPlantDetailChange =(key: string, value: string)=>{
     const newObject: AddPlantObject = {
@@ -30,7 +49,7 @@ function AddNewPlantDetailCard({deviceId}: {deviceId: string}) {
 
   const fetchSensorData = async (sensorId: string) => {
     try {
-        const response = await sensorController.getSensorData(deviceId, sensorId);
+        const response = await sensorController.getSensorData(userDetails.deviceid, sensorId);
         setSensorTableData(response.data.data);
     } catch (error: unknown) {
         if(isAuthTokenInvalid(error)) navigate('/');
@@ -38,22 +57,58 @@ function AddNewPlantDetailCard({deviceId}: {deviceId: string}) {
     }
   }
 
-  useEffect(() => {
-    const fetchUnusedSensorIds = async () => {
+  const addNewPlant = async () => {
+    if(addPlantObject.name.length<3 && addPlantObject.sensorId==='none'){
+        toast.error("Plant Name should be atleast 3 characters or Please assign a sensor to the plant", {
+            position: "top-right",
+        })
+    }
+    else{
         try {
-            const response = await sensorController.getUnusedSensorIDs(deviceId);
-            const idArray = response.data.sensor_ids;
-            setUnusedSensorIds(unusedSensorIds => {
-                unusedSensorIds = [...idArray];
-                return unusedSensorIds;
-            })
-        } catch (error) {
+            const userstring = localStorage.getItem('userDetails');
+            const user = userstring? JSON.parse(userstring):{}
+            const body: AddPlantRequestBody = {
+                plant_name: addPlantObject.name,
+                sensor_id: addPlantObject.sensorId,
+                device_id: userDetails.deviceid,
+                user_id: `${user.userid}` || '',
+            };
+            const response = await plantController.addPlant(body);
+            toast.success(response.data.message, {
+                position: 'top-right',
+            });
+            const plantMetaData: PlantMetaData = {
+                status: sensorTableData[0].digitalsatus || 'Wet',
+                deviceId: userDetails.deviceid,
+                sensorId: response.data.sensor_id,
+                name: response.data.plant_name,
+            };
+            navigate('/app/plant_detail', {state: plantMetaData});
+        } catch (error: unknown) {
             if(isAuthTokenInvalid(error)) navigate('/');
             handleApiError(error)
         }
     }
+  }
+
+  useEffect(() => {
+    const fetchUnusedSensorIds = async () => {
+        if(userDetails.deviceid!==''){
+            try {
+                const response = await sensorController.getUnusedSensorIDs(userDetails.deviceid);
+                const idArray = response.data.sensor_ids || [];
+                setUnusedSensorIds(unusedSensorIds => {
+                    unusedSensorIds = [...idArray];
+                    return unusedSensorIds;
+                })
+            } catch (error) {
+                if(isAuthTokenInvalid(error)) navigate('/');
+                handleApiError(error)
+            }
+        }
+    }
     fetchUnusedSensorIds();
-  }, [deviceId, navigate])
+  }, [userDetails.deviceid, navigate])
 
   
 
@@ -66,12 +121,6 @@ function AddNewPlantDetailCard({deviceId}: {deviceId: string}) {
                     <div>
                         Name: <input type='text' value={addPlantObject.name} onChange={(e)=>{onPlantDetailChange('name', e.target.value)}} />
                     </div>
-                    {/* <div>
-                        Status: 
-                    </div>
-                    <div>
-                        Last Watered: 
-                    </div> */}
                     <div>
                         Sensor ID: <select onChange={(e)=>{
                             onPlantDetailChange('sensorId', e.target.value)
@@ -87,11 +136,8 @@ function AddNewPlantDetailCard({deviceId}: {deviceId: string}) {
                         </select>
                     </div>
                     <div>
-                        Device ID: <b>{deviceId}</b>
+                        Device ID: <b>{userDetails.deviceid}</b>
                     </div>
-                    {/* <div>
-                        Note: <input type='text' value={addPlantObject.note} onChange={(e)=>{onPlantDetailChange('note', e.target.value)}} />
-                    </div> */}
                 </div>
             </div>
             <div className='plant-detail-card-button-container' onClick={()=>{navigate('/app/dashboard')}}>
@@ -130,7 +176,7 @@ function AddNewPlantDetailCard({deviceId}: {deviceId: string}) {
             </div>
         </div>
         <div className='add-plant-save-button-container'>
-            <button className='add-plant-save-button'>Save</button>
+            <button onClick={()=>{addNewPlant()}} className='add-plant-save-button'>Save</button>
         </div>
     </div>
   )

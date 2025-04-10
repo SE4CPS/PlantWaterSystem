@@ -7,7 +7,6 @@ export interface GetPlantData{
 export interface AddPlantObject{
     name: string;
     sensorId: string;
-    note: string;
 }
 
 export interface PlantMetaData{
@@ -23,4 +22,11 @@ export interface SensorTableData{
     adcvalue: string;
     moisture_level: string;
     digitalsatus: string;
+}
+
+export interface AddPlantRequestBody{
+    plant_name: string;
+    user_id: string;
+    sensor_id: string;
+    device_id: string;
 }
