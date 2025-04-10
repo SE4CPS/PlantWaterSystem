@@ -1,0 +1,67 @@
+.errorcontainer {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    align-items: center;
+    justify-content: center;
+    padding-top: 128px;
+}
+
+.error-text-title {
+    font-size: 60px;
+    font-weight: bold;
+}
+
+.error-text-info {
+    margin-top: 20px;
+    font-size: 25px;
+    font-weight: normal;
+}
+
+.error-return-home-btn {
+    all: unset;
+    margin-top: 26px;
+    width: 232px;
+    height: 68px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background-color: #AFD582;
+    border-radius: 15px;
+    font-weight: 700;
+    font-size: 25px;
+    transition: 0.4s;
+    cursor: pointer;
+}
+
+.error-return-home-btn:hover {
+    background-color: #77B42D;
+}
+
+.errorplant-container {
+    margin-top: 34px;
+    width: 268px;
+    height: 292px;
+}
+
+.errorplant-container img {
+    width: 268px;
+    height: 292px;
+}
+
+.errorlogo {
+    margin-top: 150px;
+}
+
+.error-sproutly-logo{
+    width: 46px;
+    height: 46px;
+}
+
+.error-sproutly-text{
+    margin-left: 11px;
+    width: 92px;
+    height: 43px;
+}
+
