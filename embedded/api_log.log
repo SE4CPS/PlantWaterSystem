@@ -12318,3 +12318,18 @@
 2025-04-10 21:56:15,240 - INFO - Batch starting at row 31781 sent successfully.
 2025-04-10 21:56:16,970 - INFO - Batch starting at row 31786 sent successfully.
 2025-04-10 21:56:18,665 - INFO - Batch starting at row 31791 sent successfully.
+2025-04-11 12:31:33,714 - INFO - Scheduler started with interval 60 seconds.
+2025-04-11 12:31:33,746 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.0.0.180:5001
+2025-04-11 12:31:33,746 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-11 12:32:37,350 - INFO - Batch starting at row 42901 sent successfully.
+2025-04-11 12:32:39,142 - INFO - Batch starting at row 42921 sent successfully.
+2025-04-11 12:32:40,972 - INFO - Batch starting at row 42941 sent successfully.
+2025-04-11 12:32:42,778 - INFO - Batch starting at row 42961 sent successfully.
+2025-04-11 12:32:46,372 - INFO - Batch starting at row 42981 sent successfully.
+2025-04-11 12:33:50,291 - INFO - Batch starting at row 42997 sent successfully.
+2025-04-11 12:34:53,463 - INFO - Batch starting at row 43005 sent successfully.
+2025-04-11 12:35:56,647 - INFO - Batch starting at row 43009 sent successfully.
+2025-04-11 12:36:59,839 - INFO - Batch starting at row 43013 sent successfully.
