@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import closeBtn from '../Images/plant-card-close-btn-icon.svg'
 import dummyImage from '../Images/rose.png'
 import { PlantMetaData, SensorTableData } from '../Interfaces/plantInterface'
@@ -15,6 +15,7 @@ function PlantDetailCard({plantMetaData}: {plantMetaData: PlantMetaData}) {
 
   const [sensorTableData, setSensorTableData] = useState<Array<SensorTableData>>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const deletePlant = async (sensorId: string) => {
     try {
@@ -44,6 +45,14 @@ function PlantDetailCard({plantMetaData}: {plantMetaData: PlantMetaData}) {
       }
     }
     fetchSensorTableData();
+    
+    intervalRef.current = setInterval(fetchSensorTableData, 600000); //this runs the sensor data api every 10 mins
+    
+    return () => {
+      if(intervalRef.current){
+        clearInterval(intervalRef.current) // when leaving the plant detail page this clears the interval function that is calling the API.
+      }
+    }
   }, [navigate, plantMetaData.deviceId, plantMetaData.sensorId])
   
 
