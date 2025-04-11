@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-    baseURL: 'http://dev.sprout-ly.com/api',
+    baseURL: 'http://sproutly-api:8000/api',
     timeout: 5000,
     headers: {
         "Content-Type": 'application/x-www-form-urlencoded',
