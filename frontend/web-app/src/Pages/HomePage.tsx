@@ -10,6 +10,8 @@ import { useNavigate } from 'react-router-dom'
 
 function HomePage() {
 
+  const userstring = localStorage.getItem('userDetails');
+  const user = userstring ? JSON.parse(userstring): {};
   const [plantData, setPlantData] = useState<Array<GetPlantData>>([]);
   const navigate = useNavigate();
 
@@ -22,7 +24,7 @@ function HomePage() {
           position: 'top-right',
         })
       } catch (error:unknown) {
-        if(isAuthTokenInvalid(error)) navigate('/login');
+        if(isAuthTokenInvalid(error)) navigate('/');
         handleApiError(error)
       }
     }
@@ -31,14 +33,14 @@ function HomePage() {
 
   return (
     <div className='homePage'>
-      <div className='nameBar'>Vy&rsquo;s Plants</div>
+      <div className='nameBar'>{user.firstname || ''}&rsquo;s Plants</div>
       <div className='plantViewer'>
         {
           plantData.map((data, index)=>{
-            return <PlantCard key={index} status='good' name={data.plantname} sensorId={data.sensorid} deviceId={data.deviceid} />
+            return <PlantCard key={index} name={data.plantname} sensorId={data.sensorid} deviceId={data.deviceid} />
           })
         }
-        <AddNewPlantCard />
+        <AddNewPlantCard/>
       </div>
     </div>
   )

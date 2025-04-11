@@ -5,17 +5,32 @@ import { PlantMetaData, SensorTableData } from '../Interfaces/plantInterface'
 import { useNavigate } from 'react-router-dom'
 import sensorController from '../Controller/SensorController'
 import handleApiError, { isAuthTokenInvalid } from '../Utils/apiService'
+import plantController from '../Controller/PlantController'
+import { toast } from 'react-toastify'
 
-function PlantDetailCard({status, plantMetaData}: {status: string, plantMetaData: PlantMetaData}) {
+function PlantDetailCard({plantMetaData}: {plantMetaData: PlantMetaData}) {
 
   const navigate = useNavigate();
 
   const [sensorTableData, setSensorTableData] = useState<Array<SensorTableData>>([]);
 
+  const deletePlant = async (sensorId: string) => {
+    try {
+      const response = await plantController.deletePlant(sensorId);
+      toast.success(response.data.message, {
+        position: 'top-right',
+      })
+      navigate('/app/dashboard');
+    } catch (error: unknown) {
+      if(isAuthTokenInvalid(error)) navigate('/');
+      handleApiError(error);
+    }
+  }
+
   useEffect(() => {
     const fetchSensorTableData = async () => {
       try {
-        const response = await sensorController.getSensorData();
+        const response = await sensorController.getSensorData(plantMetaData.deviceId, plantMetaData.sensorId);
         setSensorTableData(response.data.data);
       } catch (error) {
         if(isAuthTokenInvalid(error)) navigate('/')
@@ -23,11 +38,11 @@ function PlantDetailCard({status, plantMetaData}: {status: string, plantMetaData
       }
     }
     fetchSensorTableData();
-  }, [navigate])
+  }, [navigate, plantMetaData.deviceId, plantMetaData.sensorId])
   
 
   return (
-    <div className={`plant-detail-card font-poppins ${status}`}>
+    <div className={`plant-detail-card font-poppins ${plantMetaData.status}`}>
         <div className='plant-detail-card-information'>
             <div className='detail-and-image-container'>
                 <img className='plant-detail-card-image' src={dummyImage} alt='error img'/>
@@ -36,10 +51,10 @@ function PlantDetailCard({status, plantMetaData}: {status: string, plantMetaData
                         Name: <b>{plantMetaData.name}</b>
                     </div>
                     <div>
-                        Status: <b>Good</b>
+                        Status: <b>{plantMetaData.status}</b>
                     </div>
                     <div>
-                        Last Watered: <b>3:15pm</b> on <b>2/6/2025</b>
+                        Last Watered: <b>{sensorTableData.length!==0 ? sensorTableData[0].time: ''}</b> on <b>{sensorTableData.length!==0 ? sensorTableData[0].date: ''}</b>
                     </div>
                     <div>
                         Sensor ID: <b>{plantMetaData.sensorId}</b>
@@ -47,15 +62,15 @@ function PlantDetailCard({status, plantMetaData}: {status: string, plantMetaData
                     <div>
                         Device ID: <b>{plantMetaData.deviceId}</b>
                     </div>
-                    <div>
+                    {/* <div>
                         Note: <b>Place this plant near the window</b>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <div className='plant-detail-card-button-container'>
-                <img className='plant-detail-card-close-button' src={closeBtn} alt='error img' onClick={()=>navigate('/')}/>
-                <button className='plant-detail-card-edit-button'>Edit</button>
-                <button className='plant-detail-card-delete-button'>Delete</button>
+                <img className='plant-detail-card-close-button' src={closeBtn} alt='error img' onClick={()=>navigate('/app/dashboard')}/>
+                {/* <button className='plant-detail-card-edit-button'>Edit</button> */}
+                <button onClick={()=>deletePlant(plantMetaData.sensorId)} className='plant-detail-card-delete-button'>Delete</button>
             </div>
         </div>
         <div className='plant-detail-card-history'>
@@ -68,8 +83,8 @@ function PlantDetailCard({status, plantMetaData}: {status: string, plantMetaData
                         <tr>
                             <th>Date</th>
                             <th>Time</th>
-                            <th>ADC Value</th>
-                            <th>Moisture Level</th>
+                            {/* <th>ADC Value</th>
+                            <th>Moisture Level</th> */}
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -80,8 +95,8 @@ function PlantDetailCard({status, plantMetaData}: {status: string, plantMetaData
                               <tr key={index}>
                                 <td>{data.date}</td>
                                 <td>{data.time}</td>
-                                <td>{data.adcvalue}</td>
-                                <td>{data.moisture_level}</td>
+                                {/* <td>{data.adcvalue}</td>
+                                <td>{data.moisture_level}</td> */}
                                 <td>{data.digitalsatus}</td>
                               </tr>
                             )

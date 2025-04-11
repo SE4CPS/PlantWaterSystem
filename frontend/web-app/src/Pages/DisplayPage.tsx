@@ -13,12 +13,9 @@ function DisplayPage() {
         <div className='displayPage-sales-text'>
           Tracking with Sproutly <b className='highlighted-text'>helps your plants thrive</b> by keeping them healthy, hydrated & happy.
         </div>
-        <button onClick={()=>navigate('/login')} className='displayPage-login-button'>
+        <button onClick={()=>navigate('/')} className='displayPage-login-button'>
           Log In
         </button>
-        <div className='displayPage-signup-text'>
-          Don&rsquo;t have an account? <div onClick={()=>navigate('/signup')} className='signup-text'>Sign Up here</div>
-        </div>
       </div>
       <div className='displayPage-image-decoration'>
         <div className='displayPage-upper-image'>
