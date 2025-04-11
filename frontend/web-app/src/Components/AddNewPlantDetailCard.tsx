@@ -8,6 +8,7 @@ import sensorController from '../Controller/SensorController';
 import { toast } from 'react-toastify';
 import plantController from '../Controller/PlantController';
 import { UserDetails } from '../Interfaces/AuthInterfaces';
+import Loader from './Loader';
 
 function AddNewPlantDetailCard() {
 
@@ -20,6 +21,7 @@ function AddNewPlantDetailCard() {
 
   const [unusedSensorIds, setUnusedSensorIds] = useState<Array<string>>([]);
   const [sensorTableData, setSensorTableData] = useState<Array<SensorTableData>>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [userDetails, setUserDetails] = useState<UserDetails>({
     deviceid: '',
@@ -49,8 +51,10 @@ function AddNewPlantDetailCard() {
 
   const fetchSensorData = async (sensorId: string) => {
     try {
+        setLoading(true);
         const response = await sensorController.getSensorData(userDetails.deviceid, sensorId);
         setSensorTableData(response.data.data);
+        setLoading(false);
     } catch (error: unknown) {
         if(isAuthTokenInvalid(error)) navigate('/');
         handleApiError(error)
@@ -65,6 +69,7 @@ function AddNewPlantDetailCard() {
     }
     else{
         try {
+            setLoading(true);
             const userstring = localStorage.getItem('userDetails');
             const user = userstring? JSON.parse(userstring):{}
             const body: AddPlantRequestBody = {
@@ -83,6 +88,7 @@ function AddNewPlantDetailCard() {
                 sensorId: response.data.sensor_id,
                 name: response.data.plant_name,
             };
+            setLoading(false);
             navigate('/app/plant_detail', {state: plantMetaData});
         } catch (error: unknown) {
             if(isAuthTokenInvalid(error)) navigate('/');
@@ -113,70 +119,73 @@ function AddNewPlantDetailCard() {
   
 
   return (
-    <div className={`plant-detail-card font-poppins Wet`}>
-        <div className='plant-detail-card-information'>
-            <div className='detail-and-image-container'>
-                <img className='plant-detail-card-image' src={dummyImage} alt='error img'/>
-                <div className='plant-detail-card-details'>
-                    <div>
-                        Name: <input type='text' value={addPlantObject.name} onChange={(e)=>{onPlantDetailChange('name', e.target.value)}} />
+    <>
+        {loading && <Loader />}
+        <div className={`plant-detail-card font-poppins Wet`}>
+            <div className='plant-detail-card-information'>
+                <div className='detail-and-image-container'>
+                    <img className='plant-detail-card-image' src={dummyImage} alt='error img'/>
+                    <div className='plant-detail-card-details'>
+                        <div>
+                            Name: <input type='text' value={addPlantObject.name} onChange={(e)=>{onPlantDetailChange('name', e.target.value)}} />
+                        </div>
+                        <div>
+                            Sensor ID: <select onChange={(e)=>{
+                                onPlantDetailChange('sensorId', e.target.value)
+                                if(e.target.value!=='none') fetchSensorData(e.target.value)
+                                else setSensorTableData([]);
+                                }}>
+                                <option selected value={'none'}>Please select an unused sensor ID</option>
+                                {
+                                    unusedSensorIds.map((data, key) => {
+                                        return <option value={data} key={key}>{data}</option>
+                                    })
+                                }
+                            </select>
+                        </div>
+                        <div>
+                            Device ID: <b>{userDetails.deviceid}</b>
+                        </div>
                     </div>
-                    <div>
-                        Sensor ID: <select onChange={(e)=>{
-                            onPlantDetailChange('sensorId', e.target.value)
-                            if(e.target.value!=='none') fetchSensorData(e.target.value)
-                            else setSensorTableData([]);
-                            }}>
-                            <option selected value={'none'}>Please select an unused sensor ID</option>
+                </div>
+                <div className='plant-detail-card-button-container' onClick={()=>{navigate('/app/dashboard')}}>
+                    <img className='plant-detail-card-close-button' src={closeBtn} alt='error img'/>
+                </div>
+            </div>
+            <div className='plant-detail-card-history'>
+                <div className='title'>
+                    Water History
+                </div>
+                <div className='history-table-container'>
+                    <div className='history-table'>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Moisture Level</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             {
-                                unusedSensorIds.map((data, key) => {
-                                    return <option value={data} key={key}>{data}</option>
-                                })
+                            sensorTableData.map((data, index) => {
+                                return (
+                                <tr key={index}>
+                                    <td>{data.date}</td>
+                                    <td>{data.time}</td>
+                                    <td>{data.moisture_level}%</td>
+                                </tr>
+                                )
+                            })
                             }
-                        </select>
-                    </div>
-                    <div>
-                        Device ID: <b>{userDetails.deviceid}</b>
+                        </tbody>
                     </div>
                 </div>
             </div>
-            <div className='plant-detail-card-button-container' onClick={()=>{navigate('/app/dashboard')}}>
-                <img className='plant-detail-card-close-button' src={closeBtn} alt='error img'/>
+            <div className='add-plant-save-button-container'>
+                <button onClick={()=>{addNewPlant()}} className='add-plant-save-button'>Save</button>
             </div>
         </div>
-        <div className='plant-detail-card-history'>
-            <div className='title'>
-                Water History
-            </div>
-            <div className='history-table-container'>
-                <div className='history-table'>
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Moisture Level</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                          sensorTableData.map((data, index) => {
-                            return (
-                              <tr key={index}>
-                                <td>{data.date}</td>
-                                <td>{data.time}</td>
-                                <td>{data.moisture_level}%</td>
-                              </tr>
-                            )
-                          })
-                        }
-                    </tbody>
-                </div>
-            </div>
-        </div>
-        <div className='add-plant-save-button-container'>
-            <button onClick={()=>{addNewPlant()}} className='add-plant-save-button'>Save</button>
-        </div>
-    </div>
+    </>
   )
 }
 

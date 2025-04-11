@@ -14,7 +14,7 @@ const imageMap = new Map<string, string>([
   ['Sunflower', 'https://images.unsplash.com/photo-1597848212624-a19eb35e2651?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D']
 ])
 
-function PlantCard({name, sensorId, deviceId}: {name: string, sensorId: string, deviceId: string}) {
+function PlantCard({name, sensorId, deviceId, isLoaded}: {name: string, sensorId: string, deviceId: string, isLoaded: ()=>void}) {
 
   const navigate = useNavigate();
   const [plantMetaData, setPlantMetaData] = useState<PlantMetaData>({moisture_level: 0, name, sensorId, deviceId});
@@ -30,13 +30,14 @@ function PlantCard({name, sensorId, deviceId}: {name: string, sensorId: string, 
           plantMetaData.moisture_level = curr_status;
           return plantMetaData
         })
+        isLoaded();
       } catch (error: unknown) {
         if(isAuthTokenInvalid(error)) navigate('/');
         handleApiError(error)
       }
     }
     fetchPlantStatus();
-  }, [sensorId, deviceId, navigate])
+  }, [sensorId, deviceId, navigate, isLoaded])
   
   return (
     <div className={`plantCard ${status > 25? 'Wet' : 'Dry'}`} onClick={()=>navigate('/app/plant_detail', { state: plantMetaData })}>
