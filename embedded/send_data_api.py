@@ -3,7 +3,6 @@ import sqlite3
 import time
 import threading
 import logging
-import requests
 import schedule
 import subprocess
 import json
@@ -109,10 +108,10 @@ def row_to_dict(row):
         "device_id": row[12] if row[12] is not None else "",
     }
 
-def send_unsent_rows_via_curl(url, batch_size=5):
+def send_unsent_rows_via_curl(url, batch_size=20):
     """
     Fetch all unsent rows (with id > LAST_SENT_ID), split into batches,
-    convert each batch to a JSON payload, and send using a curl command.
+    convert each batch into a JSON payload (with a "data" key), and then send it using a curl command.
     On success, update LAST_SENT_ID to the id of the last row sent.
     """
     global LAST_SENT_ID
@@ -121,7 +120,7 @@ def send_unsent_rows_via_curl(url, batch_size=5):
         logging.info("No unsent rows to send.")
         return True
 
-    # Process in batches of batch_size (default now 5)
+    # Process in batches
     for i in range(0, len(rows), batch_size):
         batch = rows[i:i+batch_size]
         data = [row_to_dict(r) for r in batch]
@@ -134,6 +133,7 @@ def send_unsent_rows_via_curl(url, batch_size=5):
             logging.error(f"Error writing payload file: {e}")
             return False
 
+        # Build the curl command to send the payload
         cmd = [
             "curl",
             "--location",
@@ -144,6 +144,7 @@ def send_unsent_rows_via_curl(url, batch_size=5):
         ]
         try:
             result = subprocess.run(cmd, capture_output=True, text=True)
+            # Check result; if the output contains a 504 error or timeout text, treat as failure.
             if result.returncode == 0 and "504" not in result.stdout and "Gateway Time-out" not in result.stdout:
                 logging.info(f"Batch starting at row {data[0]['id']} sent successfully.")
                 LAST_SENT_ID = data[-1]["id"]
@@ -179,7 +180,7 @@ def get_min_id_after_timestamp(ts_str):
 @app.route("/send-data", methods=["POST"])
 def auto_send():
     """
-    Auto-send endpoint: converts all unsent rows into a JSON payload (in batches) and
+    Auto-send endpoint: converts unsent rows from the database into a JSON payload (in batches) and
     sends it using curl to the BACKEND_API_SEND_DATA URL.
     Optionally, if an 'after' timestamp is provided in the request payload,
     LAST_SENT_ID is reset accordingly.
@@ -202,7 +203,7 @@ def auto_send():
 @app.route("/send-current", methods=["POST"])
 def manual_send():
     """
-    Manual send endpoint: converts all unsent rows into a JSON payload (in batches) and
+    Manual send endpoint: converts unsent rows from the database into a JSON payload (in batches) and
     sends it using curl to the BACKEND_API_SEND_CURRENT URL.
     Expects an 'after' timestamp in the JSON payload.
     """
