@@ -4,7 +4,7 @@ function FaqPage() {
   return (
     <div className='font-poppins about-container'>
       <h1>Frequently Asked Questions (FAQs)</h1>
-      <p>🌿 Got questions? We've got answers! 🌿</p>
+      <p>🌿 Got questions? We&lsquo;ve got answers! 🌿</p>
       <div className='question-container'>
         <div className='question'>
           <h2>Is Sproutly free?</h2>
