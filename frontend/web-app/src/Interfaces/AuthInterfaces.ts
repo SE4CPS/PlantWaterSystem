@@ -22,12 +22,15 @@ export interface LoginObject{
     userpassword: string;
 }
 
-export interface UserDetails{
+export interface UserSettings{
     email:string;
     firstname:string;
     lastname:string;
     phonenumber:string;
     username:string;
+}
+
+export interface UserDetails extends UserSettings{
     userid: number;
     deviceid: string;
 }
