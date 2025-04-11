@@ -262,8 +262,8 @@ async def get_sensor_data_details_by_sensorid_and_deviceid(
     except Exception as e:
         return JSONResponse(status_code=500, content={"status": "error", "error": f"Unexpected error: {str(e)}"})
             
-@moisture_router.get("/api/plant/last_status")
-async def get_last_status(
+@moisture_router.get("/api/plant/moisture_level")
+async def get_moisture_level(
     sensorid: str,
     deviceid: str,
     service: SensorService = Depends(get_service),
@@ -277,8 +277,8 @@ async def get_last_status(
             return JSONResponse(status_code=status_code, content={"status": "error", "error": response["error"]})
         
         # Modify the response to return the desired format
-        digital_status = response.get('digital_status', 'Unknown')  # Assuming response contains 'digital_status'
-        return JSONResponse(status_code=200, content={"digital_status": digital_status})
+        moisture_level = response.get('moisture_level', 'moisture_level')  # Assuming response contains 'digital_status'
+        return JSONResponse(status_code=200, content={"moisture_level": moisture_level})
     except HTTPException as he:
         raise he
     except Exception as e:

@@ -485,7 +485,7 @@ class SensorDAL:
     def get_last_status(self, sensorid: str, deviceid: str):
         try:
             self.cursor.execute("""
-                SELECT digitalstatus
+                SELECT moisturelevel
                 FROM sensorsdata
                 WHERE sensorid = %s AND deviceid = %s
                 ORDER BY readingid DESC
@@ -495,10 +495,10 @@ class SensorDAL:
             results = self.cursor.fetchone()
 
             if not results:
-                return {"digital_status": "Unknown"}
+                return {"moisture_level": "Unknown"}
                 
             return {
-                "digital_status": results[0]
+                "moisture_level": results[0]
             }
 
         except (psycopg2.Error, DatabaseError) as db_error:
