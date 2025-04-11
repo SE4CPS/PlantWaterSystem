@@ -10,7 +10,7 @@ export interface AddPlantObject{
 }
 
 export interface PlantMetaData{
-    status: string;
+    moisture_level: number;
     name: string;
     sensorId: string;
     deviceId: string;
@@ -20,7 +20,7 @@ export interface SensorTableData{
     date: string,
     time: string,
     adcvalue: string;
-    moisture_level: string;
+    moisture_level: number;
     digitalsatus: string;
 }
 

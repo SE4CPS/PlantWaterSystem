@@ -16,7 +16,7 @@ class PlantController{
 
     public getPlantStatus = async (sensorid: string, deviceid: string): Promise<AxiosResponse> => {
         try {
-            const response = await axiosInstance.get(`/plant/last_status?sensorid=${sensorid}&deviceid=${deviceid}`);
+            const response = await axiosInstance.get(`/plant/moisture_level?sensorid=${sensorid}&deviceid=${deviceid}`);
             return response;
         } catch (error: unknown) {
             return Promise.reject(error);

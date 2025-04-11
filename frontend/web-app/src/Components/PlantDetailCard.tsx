@@ -42,7 +42,7 @@ function PlantDetailCard({plantMetaData}: {plantMetaData: PlantMetaData}) {
   
 
   return (
-    <div className={`plant-detail-card font-poppins ${plantMetaData.status}`}>
+    <div className={`plant-detail-card font-poppins ${plantMetaData.moisture_level > 25 ? 'Wet':'Dry'}`}>
         <div className='plant-detail-card-information'>
             <div className='detail-and-image-container'>
                 <img className='plant-detail-card-image' src={dummyImage} alt='error img'/>
@@ -51,7 +51,7 @@ function PlantDetailCard({plantMetaData}: {plantMetaData: PlantMetaData}) {
                         Name: <b>{plantMetaData.name}</b>
                     </div>
                     <div>
-                        Status: <b>{plantMetaData.status}</b>
+                        Moisture Level: <b>{plantMetaData.moisture_level}%</b>
                     </div>
                     <div>
                         Last Watered: <b>{sensorTableData.length!==0 ? sensorTableData[0].time: ''}</b> on <b>{sensorTableData.length!==0 ? sensorTableData[0].date: ''}</b>
@@ -83,9 +83,9 @@ function PlantDetailCard({plantMetaData}: {plantMetaData: PlantMetaData}) {
                         <tr>
                             <th>Date</th>
                             <th>Time</th>
-                            {/* <th>ADC Value</th>
-                            <th>Moisture Level</th> */}
-                            <th>Status</th>
+                            {/* <th>ADC Value</th> */}
+                            <th>Moisture Level</th>
+                            {/* <th>Status</th> */}
                         </tr>
                     </thead>
                     <tbody>
@@ -95,9 +95,7 @@ function PlantDetailCard({plantMetaData}: {plantMetaData: PlantMetaData}) {
                               <tr key={index}>
                                 <td>{data.date}</td>
                                 <td>{data.time}</td>
-                                {/* <td>{data.adcvalue}</td>
-                                <td>{data.moisture_level}</td> */}
-                                <td>{data.digitalsatus}</td>
+                                <td>{data.moisture_level}%</td>
                               </tr>
                             )
                           })

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import plantController from '../Controller/PlantController';
 import handleApiError, { isAuthTokenInvalid } from '../Utils/apiService';
 import sproutlyLogo from '../Images/sproutly-logo.svg';
+import { PlantMetaData } from '../Interfaces/plantInterface';
 // import dummyImage from '../Images/rose.png'
 
 const imageMap = new Map<string, string>([
@@ -16,16 +17,17 @@ const imageMap = new Map<string, string>([
 function PlantCard({name, sensorId, deviceId}: {name: string, sensorId: string, deviceId: string}) {
 
   const navigate = useNavigate();
-  const [plantMetaData, setPlantMetaData] = useState({status: 'Wet', name, sensorId, deviceId});
-  const [status, setStatus] = useState('Wet');
+  const [plantMetaData, setPlantMetaData] = useState<PlantMetaData>({moisture_level: 0, name, sensorId, deviceId});
+  const [status, setStatus] = useState(0);
 
   useEffect(() => {
     const fetchPlantStatus= async ()=>{
       try {
         const response = await plantController.getPlantStatus(sensorId, deviceId);
-        setStatus(response.data.digital_status)
+        const curr_status = response.data.moisture_level;
+        setStatus(curr_status)
         setPlantMetaData(plantMetaData => {
-          plantMetaData.status = response.data.digital_status;
+          plantMetaData.moisture_level = curr_status;
           return plantMetaData
         })
       } catch (error: unknown) {
@@ -37,15 +39,15 @@ function PlantCard({name, sensorId, deviceId}: {name: string, sensorId: string, 
   }, [sensorId, deviceId, navigate])
   
   return (
-    <div className={`plantCard ${status}`} onClick={()=>navigate('/app/plant_detail', { state: plantMetaData })}>
-      {status==='Dry'? <div className='plantCard-dry-status-indicator'><b>Water Me!</b></div> : null}
+    <div className={`plantCard ${status > 25? 'Wet' : 'Dry'}`} onClick={()=>navigate('/app/plant_detail', { state: plantMetaData })}>
+      {status < 25? <div className='plantCard-dry-status-indicator'><b>Water Me!</b></div> : null}
       <img className='plantCard-image' src={imageMap.get(name) || sproutlyLogo} alt='Error img'/>
       <div className='plantCard-detail'>
         <div>
           Name: <b>{name}</b>
         </div>
         <div>
-          Status: <b>{status}</b>
+          Moisture Level: <b>{status}%</b>
         </div>
       </div>
     </div>

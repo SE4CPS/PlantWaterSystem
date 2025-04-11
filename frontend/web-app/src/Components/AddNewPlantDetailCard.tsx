@@ -78,7 +78,7 @@ function AddNewPlantDetailCard() {
                 position: 'top-right',
             });
             const plantMetaData: PlantMetaData = {
-                status: sensorTableData[0].digitalsatus || 'Wet',
+                moisture_level: sensorTableData[0].moisture_level,
                 deviceId: userDetails.deviceid,
                 sensorId: response.data.sensor_id,
                 name: response.data.plant_name,
@@ -154,7 +154,7 @@ function AddNewPlantDetailCard() {
                         <tr>
                             <th>Date</th>
                             <th>Time</th>
-                            <th>Status</th>
+                            <th>Moisture Level</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -164,9 +164,7 @@ function AddNewPlantDetailCard() {
                               <tr key={index}>
                                 <td>{data.date}</td>
                                 <td>{data.time}</td>
-                                {/* <td>{data.adcvalue}</td>
-                                <td>{data.moisture_level}</td> */}
-                                <td>{data.digitalsatus}</td>
+                                <td>{data.moisture_level}%</td>
                               </tr>
                             )
                           })
