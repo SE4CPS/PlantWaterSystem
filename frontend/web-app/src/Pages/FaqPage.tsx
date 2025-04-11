@@ -1,5 +1,4 @@
 import React from 'react'
-import '../Styles/custom/faqPage.css'
 
 function FaqPage() {
   return (
