@@ -7,7 +7,6 @@ import AboutPage from "../Pages/AboutPage";
 import FaqPage from "../Pages/FaqPage";
 import ErrorPage from "../Pages/ErrorPage";
 import NavBar from "./NavBar";
-import SignUpPage from "../Pages/SignUpPage";
 import DisplayPage from "../Pages/DisplayPage";
 import AddPlantPage from "../Pages/AddPlantPage";
 import SettingsPage from "../Pages/SettingsPage";
@@ -17,43 +16,45 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
     },
     {
-        path: '/login',
+        path: '/',
         element: <LoginPage/>,
     },
     {
-        path: '/signup',
-        element: <SignUpPage />,
-    },
-    {
-        path: '/',
+        path: '/display',
         element: <NavBar />,
         children: [
             {
-                path: '/',
+                path: '',
+                element: <DisplayPage />
+            }
+        ],
+    },
+    {
+        path: '/app',
+        element: <NavBar />,
+        children: [
+            {
+                path: 'dashboard',
                 element: <HomePage/>,
             },
             {
-                path: '/plant_detail',
+                path: 'plant_detail',
                 element: <PlantDetailPage/>,
             },
             {
-                path: '/about',
+                path: 'about',
                 element: <AboutPage />,
             },
             {
-                path: '/faq',
+                path: 'faq',
                 element: <FaqPage />,
             },
             {
-                path: '/display',
-                element: <DisplayPage />
-            },
-            {
-                path: '/add_plant',
+                path: 'add_plant',
                 element: <AddPlantPage />
             },
             {
-                path: '/settings',
+                path: 'settings',
                 element: <SettingsPage />
             }
         ]

@@ -7,11 +7,11 @@ import { PlantMetaData } from '../Interfaces/plantInterface';
 function PlantDetailPage() {
 
   const location = useLocation();
-  const plantMetaData: PlantMetaData = location.state || {name: '', deviceId: '', sensorId: ''};
+  const plantMetaData: PlantMetaData = location.state || {status: '', name: '', deviceId: '', sensorId: ''};
 
   return (
     <div className='plant-detail-page'>
-      <PlantDetailCard status='good' plantMetaData={plantMetaData} />
+      <PlantDetailCard plantMetaData={plantMetaData} />
     </div>
   )
 }
