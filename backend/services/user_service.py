@@ -11,7 +11,6 @@ class UserService:
     
     def create_user(self, firstname: str, lastname: str, username: str, userpassword: str, email: str, phonenumber: str):
         return self.repository.create_user(
-            userid=userid,
             firstname=firstname,
             lastname=lastname,
             username=username,
