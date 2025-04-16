@@ -15,9 +15,7 @@
 
 .plantViewer{
     padding-top: 31px;
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    grid-template-columns: auto auto auto auto;
-    row-gap: 30px;
-    column-gap: 24px;
 }

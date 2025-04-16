@@ -6,8 +6,20 @@ class UserService:
     def __init__(self, repository: UserRepository):
         self.repository = repository
 
-    def verify_user(self, user: UserSchema):
-        return self.repository.verify_user(user)
+    def get_user(self, username: str):
+        return self.repository.get_user(username)
+    
+    def create_user(self, firstname: str, lastname: str, username: str, userpassword: str, email: str, phonenumber: str):
+        return self.repository.create_user(
+            userid=userid,
+            firstname=firstname,
+            lastname=lastname,
+            username=username,
+            userpassword=userpassword,
+            email=email,
+            phonenumber=phonenumber 
+        )
+
 
 def get_user_service():
     dal = UserDAL()

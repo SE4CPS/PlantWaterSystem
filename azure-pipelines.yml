@@ -1,15 +1,12 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
-  - main
-
-pr:
   branches:
     include:
       - main
+
+pr:
+  branches:
+    exclude:
+      - '*'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -23,13 +20,35 @@ stages:
         steps:
           - checkout: self
 
+          - task: DownloadSecureFile@1
+            name: fullchainPem
+            inputs:
+              secureFile: 'fullchain.pem'
+
+          - task: DownloadSecureFile@1
+            name: privkeyPem
+            inputs:
+              secureFile: 'privkey.pem'
+
           - script: |
-              COMMIT_ID=$(Build.SourceVersion)
+              export COMMIT_ID=$(Build.SourceVersion)
               docker login -u bhandarenakul -p $(DOCKER_PASSWORD)
+
+              # Copy SSL certificates to Nginx folder
+              mkdir -p ./nginx/certs
+              cp $(fullchainPem.secureFilePath) ./nginx/certs/fullchain.pem
+              cp $(privkeyPem.secureFilePath) ./nginx/certs/privkey.pem
+              chmod 644 ./nginx/certs/fullchain.pem
+              chmod 600 ./nginx/certs/privkey.pem
+
+              # Build & Push Images
               docker build -t bhandarenakul/sproutly-test:backend-latest-$COMMIT_ID ./backend
               docker build -t bhandarenakul/sproutly-test:frontend-latest-$COMMIT_ID ./frontend
+              docker build -t bhandarenakul/sproutly-test:nginx-latest-$COMMIT_ID ./nginx
+
               docker push bhandarenakul/sproutly-test:backend-latest-$COMMIT_ID
               docker push bhandarenakul/sproutly-test:frontend-latest-$COMMIT_ID
+              docker push bhandarenakul/sproutly-test:nginx-latest-$COMMIT_ID
             displayName: "Build & Push Docker Images"
 
   - stage: Deploy
@@ -47,26 +66,40 @@ stages:
             deploy:
               steps:
                 - checkout: self
+                  clean: false  # Keep repo files
+
+                - task: DownloadSecureFile@1
+                  name: fullchainPem
+                  inputs:
+                    secureFile: 'fullchain.pem'
+
+                - task: DownloadSecureFile@1
+                  name: privkeyPem
+                  inputs:
+                    secureFile: 'privkey.pem'
+
                 - script: |
-                    COMMIT_ID=$(Build.SourceVersion)
-                    docker login -u bhandarenakul -p $(DOCKER_PASSWORD)
-                    
-                    # Install docker-compose if not available
-                    sudo apt-get update
-                    sudo apt-get install -y docker-compose
+                    export COMMIT_ID=$(Build.SourceVersion)
 
-                    # Stop and remove running containers
-                    docker stop sproutly-api sproutly-frontend nginx || true
-                    docker rm sproutly-api sproutly-frontend nginx || true
+                    sudo mkdir -p /etc/ssl/sproutly
+                    sudo chown azureuser:azureuser /etc/ssl/sproutly
+                    sudo chmod 755 /etc/ssl/sproutly
 
-                    # # Pull latest images from Docker Hub
-                    # docker pull bhandarenakul/sproutly-test:backend-latest
-                    # docker pull bhandarenakul/sproutly-test:frontend-latest
-                    
-                    sed -i "s|bhandarenakul/sproutly-test:backend-latest-.*|bhandarenakul/sproutly-test:backend-latest-$COMMIT_ID|g" docker-compose.yml
-                    sed -i "s|bhandarenakul/sproutly-test:frontend-latest-.*|bhandarenakul/sproutly-test:frontend-latest-$COMMIT_ID|g" docker-compose.yml
-                   
-                    # Run Docker Compose
-                    sudo docker-compose -f docker-compose.yml up -d
+                    # Move SSL files to /etc/ssl/sproutly
+                    sudo cp $(fullchainPem.secureFilePath) /etc/ssl/sproutly/fullchain.pem
+                    sudo cp $(privkeyPem.secureFilePath) /etc/ssl/sproutly/privkey.pem
+                    sudo chmod 644 /etc/ssl/sproutly/fullchain.pem
+                    sudo chmod 600 /etc/ssl/sproutly/privkey.pem
+
+                    # Debug SSL Files
+                    sudo ls -lah /etc/ssl/sproutly
+
+                    # Update image tags in docker-compose
+                    sed -i "s|bhandarenakul/sproutly-test:backend-latest-.*|bhandarenakul/sproutly-test:backend-latest-${COMMIT_ID}|g" docker-compose.yml
+                    sed -i "s|bhandarenakul/sproutly-test:frontend-latest-.*|bhandarenakul/sproutly-test:frontend-latest-${COMMIT_ID}|g" docker-compose.yml
+                    sed -i "s|bhandarenakul/sproutly-test:nginx-latest-.*|bhandarenakul/sproutly-test:nginx-latest-${COMMIT_ID}|g" docker-compose.yml
+
+                    # Restart Containers
+                    sudo docker-compose down || true
+                    sudo docker-compose up -d --force-recreate
                   displayName: "Deploy Application"
-

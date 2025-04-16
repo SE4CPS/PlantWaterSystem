@@ -1,90 +1,128 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import closeBtn from '../Images/plant-card-close-btn-icon.svg'
 import dummyImage from '../Images/rose.png'
+import { PlantMetaData, SensorTableData } from '../Interfaces/plantInterface'
+import { useNavigate } from 'react-router-dom'
+import sensorController from '../Controller/SensorController'
+import handleApiError, { isAuthTokenInvalid } from '../Utils/apiService'
+import plantController from '../Controller/PlantController'
+import { toast } from 'react-toastify'
+import Loader from './Loader'
 
-function PlantDetailCard({status}: {status: string}) {
+function PlantDetailCard({plantMetaData}: {plantMetaData: PlantMetaData}) {
+
+  const navigate = useNavigate();
+
+  const [sensorTableData, setSensorTableData] = useState<Array<SensorTableData>>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const deletePlant = async (sensorId: string) => {
+    try {
+      setLoading(true);
+      const response = await plantController.deletePlant(sensorId);
+      toast.success(response.data.message, {
+        position: 'top-right',
+      })
+      setLoading(false);
+      navigate('/app/dashboard');
+    } catch (error: unknown) {
+      if(isAuthTokenInvalid(error)) navigate('/');
+      handleApiError(error);
+    }
+  }
+
+  useEffect(() => {
+    const fetchSensorTableData = async () => {
+      try {
+        setLoading(true);
+        const response = await sensorController.getSensorData(plantMetaData.deviceId, plantMetaData.sensorId);
+        setSensorTableData(response.data.data);
+        setLoading(false);
+      } catch (error) {
+        if(isAuthTokenInvalid(error)) navigate('/')
+        handleApiError(error);
+      }
+    }
+    fetchSensorTableData();
+    
+    intervalRef.current = setInterval(fetchSensorTableData, 600000); //this runs the sensor data api every 10 mins
+    
+    return () => {
+      if(intervalRef.current){
+        clearInterval(intervalRef.current) // when leaving the plant detail page this clears the interval function that is calling the API.
+      }
+    }
+  }, [navigate, plantMetaData.deviceId, plantMetaData.sensorId])
+  
+
   return (
-    <div className={`plant-detail-card font-poppins ${status}`}>
-        <div className='plant-detail-card-information'>
-            <div className='detail-and-image-container'>
-                <img className='plant-detail-card-image' src={dummyImage} alt='error img'/>
-                <div className='plant-detail-card-details'>
-                    <div>
-                        Name: <b>Red Rose</b>
-                    </div>
-                    <div>
-                        Status: <b>Good</b>
-                    </div>
-                    <div>
-                        Last Watered: <b>3:15pm</b> on <b>2/6/2025</b>
-                    </div>
-                    <div>
-                        Note: <b>Place this plant near the window</b>
-                    </div>
-                </div>
-            </div>
-            <div className='plant-detail-card-button-container'>
-                <img className='plant-detail-card-close-button' src={closeBtn} alt='error img'/>
-                <button className='plant-detail-card-edit-button'>Edit</button>
-                <button className='plant-detail-card-delete-button'>Delete</button>
-            </div>
-        </div>
-        <div className='plant-detail-card-history'>
-            <div className='title'>
-                Water History
-            </div>
-            <div className='history-table-container'>
-                <div className='history-table'>
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>ADC Value</th>
-                            <th>Moisture Level</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>2/2/2025</td>
-                            <td>2:23 pm</td>
-                            <td>43243</td>
-                            <td>100%</td>
-                            <td>Good</td>
-                        </tr>
-                        <tr>
-                            <td>2/2/2025</td>
-                            <td>2:23 pm</td>
-                            <td>43243</td>
-                            <td>100%</td>
-                            <td>Good</td>
-                        </tr>
-                        <tr>
-                            <td>2/2/2025</td>
-                            <td>2:23 pm</td>
-                            <td>43243</td>
-                            <td>100%</td>
-                            <td>Good</td>
-                        </tr>
-                        <tr>
-                            <td>2/2/2025</td>
-                            <td>2:23 pm</td>
-                            <td>43243</td>
-                            <td>100%</td>
-                            <td>Good</td>
-                        </tr>
-                        <tr>
-                            <td>2/2/2025</td>
-                            <td>2:23 pm</td>
-                            <td>43243</td>
-                            <td>100%</td>
-                            <td>Good</td>
-                        </tr>
-                    </tbody>
-                </div>
-            </div>
-        </div>
-    </div>
+    <>
+      {loading && <Loader />}
+      <div className={`plant-detail-card font-poppins ${plantMetaData.moisture_level > 25 ? 'Wet':'Dry'}`}>
+          <div className='plant-detail-card-information'>
+              <div className='detail-and-image-container'>
+                  <img className='plant-detail-card-image' src={dummyImage} alt='error img'/>
+                  <div className='plant-detail-card-details'>
+                      <div>
+                          Name: <b>{plantMetaData.name}</b>
+                      </div>
+                      <div>
+                          Moisture Level: <b>{plantMetaData.moisture_level}%</b>
+                      </div>
+                      <div>
+                          Last Watered: <b>{sensorTableData.length!==0 ? sensorTableData[0].time: ''}</b> on <b>{sensorTableData.length!==0 ? sensorTableData[0].date: ''}</b>
+                      </div>
+                      <div>
+                          Sensor ID: <b>{plantMetaData.sensorId}</b>
+                      </div>
+                      <div>
+                          Device ID: <b>{plantMetaData.deviceId}</b>
+                      </div>
+                      {/* <div>
+                          Note: <b>Place this plant near the window</b>
+                      </div> */}
+                  </div>
+              </div>
+              <div className='plant-detail-card-button-container'>
+                  <img className='plant-detail-card-close-button' src={closeBtn} alt='error img' onClick={()=>navigate('/app/dashboard')}/>
+                  {/* <button className='plant-detail-card-edit-button'>Edit</button> */}
+                  <button onClick={()=>deletePlant(plantMetaData.sensorId)} className='plant-detail-card-delete-button'>Delete</button>
+              </div>
+          </div>
+          <div className='plant-detail-card-history'>
+              <div className='title'>
+                  Water History
+              </div>
+              <div className='history-table-container'>
+                  <div className='history-table'>
+                      <thead>
+                          <tr>
+                              <th>Date</th>
+                              <th>Time</th>
+                              {/* <th>ADC Value</th> */}
+                              <th>Moisture Level</th>
+                              {/* <th>Status</th> */}
+                          </tr>
+                      </thead>
+                      <tbody>
+                          {
+                            sensorTableData.map((data, index) => {
+                              return (
+                                <tr key={index}>
+                                  <td>{data.date}</td>
+                                  <td>{data.time}</td>
+                                  <td>{data.moisture_level}%</td>
+                                </tr>
+                              )
+                            })
+                          }
+                      </tbody>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </>
   )
 }
 

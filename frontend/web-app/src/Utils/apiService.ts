@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 const handleApiError = (error:unknown) => {
     if(axios.isAxiosError(error)){
         if(error.response){
-            toast.error(error.response.data.message || "Something went wrong!", {
+            toast.error(error.response.data.detail || "Something went wrong!", {
                 position: "top-right",
             })
         } else if(error.request){
@@ -21,6 +21,16 @@ const handleApiError = (error:unknown) => {
             position: "top-right",
         })
     }
+}
+
+export const isAuthTokenInvalid = (error: unknown): boolean => {
+    if(axios.isAxiosError(error)){
+        if(error.response){
+            if(error.response.status === 401) return true;
+            if(error.response.status === 405) return true;
+        }
+    }
+    return false;
 }
 
 export default handleApiError;

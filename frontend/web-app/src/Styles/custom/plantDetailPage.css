@@ -10,8 +10,9 @@
 
 .plant-detail-card{
     width: 100%;
-    height: 800px;
+    height: 900px;
     border-radius: 37px;
+    padding-top: 20px;
 }
 
 .plant-detail-card-information{
@@ -129,4 +130,31 @@
     text-align: left;
     width: 180px;
 }
+
+/* Add Plant Page CSS */
+
+.add-plant-save-button-container{
+    display: flex;
+    justify-content: center;
+}
+
+.add-plant-save-button{
+    all: unset;
+    width: 123px;
+    height: 47px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #edec9a;
+    border-radius: 15px;
+    font-weight: 700;
+    font-size: 25px;
+    transition: 0.4s;
+    cursor: pointer;
+}
+
+.add-plant-save-button:hover{
+    background-color: rgb(255, 230, 0);
+}
+
 

@@ -89,6 +89,7 @@ function AboutPage() {
       </div>
       <h1>Need help?</h1>
       <p>📌 Check our <span className="faq-link">FAQ page</span> for common questions!</p>
+      <p>📌 Want to Contribute? Check out our <a href='https://github.com/SE4CPS/PlantWaterSystem'><span className="faq-link">Github Repo</span></a> </p>
       <p>📩 Contact us if you need support.</p>
     </div>
   )
