@@ -1,7 +1,7 @@
 # Central configuration and device serial extraction
 
 # Time intervals (in seconds)
-SENSOR_READ_INTERVAL = 900         # 15 minutes between sensor readings
+SENSOR_READ_INTERVAL = 60         # 15 minutes between sensor readings
 DATA_RETENTION_DAYS = 7            # Days to retain data in the database
 WEATHER_FETCH_INTERVAL = 900       # 15 minutes between weather API calls
 
@@ -16,8 +16,11 @@ CSV_FILENAME = "plant_data_temp.csv"
 # Database settings
 DB_NAME = "plant_sensor_data.db"
 
-# Backend API settings
-BACKEND_API_URL = "https://sprout-ly.com/api/sensor/data"
+# Backend API endpoints – for auto-sending data and for on-demand (current) data.
+BACKEND_API_SEND_DATA = "https://dev.sprout-ly.com/api/send-data"
+BACKEND_API_SEND_CURRENT = "https://dev.sprout-ly.com/api/send-current"
+
+# Retry settings for sending data
 RETRY_ATTEMPTS = 3
 BASE_DELAY = 2
 
