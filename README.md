@@ -6,14 +6,13 @@
 
 ## 📸 Prototype
 
-![Sprout-ly Prototype](https://dev.sprout-ly.com/)
 
 ---
 
 ## 🌱 Key Features
 
 - Monitors soil moisture in real time  
-- Sends notifications via app or SMS  
+- Sends notifications via push notification  
 - Adjustable watering thresholds for different plant types  
 - Weather-aware logic (optional API integration)  
 - Compact and energy-efficient hardware design  
