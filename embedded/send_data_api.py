@@ -50,15 +50,6 @@ def save_last_sent_id(last_id):
 # Global variable for the last sent row id, persistent across restarts.
 LAST_SENT_ID = load_last_sent_id()
 
-def format_timestamp(ts):
-    """
-    Ensure the timestamp is a valid datetime string.
-    If ts equals "LOCALTIMESTAMP" (case-insensitive), replace it with the current time.
-    """
-    if isinstance(ts, str) and ts.strip().upper() == "LOCALTIMESTAMP":
-        return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    return ts
-
 def fetch_all_unsent_rows(last_id):
     """
     Fetch all rows (readings) from the database with id greater than last_id.
@@ -88,31 +79,27 @@ def fetch_all_unsent_rows(last_id):
 def row_to_dict(row):
     """
     Convert a database row to a dictionary matching the required JSON structure.
-    Row fields: id, timestamp, sensor_id, adc_value, moisture_level, digital_status,
-                weather_temp, weather_humidity, weather_sunlight, weather_wind_speed,
-                location, weather_fetched, device_id
     """
     return {
         "id": row[0],
-        "timestamp": format_timestamp(str(row[1])),
+        "timestamp": row[1],
         "sensor_id": row[2],
         "adc_value": row[3],
         "moisture_level": round(row[4], 2) if row[4] is not None else 0,
-        "digital_status": row[5] if row[5] is not None else "",
-        "weather_temp": row[6] if row[6] is not None else 0,
-        "weather_humidity": row[7] if row[7] is not None else 0,
-        "weather_sunlight": row[8] if row[8] is not None else 0,
-        "weather_wind_speed": row[9] if row[9] is not None else 0,
-        "location": row[10] if row[10] is not None else "",
-        "weather_fetched": format_timestamp(str(row[11])) if row[11] is not None else "",
-        "device_id": row[12] if row[12] is not None else "",
+        "digital_status": row[5] or "",
+        "weather_temp": row[6] or 0,
+        "weather_humidity": row[7] or 0,
+        "weather_sunlight": row[8] or 0,
+        "weather_wind_speed": row[9] or 0,
+        "location": row[10] or "",
+        "weather_fetched": row[11] or "",
+        "device_id": row[12] or "",
     }
 
 def send_unsent_rows_via_curl(url, batch_size=20):
     """
-    Fetch all unsent rows (with id > LAST_SENT_ID), split into batches,
-    convert each batch into a JSON payload (with a "data" key), and then send it using a curl command.
-    On success, update LAST_SENT_ID to the id of the last row sent.
+    Fetch all unsent rows, split into batches, serialize each batch to JSON and
+    send via curl. Only mark as sent when HTTP 200 is returned.
     """
     global LAST_SENT_ID
     rows = fetch_all_unsent_rows(LAST_SENT_ID)
@@ -120,41 +107,50 @@ def send_unsent_rows_via_curl(url, batch_size=20):
         logging.info("No unsent rows to send.")
         return True
 
-    # Process in batches
     for i in range(0, len(rows), batch_size):
         batch = rows[i:i+batch_size]
         data = [row_to_dict(r) for r in batch]
         payload = {"data": data}
-        payload_filename = "payload.json"
+        payload_file = "payload.json"
+
+        # Write batch JSON to file
         try:
-            with open(payload_filename, "w") as f:
+            with open(payload_file, "w") as f:
                 json.dump(payload, f)
         except Exception as e:
             logging.error(f"Error writing payload file: {e}")
             return False
 
-        # Build the curl command to send the payload
+        # Build a curl command that writes only the HTTP status code to stdout
         cmd = [
             "curl",
             "--location",
-            "--request", "POST",
-            url,
+            "--silent",           # suppress progress meter
+            "--show-error",       # but show errors
+            "--write-out", "%{http_code}",  # output only status code
+            "--output", "/dev/null",         # discard response body
+            "--request", "POST", url,
             "--header", "Content-Type: application/json",
-            "--data", f"@{payload_filename}"
+            "--data", f"@{payload_file}"
         ]
+
         try:
             result = subprocess.run(cmd, capture_output=True, text=True)
-            # Check result; if the output contains a 504 error or timeout text, treat as failure.
-            if result.returncode == 0 and "504" not in result.stdout and "Gateway Time-out" not in result.stdout:
-                logging.info(f"Batch starting at row {data[0]['id']} sent successfully.")
+            http_code = result.stdout.strip()
+            if result.returncode == 0 and http_code == "200":
+                logging.info(f"Batch starting at row {data[0]['id']} sent successfully (HTTP 200).")
                 LAST_SENT_ID = data[-1]["id"]
                 save_last_sent_id(LAST_SENT_ID)
             else:
-                logging.error(f"Curl command failed for batch starting at row {data[0]['id']}: {result.stdout}")
+                logging.error(
+                    f"Curl failed for batch at row {data[0]['id']}: exit={result.returncode}, "
+                    f"http_code={http_code}, stderr={result.stderr.strip()}"
+                )
                 return False
         except Exception as e:
             logging.error(f"Error executing curl command: {e}")
             return False
+
     return True
 
 def get_min_id_after_timestamp(ts_str):
@@ -170,9 +166,7 @@ def get_min_id_after_timestamp(ts_str):
         )
         row = cursor.fetchone()
         conn.close()
-        if row and row[0]:
-            return row[0]
-        return None
+        return row[0] if row and row[0] else None
     except Exception as e:
         logging.error(f"Error in get_min_id_after_timestamp: {e}")
         return None
@@ -180,10 +174,8 @@ def get_min_id_after_timestamp(ts_str):
 @app.route("/send-data", methods=["POST"])
 def auto_send():
     """
-    Auto-send endpoint: converts unsent rows from the database into a JSON payload (in batches) and
-    sends it using curl to the BACKEND_API_SEND_DATA URL.
-    Optionally, if an 'after' timestamp is provided in the request payload,
-    LAST_SENT_ID is reset accordingly.
+    Auto-send endpoint: send unsent rows in batches.
+    Optionally reset LAST_SENT_ID based on an 'after' timestamp.
     """
     global LAST_SENT_ID
     req = request.get_json() or {}
@@ -193,19 +185,15 @@ def auto_send():
         if new_min is not None:
             LAST_SENT_ID = new_min - 1
             save_last_sent_id(LAST_SENT_ID)
-            logging.info(f"Auto-send reset LAST_SENT_ID to {LAST_SENT_ID} using after timestamp {after_str}.")
+            logging.info(f"Auto-send reset LAST_SENT_ID to {LAST_SENT_ID} using after={after_str}")
     success = send_unsent_rows_via_curl(BACKEND_API_SEND_DATA)
-    if success:
-        return jsonify({"message": "Data sent successfully"}), 200
-    else:
-        return jsonify({"message": "Failed to send data"}), 500
+    status = 200 if success else 500
+    return jsonify({"message": "Data sent successfully" if success else "Failed to send data"}), status
 
 @app.route("/send-current", methods=["POST"])
 def manual_send():
     """
-    Manual send endpoint: converts unsent rows from the database into a JSON payload (in batches) and
-    sends it using curl to the BACKEND_API_SEND_CURRENT URL.
-    Expects an 'after' timestamp in the JSON payload.
+    Manual send endpoint: same as auto-send but to the CURRENT endpoint.
     """
     global LAST_SENT_ID
     req = request.get_json() or {}
@@ -215,19 +203,17 @@ def manual_send():
         if new_min is not None:
             LAST_SENT_ID = new_min - 1
             save_last_sent_id(LAST_SENT_ID)
-            logging.info(f"Manual-send reset LAST_SENT_ID to {LAST_SENT_ID} using after timestamp {after_str}.")
+            logging.info(f"Manual-send reset LAST_SENT_ID to {LAST_SENT_ID} using after={after_str}")
     success = send_unsent_rows_via_curl(BACKEND_API_SEND_CURRENT)
-    if success:
-        return jsonify({"message": "Current data sent successfully"}), 200
-    else:
-        return jsonify({"message": "Failed to send current data"}), 500
+    status = 200 if success else 500
+    return jsonify({"message": "Current data sent successfully" if success else "Failed to send current data"}), status
 
 def scheduled_job():
-    """Job for the scheduler to auto-send data at the defined interval."""
+    """Scheduler job to auto-send data periodically."""
     send_unsent_rows_via_curl(BACKEND_API_SEND_DATA)
 
 def start_scheduler():
-    """Start the scheduler to run the auto-send job every SENSOR_READ_INTERVAL seconds."""
+    """Start the background scheduler."""
     schedule.every(SENSOR_READ_INTERVAL).seconds.do(scheduled_job)
     logging.info(f"Scheduler started with interval {SENSOR_READ_INTERVAL} seconds.")
     while True:
@@ -235,7 +221,7 @@ def start_scheduler():
         time.sleep(1)
 
 if __name__ == "__main__":
-    # Start the scheduler in a background thread.
+    # Start scheduler thread
     threading.Thread(target=start_scheduler, daemon=True).start()
-    # Run the Flask app.
+    # Run Flask
     app.run(host="0.0.0.0", port=5001, debug=False)
