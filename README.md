@@ -1,5 +1,34 @@
-# Indoor Office Lighting IoT System
+# 🌿 Sprout-ly
 
-This project explores an IoT-enabled indoor lighting system for office environments. The system optimizes energy usage, enhances workspace comfort, and ensures sustainability using smart sensors and data-driven control logic.
+**Sprout-ly** is a smart plant watering notification system that monitors soil moisture and sends real-time alerts when your plants need water. Designed for both home and educational use, it supports sustainable, hands-free plant care through IoT technology.
 
-![Indoor Office Lighting System](https://files.slack.com/files-pri/T089N4A7VML-F08BA16NDPC/img_2136.jpg)
+---
+
+## 📸 Prototype
+
+![Sprout-ly Prototype](https://dev.sprout-ly.com/)
+
+---
+
+## 🌱 Key Features
+
+- Monitors soil moisture in real time  
+- Sends notifications via app or SMS  
+- Adjustable watering thresholds for different plant types  
+- Weather-aware logic (optional API integration)  
+- Compact and energy-efficient hardware design  
+
+---
+
+## 🛠 Technologies
+
+- **Microcontroller:** Arduino  
+- **Sensors:** Soil Moisture Sensor  
+- **Software:** Node.js backend + HTML/CSS frontend or mobile app  
+- **Notifications:** Web Push  
+- **Weather Integration:**  
+
+---
+
+## 📂 Project Structure
+
