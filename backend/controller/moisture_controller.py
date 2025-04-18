@@ -7,7 +7,7 @@ from typing import List
 from datetime import datetime
 from config.authentication import get_current_user
 
-moisture_router = APIRouter()
+moisture_router = APIRouter(redirect_slashes=False)
 
 
 @moisture_router.post("/api/send-data", response_model=dict)
@@ -284,7 +284,7 @@ async def get_moisture_level(
     except Exception as e:
         return JSONResponse(status_code=500, content={"status": "error", "error": f"Unexpected error: {str(e)}"})
 
-@moisture_router.get("/api/sensor-ids/")
+@moisture_router.get("/api/sensor-ids")
 def get_sensor_id_by_device_id(
     deviceid: str,
     service: SensorService = Depends(get_service),
